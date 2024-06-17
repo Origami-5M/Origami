@@ -1,9 +1,22 @@
 body {
+  box-sizing: border-box;
   margin: 0;
-  padding: 0;
+  padding: 20px;
   background-color: #343394;
 }
 
+.flex {
+  display: flex;
+}
+.global-btn {
+  padding: 0;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+.hidden {
+  display: hidden;
+}
 .font-sm {
   font-size: 20px;
 }
@@ -17,7 +30,7 @@ body {
   font-weight: 100;
 }
 .font-bold {
-  font-weight: 400;
+  font-weight: 600;
 }
 .font-black {
   font-weight: 900;

@@ -4,10 +4,25 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script type="module" src="firebase.js"></script>
-    <link rel="stylesheet" href="./src/styles/style.css" />
+    <link rel="stylesheet" href="./src/styles/common.css" />
+    <link rel="stylesheet" href="./src/styles/main.css" />
     <title>Origami</title>
   </head>
   <body>
-    hello, world!
+    <div class="flex main-container">
+      <div class="main-bg">
+        <img class="main-bg-img" />
+      </div>
+      <nav class="sidebar-container">
+        <div class="flex icon-box">
+          <button class="sound-btn"></button>
+        </div>
+        <div class="mode-box">
+          <img class="mode-btn" />
+          <img class="mode-btn" />
+        </div>
+        <button><img class="start-btn" />start</button>
+      </nav>
+    </div>
   </body>
 </html>

@@ -12,16 +12,47 @@
     <div class="flex main-container">
       <div class="main-bg">
         <img class="main-bg-img" />
+        <div class="mode-blur-bg">
+          <div class="flex guide-mode-box">
+            <div class="guide-mod">
+              <img class="rocket-img" />
+              <img class="play-icon" />
+              <p class="font-lg font-bold">PLANE</p>
+              <span class="font-sm font-light level">Easy</span>
+              <img class="check-icon" />
+            </div>
+            <div class="guide-mod">
+              <img class="rocket-img" />
+              <img class="play-icon" />
+              <p class="font-lg font-bold">HEART</p>
+              <span class="font-sm font-light level">Normal</span>
+              <img class="check-icon" />
+            </div>
+            <div class="guide-mod">
+              <img class="rocket-img" />
+              <img class="play-icon" />
+              <p class="font-lg font-bold">BOAT</p>
+              <span class="font-sm font-light level">Hard</span>
+              <img class="check-icon" />
+            </div>
+          </div>
+        </div>
       </div>
       <nav class="sidebar-container">
-        <div class="flex icon-box">
-          <button class="sound-btn"></button>
+        <div class="flex sound-box">
+          <button class="global-btn sound-btn"></button>
         </div>
         <div class="mode-box">
-          <img class="mode-btn" />
-          <img class="mode-btn" />
+          <button class="global-btn mode-btn">
+            <span class="font-md font-bold">SANDBOX MODE</span>
+          </button>
+          <button class="global-btn mode-btn">
+            <span class="font-md font-bold">GUIDE MODE</span>
+          </button>
         </div>
-        <button><img class="start-btn" />start</button>
+        <button class="global-btn font-lg font-bold big-start-btn">
+          START
+        </button>
       </nav>
     </div>
   </body>

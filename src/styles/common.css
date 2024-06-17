@@ -1,0 +1,39 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #343394;
+}
+
+.font-sm {
+  font-size: 20px;
+}
+.font-md {
+  font-size: 24px;
+}
+.font-lg {
+  font-size: 32px;
+}
+.font-light {
+  font-weight: 100;
+}
+.font-bold {
+  font-weight: 400;
+}
+.font-black {
+  font-weight: 900;
+}
+.orange-color {
+  color: #f2482e;
+}
+.orange-bgcolor {
+  background-color: #f2482e;
+}
+.orange-bgcolor:hover {
+  background-color: #d5250a;
+}
+.white-color {
+  color: #ffffff;
+}
+.white-bgcolor {
+  background-color: #ffffff;
+}

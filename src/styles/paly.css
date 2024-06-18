@@ -1,0 +1,182 @@
+.play-wrap {
+  display: flex;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  background-color: #343394;
+}
+
+.play-wrap section {
+  display: flex;
+  align-items: flex-end;
+  width: 100%;
+  height: 96%;
+  margin-left: 1%;
+  border-radius: 30px;
+  background-color: #e7e6ff;
+}
+
+.play-wrap section .bottom-layout {
+  display: flex;
+  width: 100%;
+  height: 68px;
+  justify-content: space-between;
+  margin: 0 55px 57px 55px;
+}
+
+.play-wrap section .bottom-layout ul {
+  display: flex;
+  height: 60px;
+  gap: 20px;
+  align-items: center;
+}
+
+.play-wrap section .bottom-layout ul li {
+  height: 100%;
+}
+
+.play-wrap .play-nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: 110px;
+  height: 80%;
+}
+
+.play-wrap .play-nav div button {
+  display: block;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.play-wrap .play-nav div button:last-child {
+  margin-bottom: 0;
+}
+
+.info-wrap {
+  position: absolute;
+  display: none;
+  bottom: 120px;
+  right: 70px;
+  width: 856px;
+  height: 430px;
+  background-image: url(../assets/img/speech-bubble.png);
+}
+
+.info-button:hover + .info-wrap {
+  display: block;
+}
+
+.play-wrap .play-nav .info-wrap p {
+  width: 745px;
+  padding: 30px;
+  line-height: 1.8;
+  text-align: left;
+}
+
+.play-wrap .play-nav .info-wrap p span {
+  font-weight: 900;
+}
+
+button {
+  border: none;
+  font-size: 24px;
+  font-weight: 900;
+  color: #fff;
+  cursor: pointer;
+  background: none;
+  transition: all 0.2s ease-in-out;
+}
+
+.circle-button {
+  width: 60px;
+  height: 60px;
+  border-radius: 999px;
+}
+
+.round-button {
+  height: 60px;
+  border-radius: 60px;
+  padding: 15px 35px;
+}
+
+.button-red {
+  background-color: #f2482e;
+}
+
+.button-red:hover {
+  background-color: #d5250a;
+}
+
+.button-purple {
+  background-color: #343394;
+  opacity: 50%;
+}
+
+.button-purple:hover {
+  opacity: 100%;
+}
+
+.restart-button {
+  background: url('/src/assets/img/css_sprites.png') no-repeat -212px 0px;
+  background-color: #888;
+  opacity: 50%;
+}
+
+.restart-button:hover {
+  opacity: 100%;
+}
+
+.rollback-button {
+  opacity: 50%;
+}
+
+.commit-button {
+  opacity: 50%;
+}
+
+.home-button {
+  width: 60px;
+  height: 60px;
+  background: url('/src/assets/img/css_sprites.png') no-repeat 2px -104px;
+  opacity: 0.5;
+}
+
+.mode-button {
+  background: url('/src/assets/img/css_sprites.png') no-repeat -50px -160px;
+  width: 60px;
+  height: 60px;
+  opacity: 0.5;
+}
+
+.gallery-button {
+  background: url('/src/assets/img/css_sprites.png') no-repeat -151px 0px;
+  width: 60px;
+  height: 60px;
+  opacity: 0.5;
+}
+
+.sound-button {
+  background: url('/src/assets/img/css_sprites.png') no-repeat -122px -97px;
+  width: 60px;
+  height: 60px;
+  opacity: 0.5;
+}
+
+.info-button {
+  background: url('/src/assets/img/css_sprites.png') no-repeat -211px -58px;
+  width: 60px;
+  height: 60px;
+  opacity: 0.5;
+  margin-bottom: 0;
+}
+
+.nav-button:hover {
+  width: 60px;
+  height: 60px;
+  padding: 10px;
+  border-radius: 999px;
+  background-color: #4746c1;
+  opacity: 80%;
+}

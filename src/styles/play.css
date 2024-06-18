@@ -11,7 +11,7 @@
   align-items: flex-end;
   width: 100%;
   height: 96%;
-  margin-left: 1%;
+  margin-left: 20px;
   border-radius: 30px;
   background-color: #e7e6ff;
 }
@@ -37,6 +37,7 @@
 
 .play-wrap .play-nav {
   position: relative;
+  z-index: 3;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -45,6 +46,7 @@
   height: 100%;
   box-sizing: border-box;
   padding: 60px 0;
+  background-color: #343394;
 }
 
 .play-wrap .play-nav div button {
@@ -81,11 +83,12 @@
 }
 
 .play-wrap .play-nav .info-wrap p span {
+  color: #343394;
   font-weight: 900;
 }
 
 .restart-button {
-  background: url('/src/assets/img/css_sprites.png') no-repeat -212px 0;
+  background: url('/src/assets/img/nav_sprites.png') no-repeat -186px -9px;
   background-color: #888;
   opacity: 50%;
 }
@@ -95,47 +98,76 @@
 }
 
 .rollback-button {
+  background: url('/src/assets/img/checked_sprites.png') no-repeat -175px 0px;
   opacity: 50%;
 }
 
 .commit-button {
+  background: url('/src/assets/img/checked_sprites.png') no-repeat -171px -69px;
   opacity: 50%;
 }
 
 .home-button {
   width: 60px;
   height: 60px;
-  background: url('/src/assets/img/css_sprites.png') no-repeat 2px -104px;
+  background: url('/src/assets/img/nav_sprites.png') no-repeat -5px -8px;
   opacity: 0.5;
 }
 
 .mode-button {
   width: 60px;
   height: 60px;
-  background: url('/src/assets/img/css_sprites.png') no-repeat -50px -160px;
+  background: url('/src/assets/img/nav_sprites.png') no-repeat -184px -80px;
   opacity: 0.5;
+}
+
+.mode-button.active {
+  background: #fff url('/src/assets/img/checked_sprites.png') no-repeat -5px -30px;
+  opacity: 1;
+}
+
+.mode-button.active:hover {
+  background-color: #fff;
+  opacity: 1;
 }
 
 .gallery-button {
   width: 60px;
   height: 60px;
-  background: url('/src/assets/img/css_sprites.png') no-repeat -151px 0;
+  background: url('/src/assets/img/nav_sprites.png') no-repeat -97px -8px;
   opacity: 0.5;
 }
 
 .sound-button {
   width: 60px;
   height: 60px;
-  background: url('/src/assets/img/css_sprites.png') no-repeat -122px -97px;
+  background: url('/src/assets/img/nav_sprites.png') no-repeat -100px -80px;
   opacity: 0.5;
+  transition: none;
 }
 
 .info-button {
   width: 60px;
   height: 60px;
   margin-bottom: 0;
-  background: url('/src/assets/img/css_sprites.png') no-repeat -211px -58px;
+  background: url('/src/assets/img/nav_sprites.png') no-repeat -4px -81px;
   opacity: 0.5;
+}
+
+.info-button.active {
+  background: url('/src/assets/img/checked_sprites.png') no-repeat -89px -31px;
+  background-color: #fff;
+  opacity: 1;
+}
+
+.info-button.active:hover {
+  background-color: #fff;
+  opacity: 1;
+}
+
+.nav-button {
+  border-radius: 999px;
+  transition: none;
 }
 
 .nav-button:hover {
@@ -155,20 +187,36 @@
 
 .mode-sidebar {
   position: absolute;
-  top: 15px;
-  right: 99px;
+  z-index: 1;
+  top: 2%;
+  right: -250px;
   height: 96%;
+  overflow: hidden;
   box-sizing: border-box;
+  width: 0;
   padding: 30px 0 0 0;
   border-radius: 30px;
   background-color: #fff;
+  opacity: 0;
   filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.25));
+  transition: all 0.2s ease-in-out;
+}
+
+.mode-sidebar.visible {
+  right: 102px;
+  width: 269px;
+  opacity: 1;
 }
 
 .mode-sidebar ul li {
   margin-bottom: 35px;
   padding: 0 30px;
   transition: all 0.2s ease-in-out;
+}
+
+.mode-sidebar ul li.active {
+  padding: 30px 30px;
+  background-color: rgba(52, 51, 148, 0.1);
 }
 
 .mode-sidebar ul li:hover {
@@ -182,6 +230,7 @@
   height: 155px;
   border-radius: 30px;
   background-image: url(../assets/img/green-gamebg.png);
+  background-size: contain;
 }
 
 .mode-sidebar ul li h3 {
@@ -217,5 +266,6 @@
   bottom: 0;
   width: 100%;
   padding: 45px 0;
+  background-color: #fff;
   text-align: center;
 }

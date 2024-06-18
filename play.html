@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PlayPage</title>
-    <link rel="stylesheet" href="./src/styles/paly.css" />
+    <link rel="stylesheet" href="./src/styles/play.css" />
     <link rel="stylesheet" href="./src/styles/common.css" />
     <link
       rel="stylesheet"
@@ -20,7 +20,9 @@
               <button class="circle-button restart-button"></button>
             </li>
             <li>
-              <button class="round-button button-red">FINISH</button>
+              <button class="round-button button-red finish-button">
+                FINISH
+              </button>
             </li>
           </ul>
           <ul>
@@ -44,7 +46,14 @@
           <button class="gallery-button nav-button"></button>
         </div>
         <div>
-          <button class="sound-button nav-button"></button>
+          <button class="sound-button nav-button">
+            <audio
+              class="main-bgm"
+              src="/src/assets/sound/origami_main_music.mp3"
+              loop
+              autoplay
+            ></audio>
+          </button>
           <button class="info-button nav-button"></button>
           <div class="info-wrap">
             <p>
@@ -69,8 +78,8 @@
         </div>
       </nav>
       <aside class="mode-sidebar">
-        <ul>
-          <li>
+        <ul class="mode-list">
+          <li data-guideMode="plane">
             <div>
               <h3>Plane</h3>
               <p>
@@ -81,7 +90,7 @@
               </p>
             </div>
           </li>
-          <li>
+          <li class="mode-list" data-guideMode="heart">
             <div>
               <h3>Plane</h3>
               <p>
@@ -92,7 +101,7 @@
               </p>
             </div>
           </li>
-          <li>
+          <li class="mode-list" data-guideMode="bell">
             <div>
               <h3>Plane</h3>
               <p>
@@ -109,6 +118,6 @@
         </div>
       </aside>
     </main>
-    <script src="/src/components/play.js"></script>
+    <script src="/src/components/play.js" defer></script>
   </body>
 </html>

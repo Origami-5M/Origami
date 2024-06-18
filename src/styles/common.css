@@ -70,13 +70,16 @@ p {
 .button-red:hover {
   background-color: #d5250a;
 }
+
 .button-purple {
   background-color: #343394;
   opacity: 50%;
 }
+
 .button-purple:hover {
   opacity: 100%;
 }
+
 .circle-button {
   box-sizing: border-box;
   width: 60px;

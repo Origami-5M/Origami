@@ -40,24 +40,87 @@
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  bottom: 90px;
+  bottom: 10px;
   width: 80%;
-  height: 100px;
+  height: 70px;
   text-align: center;
   background: #f2482e;
-  border-radius: 30px;
+  border-radius: 10px;
   color: #ffffff;
   transition: all 0.3s;
 }
 .big-start-button:hover {
   width: 85%;
-  height: 106px;
+  height: 80px;
 }
 .mode-blur-bg {
   position: absolute;
-  width: 95%;
-  height: 95%;
+  width: 98%;
+  height: 98%;
   z-index: 1;
   background-color: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(5px);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 40px;
+  padding: 60px;
+}
+.guide-mode-box {
+  justify-content: space-evenly;
+}
+.guide-mode {
+  position: relative;
+  width: 25%;
+  height: 200px;
+  border-radius: 30px;
+  padding: 15px;
+}
+.guide-mode:hover {
+  width: 30%;
+}
+.mode-info {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+}
+.flex-start {
+  align-self: flex-start;
+}
+.level {
+  margin-top: 10px;
+}
+.blue-bg {
+  background: url('../assets/img/blue-gamebg.png');
+  background-size: cover;
+}
+.red-bg {
+  background: url('../assets/img/orange-gamebg.png');
+  background-size: cover;
+}
+.green-bg {
+  background: url('../assets/img/green-gamebg.png');
+  background-size: cover;
+}
+.rocket-img {
+  position: absolute;
+  right: 0;
+  top: -30px;
+  width: 60%;
+  max-width: 100px;
+}
+.play-icon {
+  position: absolute;
+  bottom: 120px;
+  width: 47px;
+  height: 47px;
+  background: url('../assets/img/css_sprites.png') -96px -8px;
+}
+.check-icon {
+  position: absolute;
+  right: 15px;
+  bottom: 50px;
+  width: 37px;
+  height: 27px;
+  background: url('../assets/img/css_sprites.png') -221px -125px;
 }

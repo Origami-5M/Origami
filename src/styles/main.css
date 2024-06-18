@@ -31,6 +31,7 @@
   width: 47px;
   height: 39px;
   background: url('../assets/img/css_sprites.png') -130px -108px;
+  transition: none;
 }
 
 .mode-button {

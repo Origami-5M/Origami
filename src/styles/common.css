@@ -4,18 +4,21 @@ body {
   padding: 20px;
   background-color: #343394;
 }
-
+button {
+  cursor: pointer;
+  border: none;
+  padding: 0;
+  background: none;
+  color: #fff;
+  font-size: 24px;
+  font-weight: 900;
+  transition: all 0.2s ease-in-out;
+}
 .flex {
   display: flex;
 }
-.global-btn {
-  padding: 0;
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-}
 .hidden {
-  display: hidden;
+  display: none;
 }
 .font-sm {
   font-size: 20px;
@@ -35,18 +38,24 @@ body {
 .font-black {
   font-weight: 900;
 }
-.orange-color {
+.red-color {
   color: #f2482e;
 }
-.orange-bgcolor {
+.button-red {
   background-color: #f2482e;
 }
-.orange-bgcolor:hover {
+.button-red:hover {
   background-color: #d5250a;
 }
-.white-color {
-  color: #ffffff;
+.circle-button {
+  box-sizing: border-box;
+  width: 60px;
+  height: 60px;
+  border-radius: 999px;
 }
-.white-bgcolor {
-  background-color: #ffffff;
+.round-button {
+  box-sizing: border-box;
+  height: 60px;
+  padding: 15px 35px;
+  border-radius: 60px;
 }

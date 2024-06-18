@@ -49,8 +49,8 @@
 
 .play-wrap .play-nav div button {
   display: block;
-  text-align: center;
   margin-bottom: 15px;
+  text-align: center;
 }
 
 .play-wrap .play-nav div button:last-child {
@@ -59,16 +59,17 @@
 
 .info-wrap {
   position: absolute;
+  z-index: 3;
   bottom: 120px;
   right: 70px;
+  display: none;
   width: 856px;
   height: 430px;
-  z-index: 3;
   background-image: url(../assets/img/speech-bubble.png);
-  display: none;
+  transition: all 0.2s ease-in-out;
 }
 
-.info-button:hover + .info-wrap {
+.info-wrap.visible {
   display: block;
 }
 
@@ -109,32 +110,32 @@
 }
 
 .mode-button {
-  background: url('/src/assets/img/css_sprites.png') no-repeat -50px -160px;
   width: 60px;
   height: 60px;
+  background: url('/src/assets/img/css_sprites.png') no-repeat -50px -160px;
   opacity: 0.5;
 }
 
 .gallery-button {
-  background: url('/src/assets/img/css_sprites.png') no-repeat -151px 0;
   width: 60px;
   height: 60px;
+  background: url('/src/assets/img/css_sprites.png') no-repeat -151px 0;
   opacity: 0.5;
 }
 
 .sound-button {
-  background: url('/src/assets/img/css_sprites.png') no-repeat -122px -97px;
   width: 60px;
   height: 60px;
+  background: url('/src/assets/img/css_sprites.png') no-repeat -122px -97px;
   opacity: 0.5;
 }
 
 .info-button {
-  background: url('/src/assets/img/css_sprites.png') no-repeat -211px -58px;
   width: 60px;
   height: 60px;
-  opacity: 0.5;
   margin-bottom: 0;
+  background: url('/src/assets/img/css_sprites.png') no-repeat -211px -58px;
+  opacity: 0.5;
 }
 
 .nav-button:hover {
@@ -157,16 +158,16 @@
   top: 15px;
   right: 99px;
   height: 96%;
+  box-sizing: border-box;
   padding: 30px 0 0 0;
   border-radius: 30px;
   background-color: #fff;
-  box-sizing: border-box;
   filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.25));
 }
 
 .mode-sidebar ul li {
-  padding: 0 30px;
   margin-bottom: 35px;
+  padding: 0 30px;
   transition: all 0.2s ease-in-out;
 }
 
@@ -194,11 +195,11 @@
 
 .mode-sidebar ul li p {
   position: absolute;
+  z-index: 1;
   top: -20px;
   right: -15px;
   width: 120px;
   height: 120px;
-  z-index: 1;
 }
 
 .mode-sidebar ul li p img {
@@ -212,9 +213,9 @@
 
 .mode-sidebar .sidebar-footer {
   position: absolute;
+  z-index: 1;
   bottom: 0;
   width: 100%;
   padding: 45px 0;
   text-align: center;
-  z-index: 1;
 }

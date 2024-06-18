@@ -1,5 +1,8 @@
-body {
+* {
   box-sizing: border-box;
+}
+
+body {
   margin: 0;
   padding: 20px;
   background-color: #343394;
@@ -14,6 +17,9 @@ button {
   font-weight: 900;
   transition: all 0.2s ease-in-out;
 }
+p {
+  margin: 0;
+}
 .flex {
   display: flex;
 }
@@ -21,13 +27,13 @@ button {
   display: none;
 }
 .font-sm {
-  font-size: 20px;
+  font-size: 14px;
 }
 .font-md {
-  font-size: 24px;
+  font-size: 20px;
 }
 .font-lg {
-  font-size: 32px;
+  font-size: 34px;
 }
 .font-light {
   font-weight: 100;
@@ -40,6 +46,9 @@ button {
 }
 .red-color {
   color: #f2482e;
+}
+.white-color {
+  color: #ffffff;
 }
 .button-red {
   background-color: #f2482e;

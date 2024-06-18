@@ -7,6 +7,7 @@ body {
   padding: 20px;
   background-color: #343394;
 }
+
 button {
   cursor: pointer;
   border: none;
@@ -17,51 +18,66 @@ button {
   font-weight: 900;
   transition: all 0.2s ease-in-out;
 }
+
 p {
   margin: 0;
 }
+
 .flex {
   display: flex;
 }
+
 .hidden {
   display: none;
 }
+
 .font-sm {
   font-size: 14px;
 }
+
 .font-md {
   font-size: 20px;
 }
+
 .font-lg {
   font-size: 34px;
 }
+
 .font-light {
   font-weight: 100;
 }
+
 .font-bold {
   font-weight: 600;
 }
+
 .font-black {
   font-weight: 900;
 }
+
 .red-color {
   color: #f2482e;
 }
+
 .white-color {
   color: #ffffff;
 }
+
 .button-red {
   background-color: #f2482e;
 }
+
 .button-red:hover {
   background-color: #d5250a;
 }
+
 .circle-button {
   box-sizing: border-box;
   width: 60px;
   height: 60px;
   border-radius: 999px;
 }
+
 .round-button {
   box-sizing: border-box;
   height: 60px;

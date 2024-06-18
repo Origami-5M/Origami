@@ -6,6 +6,7 @@ const $guideModeButton = document.getElementById('guideMode');
 const $modeModal = document.querySelector('.mode-blur-bg');
 
 const $guideModeBox = document.querySelector('.guide-mode-box');
+const $startButton = document.querySelector('.big-start-button');
 
 let isMuted = false;
 
@@ -48,6 +49,17 @@ const addCheckIcon = button => {
   button.appendChild(checkIcon);
 };
 
+const navigateToPlay = () => {
+  const $activeGuideModeButton = document.querySelector('.guide-mode.active');
+  const modalOpacity = parseFloat(getComputedStyle($modeModal).opacity);
+  if (modalOpacity !== 0) {
+    const guideMode = $activeGuideModeButton.getAttribute('data-mode');
+    window.location.href = `/play-${guideMode}`;
+  } else {
+    window.location.href = '/play';
+  }
+};
+
 $sandboxModeButton.addEventListener('click', () => {
   handleModeButtonClick($sandboxModeButton, $guideModeButton);
   $modeModal.style.opacity = '0';
@@ -65,3 +77,5 @@ $guideModeBox.addEventListener('click', event => {
   removeCheckIcon($guideModeButtons);
   addCheckIcon($guideModeButton);
 });
+
+$startButton.addEventListener('click', navigateToPlay);

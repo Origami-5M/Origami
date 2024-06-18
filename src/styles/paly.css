@@ -18,17 +18,17 @@
 
 .play-wrap section .bottom-layout {
   display: flex;
+  justify-content: space-between;
   width: 100%;
   height: 68px;
-  justify-content: space-between;
   margin: 0 55px 57px 55px;
 }
 
 .play-wrap section .bottom-layout ul {
   display: flex;
+  align-items: center;
   height: 60px;
   gap: 20px;
-  align-items: center;
 }
 
 .play-wrap section .bottom-layout ul li {
@@ -36,12 +36,15 @@
 }
 
 .play-wrap .play-nav {
+  position: relative;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
   width: 110px;
-  height: 80%;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 60px 0;
 }
 
 .play-wrap .play-nav div button {
@@ -56,12 +59,13 @@
 
 .info-wrap {
   position: absolute;
-  display: none;
   bottom: 120px;
   right: 70px;
   width: 856px;
   height: 430px;
+  z-index: 3;
   background-image: url(../assets/img/speech-bubble.png);
+  display: none;
 }
 
 .info-button:hover + .info-wrap {
@@ -79,47 +83,8 @@
   font-weight: 900;
 }
 
-button {
-  border: none;
-  font-size: 24px;
-  font-weight: 900;
-  color: #fff;
-  cursor: pointer;
-  background: none;
-  transition: all 0.2s ease-in-out;
-}
-
-.circle-button {
-  width: 60px;
-  height: 60px;
-  border-radius: 999px;
-}
-
-.round-button {
-  height: 60px;
-  border-radius: 60px;
-  padding: 15px 35px;
-}
-
-.button-red {
-  background-color: #f2482e;
-}
-
-.button-red:hover {
-  background-color: #d5250a;
-}
-
-.button-purple {
-  background-color: #343394;
-  opacity: 50%;
-}
-
-.button-purple:hover {
-  opacity: 100%;
-}
-
 .restart-button {
-  background: url('/src/assets/img/css_sprites.png') no-repeat -212px 0px;
+  background: url('/src/assets/img/css_sprites.png') no-repeat -212px 0;
   background-color: #888;
   opacity: 50%;
 }
@@ -151,7 +116,7 @@ button {
 }
 
 .gallery-button {
-  background: url('/src/assets/img/css_sprites.png') no-repeat -151px 0px;
+  background: url('/src/assets/img/css_sprites.png') no-repeat -151px 0;
   width: 60px;
   height: 60px;
   opacity: 0.5;
@@ -179,4 +144,77 @@ button {
   border-radius: 999px;
   background-color: #4746c1;
   opacity: 80%;
+}
+
+.small-start-button {
+  width: 210px;
+  height: 60px;
+  border-radius: 10px;
+}
+
+.mode-sidebar {
+  position: absolute;
+  top: 15px;
+  right: 99px;
+  height: 96%;
+  padding: 30px 0 0 0;
+  border-radius: 30px;
+  background-color: #fff;
+  box-sizing: border-box;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.25));
+}
+
+.mode-sidebar ul li {
+  padding: 0 30px;
+  margin-bottom: 35px;
+  transition: all 0.2s ease-in-out;
+}
+
+.mode-sidebar ul li:hover {
+  padding: 30px 30px;
+  background-color: rgba(52, 51, 148, 0.1);
+}
+
+.mode-sidebar ul li div {
+  position: relative;
+  width: 209px;
+  height: 155px;
+  border-radius: 30px;
+  background-image: url(../assets/img/green-gamebg.png);
+}
+
+.mode-sidebar ul li h3 {
+  position: absolute;
+  bottom: 30px;
+  left: 20px;
+  color: #fff;
+  font-size: 24px;
+  font-weight: 900;
+}
+
+.mode-sidebar ul li p {
+  position: absolute;
+  top: -20px;
+  right: -15px;
+  width: 120px;
+  height: 120px;
+  z-index: 1;
+}
+
+.mode-sidebar ul li p img {
+  width: 100%;
+  height: 100%;
+}
+
+.mode-sidebar ul li:last-child {
+  margin-bottom: 0;
+}
+
+.mode-sidebar .sidebar-footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 45px 0;
+  text-align: center;
+  z-index: 1;
 }

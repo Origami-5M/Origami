@@ -28,7 +28,7 @@ p {
 }
 
 .hidden {
-  display: none;
+  opacity: 0;
 }
 
 .font-sm {

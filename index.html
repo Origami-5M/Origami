@@ -14,7 +14,7 @@
         <img class="main-bg-img" />
         <div class="mode-blur-bg white-color hidden">
           <div class="flex guide-mode-box">
-            <button class="guide-mode blue-bg">
+            <button class="guide-mode active blue-bg" data-mode="plane">
               <img class="rocket-img" src="./src/assets/img/rocket-img.png" />
               <div class="play-icon"></div>
               <div class="check-icon"></div>
@@ -23,7 +23,7 @@
                 <span class="font-sm font-light flex-start level">Easy</span>
               </div>
             </button>
-            <button class="guide-mode red-bg">
+            <button class="guide-mode red-bg" data-mode="heart">
               <img class="rocket-img" src="./src/assets/img/rocket-img.png" />
               <div class="play-icon"></div>
               <div class="mode-info">
@@ -31,7 +31,7 @@
                 <span class="font-sm font-light flex-start level">Normal</span>
               </div>
             </button>
-            <button class="guide-mode green-bg">
+            <button class="guide-mode green-bg" data-mode="boat">
               <img class="rocket-img" src="./src/assets/img/rocket-img.png" />
               <div class="play-icon"></div>
               <div class="mode-info">
@@ -53,10 +53,10 @@
           <button class="sound-button"></button>
         </div>
         <div class="mode-box">
-          <button class="mode-button">
+          <button class="mode-button active" id="sandboxMode">
             <span class="font-md font-bold">SANDBOX MODE</span>
           </button>
-          <button class="mode-button">
+          <button class="mode-button" id="guideMode">
             <span class="font-md font-bold">GUIDE MODE</span>
           </button>
         </div>

@@ -37,6 +37,10 @@
   margin: 0 55px 57px 55px;
 }
 
+.bottom-layout {
+  z-index: 1;
+}
+
 .play-wrap section .bottom-layout ul {
   display: flex;
   align-items: center;
@@ -401,4 +405,13 @@
   display: flex;
   margin-top: 20px;
   gap: 30px;
+}
+
+.play-cont {
+  position: relative;
+}
+
+.play-canvas {
+  position: absolute;
+  width: 100%;
 }

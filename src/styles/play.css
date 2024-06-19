@@ -62,13 +62,24 @@
 .info-wrap {
   position: absolute;
   z-index: 3;
-  bottom: 120px;
-  right: 70px;
+  bottom: 160px;
+  right: 120px;
   display: none;
-  width: 856px;
-  height: 430px;
-  background-image: url(../assets/img/speech-bubble.png);
+  border-radius: 30px;
+  background-color: #fff;
   transition: all 0.2s ease-in-out;
+}
+
+.info-wrap::before {
+  position: absolute;
+  z-index: 3;
+  bottom: -54px;
+  right: -32px;
+  content: '';
+  width: 61px;
+  height: 79px;
+  background: url('/src/assets/img/speech-bubble.png') no-repeat -5px -30px;
+  background-size: contain;
 }
 
 .info-wrap.visible {

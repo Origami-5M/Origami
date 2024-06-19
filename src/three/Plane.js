@@ -20,12 +20,13 @@ const [frontColorIndex, backColorIndex] = getRandomColors(colors.length);
 const frontColor = colors[frontColorIndex];
 const backColor = colors[backColorIndex];
 
-const geometry = new THREE.PlaneGeometry(2, 2);
+const geometry = new THREE.PlaneGeometry(2, 2, 5, 5);
 const material = new THREE.ShaderMaterial({
   uniforms: {
     colorFront: { value: new THREE.Color(frontColor) },
     colorBack: { value: new THREE.Color(backColor) },
   },
+  wireframe: true,
   vertexShader: `
   varying vec3 vNormal;
   void main() {

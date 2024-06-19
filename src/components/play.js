@@ -1,14 +1,17 @@
-const infoButton = document.querySelector('.info-button');
-const modeLists = document.querySelectorAll('.mode-list li');
-const sidebarToggleButton = document.querySelector('.mode-button');
-const modeSidebar = document.querySelector('.mode-sidebar');
 const homeButton = document.querySelector('.home-button');
+const sidebarToggleButton = document.querySelector('.mode-button');
+const infoButton = document.querySelector('.info-button');
+const soundButton = document.querySelector('.sound-button');
 const finishButton = document.querySelector('.finish-button');
+
+const modeSidebar = document.querySelector('.mode-sidebar');
+const modeLists = document.querySelectorAll('.mode-list li');
+
+const mainBgm = document.querySelector('.main-bgm');
+
 const urlParams = new URLSearchParams(window.location.search);
 const guideMode = urlParams.get('guideMode');
-const soundButton = document.querySelector('.sound-button');
-const mainBgm = document.querySelector('.main-bgm');
-let isMute = false;
+let isMuted = false;
 
 const toggleInfo = () => {
   const infoWrap = document.querySelector('.info-wrap');
@@ -38,7 +41,7 @@ modeLists.forEach(item => {
 });
 
 homeButton.addEventListener('click', () => {
-  window.location.href = `origami/`;
+  window.location.href = `/`;
 });
 
 finishButton.addEventListener('click', () => {
@@ -62,8 +65,8 @@ document.addEventListener('click', event => {
   }
 });
 
-const changeSoundButton = isMute => {
-  if (isMute) {
+const changeSoundButton = isMuted => {
+  if (isMuted) {
     soundButton.style.backgroundPosition = '-100px -137px';
     mainBgm.pause();
   } else {
@@ -73,6 +76,6 @@ const changeSoundButton = isMute => {
 };
 
 soundButton.addEventListener('click', () => {
-  isMute = !isMute;
-  changeSoundButton(isMute);
+  isMuted = !isMuted;
+  changeSoundButton(isMuted);
 });

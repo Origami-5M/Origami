@@ -122,12 +122,12 @@
 }
 
 .rollback-button {
-  background: url('/src/assets/img/checked_sprites.png') no-repeat -175px 0px;
+  background: url('/src/assets/img/checked_sprites.png') no-repeat -107px -2px;
   opacity: 50%;
 }
 
 .commit-button {
-  background: url('/src/assets/img/checked_sprites.png') no-repeat -171px -69px;
+  background: url('/src/assets/img/checked_sprites.png') no-repeat -103px -56px;
   opacity: 50%;
 }
 
@@ -146,7 +146,7 @@
 }
 
 .mode-button.active {
-  background: #fff url('/src/assets/img/checked_sprites.png') no-repeat -5px -30px;
+  background: #fff url('/src/assets/img/checked_sprites.png') no-repeat -8px -3px;
   opacity: 1;
 }
 
@@ -179,7 +179,7 @@
 }
 
 .info-button.active {
-  background: url('/src/assets/img/checked_sprites.png') no-repeat -89px -31px;
+  background: url('/src/assets/img/checked_sprites.png') no-repeat -52px -55px;
   background-color: #fff;
   opacity: 1;
 }

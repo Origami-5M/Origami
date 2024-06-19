@@ -1,26 +1,26 @@
-const $soundButton = document.querySelector('.sound-button');
-const $mainBgm = document.querySelector('.main-bgm');
+const soundButton = document.querySelector('.sound-button');
+const mainBgm = document.querySelector('.main-bgm');
 
-const $sandboxModeButton = document.getElementById('sandboxMode');
-const $guideModeButton = document.getElementById('guideMode');
-const $modeModal = document.querySelector('.mode-blur-bg');
+const sandboxModeButton = document.getElementById('sandboxMode');
+const guideModeButton = document.getElementById('guideMode');
+const modeModal = document.querySelector('.mode-blur-bg');
 
-const $guideModeBox = document.querySelector('.guide-mode-box');
-const $startButton = document.querySelector('.big-start-button');
+const guideModeBox = document.querySelector('.guide-mode-box');
+const startButton = document.querySelector('.big-start-button');
 
 let isMuted = false;
 
 const toggleSoundButton = isMuted => {
   if (isMuted) {
-    $soundButton.style.backgroundPosition = '-66px -108px';
-    $mainBgm.pause();
+    soundButton.style.backgroundPosition = '-66px -108px';
+    mainBgm.pause();
   } else {
-    $soundButton.style.backgroundPosition = '-130px -108px';
-    $mainBgm.play();
+    soundButton.style.backgroundPosition = '-130px -108px';
+    mainBgm.play();
   }
 };
 
-$soundButton.addEventListener('click', () => {
+soundButton.addEventListener('click', () => {
   isMuted = !isMuted;
   toggleSoundButton(isMuted);
 });
@@ -50,32 +50,32 @@ const addCheckIcon = button => {
 };
 
 const navigateToPlay = () => {
-  const $activeGuideModeButton = document.querySelector('.guide-mode.active');
-  const modalOpacity = parseFloat(getComputedStyle($modeModal).opacity);
+  const activeGuideModeButton = document.querySelector('.guide-mode.active');
+  const modalOpacity = parseFloat(getComputedStyle(modeModal).opacity);
   if (modalOpacity !== 0) {
-    const guideMode = $activeGuideModeButton.getAttribute('data-mode');
+    const guideMode = activeGuideModeButton.getAttribute('data-mode');
     window.location.href = `/play-${guideMode}`;
   } else {
     window.location.href = '/play';
   }
 };
 
-$sandboxModeButton.addEventListener('click', () => {
-  handleModeButtonClick($sandboxModeButton, $guideModeButton);
-  $modeModal.style.opacity = '0';
+sandboxModeButton.addEventListener('click', () => {
+  handleModeButtonClick(sandboxModeButton, guideModeButton);
+  modeModal.style.opacity = '0';
 });
 
-$guideModeButton.addEventListener('click', () => {
-  handleModeButtonClick($guideModeButton, $sandboxModeButton);
-  $modeModal.style.opacity = '1';
+guideModeButton.addEventListener('click', () => {
+  handleModeButtonClick(guideModeButton, sandboxModeButton);
+  modeModal.style.opacity = '1';
 });
 
-$guideModeBox.addEventListener('click', event => {
-  const $guideModeButtons = document.querySelectorAll('.guide-mode');
-  const $guideModeButton = event.target.closest('.guide-mode');
+guideModeBox.addEventListener('click', event => {
+  const guideModeButtons = document.querySelectorAll('.guide-mode');
+  const guideModeButton = event.target.closest('.guide-mode');
 
-  removeCheckIcon($guideModeButtons);
-  addCheckIcon($guideModeButton);
+  removeCheckIcon(guideModeButtons);
+  addCheckIcon(guideModeButton);
 });
 
-$startButton.addEventListener('click', navigateToPlay);
+startButton.addEventListener('click', navigateToPlay);

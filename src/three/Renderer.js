@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { sizes } from './Sizes';
 
 const canvas = document.querySelector('.play-canvas');
 
@@ -7,6 +8,6 @@ const renderer = new THREE.WebGLRenderer({
   canvas: canvas,
 });
 renderer.setClearColor(0x000000, 0);
-renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setSize(sizes.width, sizes.height);
 
 export { renderer };

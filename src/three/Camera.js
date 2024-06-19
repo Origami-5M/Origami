@@ -1,11 +1,12 @@
 import * as THREE from 'three';
+import { sizes } from './Sizes';
 
 const camera = new THREE.PerspectiveCamera(
   75,
-  window.innerWidth / window.innerHeight,
+  sizes.width / sizes.height,
   0.1,
   1000
 );
-camera.position.z = 5;
+camera.position.z = 3;
 
 export { camera };

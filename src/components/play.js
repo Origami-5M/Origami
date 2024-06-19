@@ -11,6 +11,19 @@ const mainBgm = document.querySelector('.main-bgm');
 
 const urlParams = new URLSearchParams(window.location.search);
 const guideMode = urlParams.get('guideMode');
+
+const guideWrap = document.querySelector('.guide-wrap');
+const slider = guideWrap.querySelector('.slider');
+const slideList = slider.querySelectorAll('li');
+const prevButton = guideWrap.querySelector('.prev');
+const nextButton = guideWrap.querySelector('.next');
+
+const paginationText = guideWrap.querySelector('.pagination-text');
+const listWidth = 210;
+const sliderWidth = 210 * slideList.length;
+
+let currentIdx = 0;
+let translate = 0;
 let isMuted = false;
 
 const toggleInfo = () => {
@@ -35,6 +48,10 @@ modeLists.forEach(item => {
   }
 });
 
+if (guideMode) {
+  guideWrap.classList.remove('hidden');
+}
+
 infoButton.addEventListener('click', toggleInfo);
 modeLists.forEach(item => {
   item.addEventListener('click', checkList);
@@ -45,7 +62,6 @@ homeButton.addEventListener('click', () => {
 });
 
 finishButton.addEventListener('click', () => {
-  // 완료 기능 구현 필요
   console.log('Finish button clicked');
 });
 
@@ -79,3 +95,50 @@ soundButton.addEventListener('click', () => {
   isMuted = !isMuted;
   changeSoundButton(isMuted);
 });
+
+slider.style.width = `${sliderWidth}px`;
+
+function updateSlideButtons() {
+  if (currentIdx === 0) {
+    prevButton.classList.add('hidden');
+  } else {
+    prevButton.classList.remove('hidden');
+  }
+
+  if (currentIdx === slideList.length - 1) {
+    nextButton.classList.add('hidden');
+  } else {
+    nextButton.classList.remove('hidden');
+  }
+}
+
+function moveSlide(event) {
+  event.preventDefault();
+
+  if (event.target.className.includes('next')) {
+    if (currentIdx !== slideList.length - 1) {
+      goToSlide(currentIdx + 1);
+    }
+  } else if (event.target.className.includes('prev')) {
+    if (currentIdx !== 0) {
+      goToSlide(currentIdx - 1);
+    }
+  }
+
+  updateSlideButtons();
+}
+
+function goToSlide(index) {
+  translate = -listWidth * index;
+  slider.style.transform = `translateX(${translate}px)`;
+  currentIdx = index;
+
+  paginationText.textContent = `${currentIdx + 1} / ${slideList.length}`;
+  updateSlideButtons();
+}
+
+paginationText.textContent = `${currentIdx + 1} / ${slideList.length}`;
+updateSlideButtons();
+
+prevButton.addEventListener('click', moveSlide);
+nextButton.addEventListener('click', moveSlide);

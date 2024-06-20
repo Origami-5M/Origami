@@ -7,6 +7,7 @@ import { paper, borderVertices } from '../three/Paper';
 import { renderer } from '../three/Renderer';
 
 const playCont = document.querySelector('.play-cont');
+const foldFailToastMessage = document.querySelector('#fold-fail-toast-message');
 
 const scene = new THREE.Scene();
 scene.add(paper);
@@ -15,18 +16,23 @@ scene.add(directionalLight);
 
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
-let closestVertexIndex = -1;
 
-const createPointsMarker = () => {
+let closestVertexIndex = -1;
+let areMarkersAtSamePosition = false;
+
+const createPointsMarker = color => {
   const geometry = new THREE.SphereGeometry(0.03, 16, 16);
-  const material = new THREE.MeshBasicMaterial({ color: '#098CEA' });
+  const material = new THREE.MeshBasicMaterial({ color });
   const marker = new THREE.Mesh(geometry, material);
   marker.visible = false;
   return marker;
 };
 
-const pointsMarker = createPointsMarker();
+const pointsMarker = createPointsMarker('#098CEA');
 scene.add(pointsMarker);
+
+const redMarker = createPointsMarker('#FF0000');
+scene.add(redMarker);
 
 const handleResize = () => {
   const { width, height } = playCont.getBoundingClientRect();
@@ -41,6 +47,27 @@ const handleMouseMove = event => {
   const rect = playCont.getBoundingClientRect();
   mouse.x = ((event.clientX - rect.left) / sizes.width) * 2 - 1;
   mouse.y = -((event.clientY - rect.top) / sizes.height) * 2 + 1;
+};
+
+const handleMouseDown = () => {
+  if (pointsMarker.visible) {
+    redMarker.position.copy(pointsMarker.position);
+    pointsMarker.visible = false;
+    redMarker.visible = true;
+  }
+};
+
+const handleMouseUp = () => {
+  if (areMarkersAtSamePosition) {
+    foldFailToastMessage.classList.add('active');
+
+    setTimeout(() => {
+      foldFailToastMessage.classList.remove('active');
+    }, 1000);
+  } else if (pointsMarker.visible) {
+    console.log('접기 로직');
+  }
+  redMarker.visible = false;
 };
 
 const updateClosestVertex = (intersectionPoint, thresholdDistance) => {
@@ -67,11 +94,14 @@ const updateClosestVertex = (intersectionPoint, thresholdDistance) => {
       borderVertices[closestVertexIndex].y,
       borderVertices[closestVertexIndex].z
     );
+
     pointsMarker.position.copy(position);
     pointsMarker.visible = true;
   } else {
     pointsMarker.visible = false;
   }
+
+  areMarkersAtSamePosition = pointsMarker.position.equals(redMarker.position);
 };
 
 const MarkClosestVertexAnimate = () => {
@@ -92,5 +122,7 @@ const MarkClosestVertexAnimate = () => {
 
 window.addEventListener('resize', handleResize);
 window.addEventListener('mousemove', handleMouseMove);
+window.addEventListener('mousedown', handleMouseDown);
+window.addEventListener('mouseup', handleMouseUp);
 
 MarkClosestVertexAnimate();

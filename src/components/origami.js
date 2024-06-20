@@ -7,8 +7,10 @@ import { paper, borderVertices } from '../three/Paper';
 import { renderer } from '../three/Renderer';
 
 const playCont = document.querySelector('.play-cont');
+const foldFailToastMessage = document.getElementById('fold-fail-toast-message');
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
+
 let hoveredPoint = null;
 let clickPoint = null;
 
@@ -144,12 +146,10 @@ playCont.addEventListener('mouseup', event => {
       // 접기 기능 구현 추가 위치
     } else {
       if (clickPoint) {
-        const toastMessage = document.getElementById('toast_message');
-
-        toastMessage.classList.add('active');
+        foldFailToastMessage.classList.add('active');
 
         setTimeout(function () {
-          toastMessage.classList.remove('active');
+          foldFailToastMessage.classList.remove('active');
         }, 1000);
       }
     }

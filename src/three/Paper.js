@@ -105,5 +105,4 @@ const allVertices = getVertices(geometry);
 const borderVerticesIndexs = findBorderVertices(geometry);
 const borderVertices = borderVerticesIndexs.map(index => allVertices[index]);
 
-console.log('borderVertices', borderVertices);
 export { paper, borderVertices };

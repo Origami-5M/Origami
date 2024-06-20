@@ -43,7 +43,7 @@ const handleMouseMove = event => {
   mouse.y = -((event.clientY - rect.top) / sizes.height) * 2 + 1;
 };
 
-const updateClosestVertex = intersectionPoint => {
+const updateClosestVertex = (intersectionPoint, thresholdDistance) => {
   let minDistance = Infinity;
   closestVertexIndex = -1;
 
@@ -61,7 +61,7 @@ const updateClosestVertex = intersectionPoint => {
     }
   }
 
-  if (closestVertexIndex !== -1) {
+  if (closestVertexIndex !== -1 && minDistance < thresholdDistance) {
     const position = new THREE.Vector3(
       borderVertices[closestVertexIndex].x,
       borderVertices[closestVertexIndex].y,
@@ -69,6 +69,8 @@ const updateClosestVertex = intersectionPoint => {
     );
     pointsMarker.position.copy(position);
     pointsMarker.visible = true;
+  } else {
+    pointsMarker.visible = false;
   }
 };
 
@@ -77,7 +79,8 @@ const MarkClosestVertexAnimate = () => {
   const intersect = raycaster.intersectObject(paper);
 
   if (intersect.length) {
-    updateClosestVertex(intersect[0].point);
+    const threshold = 0.6;
+    updateClosestVertex(intersect[0].point, threshold);
   } else {
     pointsMarker.visible = false;
   }

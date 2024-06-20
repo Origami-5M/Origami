@@ -14,4 +14,7 @@ controls.mouseButtons = {
   RIGHT: null,
 };
 
+controls.minDistance = 1.5;
+controls.maxDistance = 5;
+
 export { controls };

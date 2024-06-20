@@ -20,7 +20,7 @@ const [frontColorIndex, backColorIndex] = getRandomColors(colors.length);
 const frontColor = colors[frontColorIndex];
 const backColor = colors[backColorIndex];
 
-const geometry = new THREE.PlaneGeometry(2, 2, 10, 10);
+const geometry = new THREE.PlaneGeometry(3, 3, 10, 10);
 const material = new THREE.ShaderMaterial({
   uniforms: {
     colorFront: { value: new THREE.Color(frontColor) },

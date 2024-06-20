@@ -31,6 +31,10 @@ p {
   opacity: 0;
 }
 
+.none {
+  display: none;
+}
+
 .font-sm {
   font-size: 14px;
 }

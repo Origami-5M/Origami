@@ -423,7 +423,7 @@
   left: 50%;
   transform: translate(-50%, 0);
   padding: 10px 50px;
-  background: #b9b8cc;
+  background: rgba(185, 184, 204, 0.2);
   border-radius: 100px;
   color: #000000;
   box-shadow: 3px 4px 11px 0px #00000040;

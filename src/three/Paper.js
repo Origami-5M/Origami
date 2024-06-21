@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-import { PAPERCOLORS } from '../components/constants';
+import { PAPERCOLORS } from '../constants';
 
 const getRandomColors = length => {
   const frontColorIndex = Math.floor(Math.random() * length);

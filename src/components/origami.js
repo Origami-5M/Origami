@@ -6,7 +6,7 @@ import { ambientLight, directionalLight } from '../three/Lights';
 import { paper, borderVertices } from '../three/Paper';
 import { renderer } from '../three/Renderer';
 
-import { POINTS_MARKER_COLOR, RED_MARKER_COLOR } from './constants';
+import { POINTS_MARKER_COLOR, RED_MARKER_COLOR } from '../constants';
 
 const playCont = document.querySelector('.play-cont');
 const foldFailToastMessage = document.querySelector('#foldFailToastMessage');

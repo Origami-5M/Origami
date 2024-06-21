@@ -75,7 +75,7 @@ const handleMouseUp = () => {
     }, 2000);
   } else if (!pointsMarker.visible && clickedRedMarker.visible) {
     foldFailToastMessage.innerText =
-      '꼭지점이 접을 수 있는 선분에 닿아야 합니다!';
+      '꼭짓점이 접을 수 있는 선분에 닿아야 합니다!';
     foldFailToastMessage.classList.add('active');
 
     setTimeout(() => {

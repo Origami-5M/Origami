@@ -29,7 +29,7 @@ let isFinished = false;
 let isDragging = false;
 let closestVertexIndex = -1;
 let areMarkersAtSamePosition = false;
-let confettiIntervalId = 0;
+let vertexIntervalLine = null;
 
 const createPointsMarker = color => {
   const geometry = new THREE.SphereGeometry(0.03, 16, 16);
@@ -99,8 +99,64 @@ const handleMouseUp = () => {
       foldFailToastMessage.classList.remove('active');
     }, 2000);
   } else {
-    // 접기 기능구현 들어가야할 곳!
+    raycaster.setFromCamera(mouse, camera);
+    const intersects = raycaster.intersectObject(paper);
+
+    if (intersects.length > 0) {
+      const intersectPoint = intersects[0].point;
+
+      let minDistance = Infinity;
+      let closestVertex = null;
+
+      for (let i = 0; i < borderVertices.length; i++) {
+        const vertex = new THREE.Vector3(
+          borderVertices[i].x,
+          borderVertices[i].y,
+          borderVertices[i].z
+        );
+        const distance = vertex.distanceTo(intersectPoint);
+
+        if (distance < minDistance) {
+          minDistance = distance;
+          closestVertex = vertex;
+        }
+      }
+
+      if (closestVertex) {
+        const MouseDownVertex = clickedRedMarker.position;
+        const MouseUpVertex = closestVertex.clone();
+
+        if (vertexIntervalLine) {
+          scene.remove(vertexIntervalLine);
+        }
+
+        const vertexIntervalGeometry = new THREE.BufferGeometry().setFromPoints(
+          [
+            new THREE.Vector3(
+              MouseDownVertex.x,
+              MouseDownVertex.y,
+              MouseDownVertex.z
+            ),
+            new THREE.Vector3(
+              MouseUpVertex.x,
+              MouseUpVertex.y,
+              MouseUpVertex.z
+            ),
+          ]
+        );
+        const vertexIntervalMaterial = new THREE.LineBasicMaterial({
+          color: 0xff0000,
+        });
+        vertexIntervalLine = new THREE.Line(
+          vertexIntervalGeometry,
+          vertexIntervalMaterial
+        );
+
+        scene.add(vertexIntervalLine);
+      }
+    }
   }
+
   clickedRedMarker.visible = false;
 };
 

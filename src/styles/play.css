@@ -32,9 +32,13 @@
 .play-wrap section .bottom-layout {
   display: flex;
   justify-content: space-between;
-  width: 100%;
   height: 68px;
   margin: 0 55px 57px 55px;
+}
+
+.arrowButtonBox {
+  position: absolute;
+  right: 0;
 }
 
 .bottom-layout {

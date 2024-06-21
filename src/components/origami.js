@@ -6,6 +6,8 @@ import { ambientLight, directionalLight } from '../three/Lights';
 import { paper, borderVertices } from '../three/Paper';
 import { renderer } from '../three/Renderer';
 
+import { POINTS_MARKER_COLOR, RED_MARKER_COLOR } from './constants';
+
 const playCont = document.querySelector('.play-cont');
 const foldFailToastMessage = document.querySelector('#foldFailToastMessage');
 
@@ -28,10 +30,10 @@ const createPointsMarker = color => {
   return marker;
 };
 
-const pointsMarker = createPointsMarker('#098CEA');
+const pointsMarker = createPointsMarker(POINTS_MARKER_COLOR);
 scene.add(pointsMarker);
 
-const clickedRedMarker = createPointsMarker('#FF0000');
+const clickedRedMarker = createPointsMarker(RED_MARKER_COLOR);
 scene.add(clickedRedMarker);
 
 const handleResize = () => {

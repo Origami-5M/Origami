@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { sizes } from '../three/Sizes';
-import { camera, initialCameraPosition } from '../three/Camera';
+import { camera, initializeCamera } from '../three/Camera';
 import { controls } from '../three/Controls';
 import { ambientLight, directionalLight } from '../three/Lights';
 import { paper, borderVertices } from '../three/Paper';
@@ -19,6 +19,7 @@ scene.add(directionalLight);
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 
+let isDragging = false;
 let closestVertexIndex = -1;
 let areMarkersAtSamePosition = false;
 
@@ -56,18 +57,23 @@ const handleMouseDown = () => {
     clickedRedMarker.position.copy(pointsMarker.position);
     pointsMarker.visible = false;
     clickedRedMarker.visible = true;
+    controls.enabled = false;
+    isDragging = true;
   }
 };
 
 const handleMouseUp = () => {
-  if (areMarkersAtSamePosition) {
+  isDragging = false;
+  controls.enabled = true;
+
+  if (areMarkersAtSamePosition && clickedRedMarker.visible) {
     foldFailToastMessage.innerText = '마우스를 접을 곳으로 이동해 주세요!';
     foldFailToastMessage.classList.add('active');
 
     setTimeout(() => {
       foldFailToastMessage.classList.remove('active');
     }, 2000);
-  } else if (!pointsMarker.visible) {
+  } else if (!pointsMarker.visible && clickedRedMarker.visible) {
     foldFailToastMessage.innerText =
       '꼭지점이 접을 수 있는 선분에 닿아야 합니다!';
     foldFailToastMessage.classList.add('active');
@@ -137,8 +143,6 @@ window.addEventListener('resize', handleResize);
 window.addEventListener('mousemove', handleMouseMove);
 window.addEventListener('mousedown', handleMouseDown);
 window.addEventListener('mouseup', handleMouseUp);
-playCont.addEventListener('dblclick', () => {
-  camera.position.copy(initialCameraPosition);
-});
+playCont.addEventListener('dblclick', initializeCamera);
 
 MarkClosestVertexAnimate();

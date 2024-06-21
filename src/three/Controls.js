@@ -1,14 +1,13 @@
 import * as THREE from 'three';
-import { TrackballControls } from 'three/examples/jsm/Addons.js';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 import { camera } from './Camera';
 import { renderer } from './Renderer';
 
-const controls = new TrackballControls(camera, renderer.domElement);
+const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.dampingFactor = 0.25;
 controls.enableZoom = true;
-controls.rotateSpeed = 4.0;
 
 controls.mouseButtons = {
   LEFT: THREE.MOUSE.ROTATE,

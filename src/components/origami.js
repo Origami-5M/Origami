@@ -61,13 +61,22 @@ const handleMouseDown = () => {
 
 const handleMouseUp = () => {
   if (areMarkersAtSamePosition) {
+    foldFailToastMessage.innerText = '마우스를 접을 곳으로 이동해 주세요!';
     foldFailToastMessage.classList.add('active');
 
     setTimeout(() => {
       foldFailToastMessage.classList.remove('active');
     }, 2000);
-  } else if (pointsMarker.visible) {
-    console.log('접기 로직');
+  } else if (!pointsMarker.visible) {
+    foldFailToastMessage.innerText =
+      '꼭지점이 접을 수 있는 선분에 닿아야 합니다!';
+    foldFailToastMessage.classList.add('active');
+
+    setTimeout(() => {
+      foldFailToastMessage.classList.remove('active');
+    }, 2000);
+  } else {
+    // 접기 기능구현 들어가야할 곳!
   }
   clickedRedMarker.visible = false;
 };

@@ -9,7 +9,7 @@ const modeLists = document.querySelectorAll('.mode-list li');
 const mainBgm = document.querySelector('.main-bgm');
 
 const urlParams = new URLSearchParams(window.location.search);
-const guideMode = urlParams.get('guideMode');
+const guideMode = urlParams.get('mode');
 
 const guideWrap = document.querySelector('.guide-wrap');
 const slider = guideWrap.querySelector('.slider');
@@ -43,12 +43,12 @@ const checkList = event => {
 
 modeLists.forEach(item => {
   if (item.getAttribute('data-guideMode') === guideMode) {
-    item.classList.add('hidden');
+    item.classList.add('none');
   }
 });
 
 if (guideMode) {
-  guideWrap.classList.remove('hidden');
+  guideWrap.classList.remove('none');
 }
 
 infoButton.addEventListener('click', toggleInfo);

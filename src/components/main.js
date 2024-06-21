@@ -54,7 +54,13 @@ const navigateToPlay = () => {
   const modalOpacity = parseFloat(getComputedStyle(modeModal).opacity);
   if (modalOpacity !== 0) {
     const guideMode = activeGuideModeButton.getAttribute('data-mode');
-    window.location.href = `/play-${guideMode}`;
+    let url = new URL(`${window.location.origin}/play`);
+    let params = new URLSearchParams(url.search);
+
+    params.append('mode', guideMode);
+    url.search = params.toString();
+
+    window.location.href = url.toString();
   } else {
     window.location.href = '/play';
   }

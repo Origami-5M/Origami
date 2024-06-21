@@ -31,8 +31,8 @@ const createPointsMarker = color => {
 const pointsMarker = createPointsMarker('#098CEA');
 scene.add(pointsMarker);
 
-const redMarker = createPointsMarker('#FF0000');
-scene.add(redMarker);
+const clickedRedMarker = createPointsMarker('#FF0000');
+scene.add(clickedRedMarker);
 
 const handleResize = () => {
   const { width, height } = playCont.getBoundingClientRect();
@@ -51,9 +51,9 @@ const handleMouseMove = event => {
 
 const handleMouseDown = () => {
   if (pointsMarker.visible) {
-    redMarker.position.copy(pointsMarker.position);
+    clickedRedMarker.position.copy(pointsMarker.position);
     pointsMarker.visible = false;
-    redMarker.visible = true;
+    clickedRedMarker.visible = true;
   }
 };
 
@@ -67,7 +67,7 @@ const handleMouseUp = () => {
   } else if (pointsMarker.visible) {
     console.log('접기 로직');
   }
-  redMarker.visible = false;
+  clickedRedMarker.visible = false;
 };
 
 const updateClosestVertex = (intersectionPoint, thresholdDistance) => {
@@ -101,7 +101,9 @@ const updateClosestVertex = (intersectionPoint, thresholdDistance) => {
     pointsMarker.visible = false;
   }
 
-  areMarkersAtSamePosition = pointsMarker.position.equals(redMarker.position);
+  areMarkersAtSamePosition = pointsMarker.position.equals(
+    clickedRedMarker.position
+  );
 };
 
 const MarkClosestVertexAnimate = () => {

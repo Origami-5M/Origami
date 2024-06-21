@@ -7,7 +7,7 @@ import { paper, borderVertices } from '../three/Paper';
 import { renderer } from '../three/Renderer';
 
 const playCont = document.querySelector('.play-cont');
-const foldFailToastMessage = document.querySelector('#fold-fail-toast-message');
+const foldFailToastMessage = document.querySelector('#foldFailToastMessage');
 
 const scene = new THREE.Scene();
 scene.add(paper);

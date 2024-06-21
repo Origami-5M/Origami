@@ -63,7 +63,7 @@ const handleMouseUp = () => {
 
     setTimeout(() => {
       foldFailToastMessage.classList.remove('active');
-    }, 1000);
+    }, 2000);
   } else if (pointsMarker.visible) {
     console.log('접기 로직');
   }

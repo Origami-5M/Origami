@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { sizes } from '../three/Sizes';
-import { camera } from '../three/Camera';
+import { camera, initialCameraPosition } from '../three/Camera';
 import { controls } from '../three/Controls';
 import { ambientLight, directionalLight } from '../three/Lights';
 import { paper, borderVertices } from '../three/Paper';
@@ -137,5 +137,8 @@ window.addEventListener('resize', handleResize);
 window.addEventListener('mousemove', handleMouseMove);
 window.addEventListener('mousedown', handleMouseDown);
 window.addEventListener('mouseup', handleMouseUp);
+playCont.addEventListener('dblclick', () => {
+  camera.position.copy(initialCameraPosition);
+});
 
 MarkClosestVertexAnimate();

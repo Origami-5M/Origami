@@ -6,7 +6,12 @@ import { camera, initializeCamera } from '../three/Camera';
 import { controls } from '../three/Controls';
 import { ambientLight, directionalLight } from '../three/Lights';
 import { paper, borderVertices } from '../three/Paper';
-import { renderer, finishRenderer } from '../three/Renderer';
+import { renderer } from '../three/Renderer';
+import {
+  findClosestVertex,
+  createVertexIntervalLine,
+} from './vertexIntervalOperations';
+import { calculateRotatedLine } from './axisCalculations';
 
 import { POINTS_MARKER_COLOR, RED_MARKER_COLOR } from '../constants';
 
@@ -30,6 +35,7 @@ let isDragging = false;
 let closestVertexIndex = -1;
 let areMarkersAtSamePosition = false;
 let vertexIntervalLine = null;
+let vertexIntervalRotatedLine = null;
 
 const createPointsMarker = color => {
   const geometry = new THREE.SphereGeometry(0.03, 16, 16);
@@ -104,55 +110,25 @@ const handleMouseUp = () => {
 
     if (intersects.length > 0) {
       const intersectPoint = intersects[0].point;
-
-      let minDistance = Infinity;
-      let closestVertex = null;
-
-      for (let i = 0; i < borderVertices.length; i++) {
-        const vertex = new THREE.Vector3(
-          borderVertices[i].x,
-          borderVertices[i].y,
-          borderVertices[i].z
-        );
-        const distance = vertex.distanceTo(intersectPoint);
-
-        if (distance < minDistance) {
-          minDistance = distance;
-          closestVertex = vertex;
-        }
-      }
+      const closestVertex = findClosestVertex(intersectPoint, borderVertices);
 
       if (closestVertex) {
-        const MouseDownVertex = clickedRedMarker.position;
-        const MouseUpVertex = closestVertex.clone();
-
-        if (vertexIntervalLine) {
-          scene.remove(vertexIntervalLine);
-        }
-
-        const vertexIntervalGeometry = new THREE.BufferGeometry().setFromPoints(
-          [
-            new THREE.Vector3(
-              MouseDownVertex.x,
-              MouseDownVertex.y,
-              MouseDownVertex.z
-            ),
-            new THREE.Vector3(
-              MouseUpVertex.x,
-              MouseUpVertex.y,
-              MouseUpVertex.z
-            ),
-          ]
+        vertexIntervalLine = createVertexIntervalLine(
+          scene,
+          clickedRedMarker,
+          closestVertex,
+          vertexIntervalLine
         );
-        const vertexIntervalMaterial = new THREE.LineBasicMaterial({
-          color: 0xff0000,
-        });
-        vertexIntervalLine = new THREE.Line(
-          vertexIntervalGeometry,
-          vertexIntervalMaterial
+        vertexIntervalRotatedLine = calculateRotatedLine(
+          scene,
+          clickedRedMarker.position,
+          closestVertex,
+          createPointsMarker,
+          vertexIntervalRotatedLine
         );
 
         scene.add(vertexIntervalLine);
+        scene.add(vertexIntervalRotatedLine);
       }
     }
   }

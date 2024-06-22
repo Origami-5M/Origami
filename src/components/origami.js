@@ -1,4 +1,6 @@
 import * as THREE from 'three';
+import confetti from 'canvas-confetti';
+
 import { sizes, finishSizes } from '../three/Sizes';
 import { camera, initializeCamera } from '../three/Camera';
 import { controls } from '../three/Controls';
@@ -160,9 +162,23 @@ const MarkClosestVertexAnimate = () => {
   requestAnimationFrame(MarkClosestVertexAnimate);
 };
 
+const launchConfetti = () => {
+  if (!completeContainer.classList.contains('none')) {
+    confetti({
+      particleCount: 200,
+      spread: 130,
+      origin: { y: 0.65 },
+      zIndex: 3,
+    });
+  }
+};
+
 finishButton.addEventListener('click', () => {
   completeContainer.classList.remove('none');
   section.classList.add('active');
+
+  launchConfetti();
+  setInterval(launchConfetti, 3500);
 
   renderer.clear();
   handleResize();

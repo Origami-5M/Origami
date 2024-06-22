@@ -31,8 +31,6 @@
 }
 
 .play-wrap section .bottom-layout {
-  display: flex;
-  justify-content: space-between;
   height: 68px;
   margin: 0 55px 57px 55px;
 }
@@ -437,4 +435,8 @@
   z-index: 10;
   opacity: 100%;
   bottom: 50px;
+}
+
+#confetti-canvas {
+  position: absolute;
 }

@@ -28,6 +28,7 @@ const mouse = new THREE.Vector2();
 let isDragging = false;
 let closestVertexIndex = -1;
 let areMarkersAtSamePosition = false;
+let confettiIntervalId = 0;
 
 const createPointsMarker = color => {
   const geometry = new THREE.SphereGeometry(0.03, 16, 16);
@@ -170,6 +171,8 @@ const launchConfetti = () => {
       origin: { y: 0.65 },
       zIndex: 3,
     });
+  } else {
+    clearInterval(confettiIntervalId);
   }
 };
 
@@ -178,7 +181,7 @@ finishButton.addEventListener('click', () => {
   section.classList.add('active');
 
   launchConfetti();
-  setInterval(launchConfetti, 3500);
+  confettiIntervalId = setInterval(launchConfetti, 3500);
 
   renderer.clear();
   handleResize();

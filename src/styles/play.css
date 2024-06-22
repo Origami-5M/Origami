@@ -19,6 +19,7 @@
 
 .play-wrap section.active:after {
   position: absolute;
+  z-index: 2;
   top: 0;
   left: 0;
   width: 100%;
@@ -390,7 +391,6 @@
   width: 390px;
   height: 390px;
   margin-bottom: 20px;
-  background-color: #d1d1d1;
 }
 
 .complete-container form {

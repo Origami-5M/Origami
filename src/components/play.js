@@ -1,9 +1,7 @@
-const section = document.querySelector('section');
 const homeButton = document.querySelector('.home-button');
 const sidebarToggleButton = document.querySelector('.mode-button');
 const infoButton = document.querySelector('.info-button');
 const soundButton = document.querySelector('.sound-button');
-const finishButton = document.querySelector('.finish-button');
 
 const modeSidebar = document.querySelector('.mode-sidebar');
 const modeLists = document.querySelectorAll('.mode-list li');
@@ -22,8 +20,6 @@ const nextButton = guideWrap.querySelector('.next');
 const paginationText = guideWrap.querySelector('.pagination-text');
 const listWidth = 210;
 const sliderWidth = 210 * slideList.length;
-
-const completeContainer = document.querySelector('.complete-container');
 
 let currentIdx = 0;
 let translate = 0;
@@ -62,11 +58,6 @@ modeLists.forEach(item => {
 
 homeButton.addEventListener('click', () => {
   window.location.href = `/`;
-});
-
-finishButton.addEventListener('click', () => {
-  completeContainer.classList.remove('hidden');
-  section.classList.add('active');
 });
 
 sidebarToggleButton.addEventListener('click', event => {

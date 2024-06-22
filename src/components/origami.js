@@ -1,14 +1,18 @@
 import * as THREE from 'three';
-import { sizes } from '../three/Sizes';
+import { sizes, finishSizes } from '../three/Sizes';
 import { camera, initializeCamera } from '../three/Camera';
 import { controls } from '../three/Controls';
 import { ambientLight, directionalLight } from '../three/Lights';
 import { paper, borderVertices } from '../three/Paper';
-import { renderer } from '../three/Renderer';
+import { renderer, finishRenderer } from '../three/Renderer';
 
 import { POINTS_MARKER_COLOR, RED_MARKER_COLOR } from '../constants';
 
+const section = document.querySelector('section');
 const playCont = document.querySelector('.play-cont');
+const finishCont = document.querySelector('.complete-scene');
+const finishButton = document.querySelector('.finish-button');
+const completeContainer = document.querySelector('.complete-container');
 const foldFailToastMessage = document.querySelector('#foldFailToastMessage');
 
 const scene = new THREE.Scene();
@@ -38,12 +42,21 @@ const clickedRedMarker = createPointsMarker(RED_MARKER_COLOR);
 scene.add(clickedRedMarker);
 
 const handleResize = () => {
-  const { width, height } = playCont.getBoundingClientRect();
-  sizes.width = width;
-  sizes.height = height;
-  camera.aspect = width / height;
+  const playRect = playCont.getBoundingClientRect();
+  sizes.width = playRect.width;
+  sizes.height = playRect.height;
+  camera.aspect = sizes.width / sizes.height;
   camera.updateProjectionMatrix();
-  renderer.setSize(width, height);
+  renderer.setSize(sizes.width, sizes.height);
+
+  if (!completeContainer.classList.contains('none')) {
+    const finishRect = finishCont.getBoundingClientRect();
+    finishSizes.width = finishRect.width;
+    finishSizes.height = finishRect.height;
+    camera.aspect = finishSizes.width / finishSizes.height;
+    camera.updateProjectionMatrix();
+    finishRenderer.setSize(finishSizes.width, finishSizes.height);
+  }
 };
 
 const handleMouseMove = event => {
@@ -135,9 +148,26 @@ const MarkClosestVertexAnimate = () => {
   }
 
   controls.update();
-  renderer.render(scene, camera);
+
+  if (completeContainer.classList.contains('none')) {
+    renderer.render(scene, camera);
+  } else {
+    updateClosestVertex(0, 0);
+    finishRenderer.render(scene, camera);
+    paper.rotation.y += 0.01;
+  }
+
   requestAnimationFrame(MarkClosestVertexAnimate);
 };
+
+finishButton.addEventListener('click', () => {
+  completeContainer.classList.remove('none');
+  section.classList.add('active');
+
+  renderer.clear();
+  handleResize();
+  initializeCamera();
+});
 
 window.addEventListener('resize', handleResize);
 window.addEventListener('mousemove', handleMouseMove);

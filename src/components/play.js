@@ -60,6 +60,12 @@ homeButton.addEventListener('click', () => {
   window.location.href = `/`;
 });
 
+document.body.addEventListener('click', event => {
+  if (event.target.matches('.restart-button')) {
+    window.location.href = `/`;
+  }
+});
+
 sidebarToggleButton.addEventListener('click', event => {
   sidebarToggleButton.classList.toggle('active');
   modeSidebar.classList.toggle('visible');

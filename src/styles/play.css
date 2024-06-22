@@ -118,13 +118,13 @@
   font-weight: 900;
 }
 
-.restart-button {
+.circle-button.restart-button {
   background: url('/src/assets/img/nav_sprites.png') no-repeat -186px -9px;
   background-color: #888;
   opacity: 50%;
 }
 
-.restart-button:hover {
+.circle-button.restart-button:hover {
   opacity: 100%;
 }
 

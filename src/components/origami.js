@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import confetti from 'canvas-confetti';
 
-import { sizes, finishSizes } from '../three/Sizes';
+import { sizes } from '../three/Sizes';
 import { camera, initializeCamera } from '../three/Camera';
 import { controls } from '../three/Controls';
 import { ambientLight, directionalLight } from '../three/Lights';
@@ -25,6 +25,7 @@ scene.add(directionalLight);
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 
+let isFinished = false;
 let isDragging = false;
 let closestVertexIndex = -1;
 let areMarkersAtSamePosition = false;
@@ -44,21 +45,21 @@ scene.add(pointsMarker);
 const clickedRedMarker = createPointsMarker(RED_MARKER_COLOR);
 scene.add(clickedRedMarker);
 
-const handleResize = () => {
-  const playRect = playCont.getBoundingClientRect();
-  sizes.width = playRect.width;
-  sizes.height = playRect.height;
+const updateSizesAndCamera = cont => {
+  const rect = cont.getBoundingClientRect();
+  sizes.width = rect.width;
+  sizes.height = rect.height;
   camera.aspect = sizes.width / sizes.height;
   camera.updateProjectionMatrix();
+};
+
+const handleResize = () => {
+  updateSizesAndCamera(playCont);
   renderer.setSize(sizes.width, sizes.height);
 
-  if (!completeCont.classList.contains('none')) {
-    const finishRect = finishCont.getBoundingClientRect();
-    finishSizes.width = finishRect.width;
-    finishSizes.height = finishRect.height;
-    camera.aspect = finishSizes.width / finishSizes.height;
-    camera.updateProjectionMatrix();
-    finishRenderer.setSize(finishSizes.width, finishSizes.height);
+  if (isFinished) {
+    updateSizesAndCamera(finishCont);
+    finishRenderer.setSize(sizes.width, sizes.height);
   }
 };
 
@@ -152,19 +153,19 @@ const MarkClosestVertexAnimate = () => {
 
   controls.update();
 
-  if (completeCont.classList.contains('none')) {
-    renderer.render(scene, camera);
-  } else {
-    updateClosestVertex(0, 0);
+  if (isFinished) {
+    camera.position.z = 3.5;
     finishRenderer.render(scene, camera);
     paper.rotation.y += 0.01;
+  } else {
+    renderer.render(scene, camera);
   }
 
   requestAnimationFrame(MarkClosestVertexAnimate);
 };
 
 const launchConfetti = () => {
-  if (!completeCont.classList.contains('none')) {
+  if (isFinished) {
     confetti({
       particleCount: 200,
       spread: 130,
@@ -177,6 +178,8 @@ const launchConfetti = () => {
 };
 
 finishButton.addEventListener('click', () => {
+  isFinished = true;
+
   completeCont.classList.remove('none');
   section.classList.add('active');
 

@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-
 import { PAPERCOLORS } from '../constants';
 
 const getRandomColors = length => {
@@ -23,7 +22,7 @@ const material = new THREE.ShaderMaterial({
     colorFront: { value: new THREE.Color(frontColor) },
     colorBack: { value: new THREE.Color(backColor) },
   },
-  wireframe: true,
+  wireframe: false,
   vertexShader: `
   varying vec3 vNormal;
   void main() {

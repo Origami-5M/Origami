@@ -7,12 +7,8 @@ import { controls } from '../three/Controls';
 import { ambientLight, directionalLight } from '../three/Lights';
 import { paper, borderVertices } from '../three/Paper';
 import { renderer } from '../three/Renderer';
-import {
-  findClosestVertex,
-  createVertexIntervalLine,
-} from './vertexIntervalOperations';
+import { findClosestVertex } from './findClosestVertex';
 import { calculateRotatedLine } from './axisCalculations';
-
 import { POINTS_MARKER_COLOR, RED_MARKER_COLOR } from '../constants';
 
 const section = document.querySelector('section');
@@ -21,7 +17,6 @@ const finishCont = document.querySelector('.complete-scene');
 const finishButton = document.querySelector('.finish-button');
 const completeCont = document.querySelector('.complete-cont');
 const foldFailToastMessage = document.querySelector('#foldFailToastMessage');
-
 const scene = new THREE.Scene();
 scene.add(paper);
 scene.add(ambientLight);
@@ -32,10 +27,9 @@ const mouse = new THREE.Vector2();
 
 let isFinished = false;
 let isDragging = false;
-let closestVertexIndex = -1;
 let areMarkersAtSamePosition = false;
-let vertexIntervalLine = null;
-let vertexIntervalRotatedLine = null;
+let vertexIntervalRotatedBasedOnX = null;
+let vertexIntervalRotatedBasedOnY = null;
 
 const createPointsMarker = color => {
   const geometry = new THREE.SphereGeometry(0.03, 16, 16);
@@ -110,25 +104,30 @@ const handleMouseUp = () => {
 
     if (intersects.length > 0) {
       const intersectPoint = intersects[0].point;
-      const closestVertex = findClosestVertex(intersectPoint, borderVertices);
+      const closestVertex = findClosestVertex(
+        intersectPoint,
+        borderVertices
+      ).closestVertex;
 
       if (closestVertex) {
-        vertexIntervalLine = createVertexIntervalLine(
-          scene,
-          clickedRedMarker,
-          closestVertex,
-          vertexIntervalLine
-        );
-        vertexIntervalRotatedLine = calculateRotatedLine(
+        const rotatedLines = calculateRotatedLine(
           scene,
           clickedRedMarker.position,
           closestVertex,
-          createPointsMarker,
-          vertexIntervalRotatedLine
+          vertexIntervalRotatedBasedOnX,
+          vertexIntervalRotatedBasedOnY
         );
 
-        scene.add(vertexIntervalLine);
-        scene.add(vertexIntervalRotatedLine);
+        vertexIntervalRotatedBasedOnX =
+          rotatedLines.vertexIntervalRotatedBasedOnX;
+        vertexIntervalRotatedBasedOnY =
+          rotatedLines.vertexIntervalRotatedBasedOnY;
+        vertexIntervalRotatedBasedOnX
+          ? scene.add(vertexIntervalRotatedBasedOnX)
+          : null;
+        vertexIntervalRotatedBasedOnY
+          ? scene.add(vertexIntervalRotatedBasedOnY)
+          : null;
       }
     }
   }
@@ -137,31 +136,13 @@ const handleMouseUp = () => {
 };
 
 const updateClosestVertex = (intersectionPoint, thresholdDistance) => {
-  let minDistance = Infinity;
-  closestVertexIndex = -1;
-
-  for (let i = 0; i < borderVertices.length; i++) {
-    const vertex = new THREE.Vector3(
-      borderVertices[i].x,
-      borderVertices[i].y,
-      borderVertices[i].z
-    );
-    const distance = vertex.distanceTo(intersectionPoint);
-
-    if (distance < minDistance) {
-      minDistance = distance;
-      closestVertexIndex = i;
-    }
-  }
+  const { closestVertex, closestVertexIndex, minDistance } = findClosestVertex(
+    intersectionPoint,
+    borderVertices
+  );
 
   if (closestVertexIndex !== -1 && minDistance < thresholdDistance) {
-    const position = new THREE.Vector3(
-      borderVertices[closestVertexIndex].x,
-      borderVertices[closestVertexIndex].y,
-      borderVertices[closestVertexIndex].z
-    );
-
-    pointsMarker.position.copy(position);
+    pointsMarker.position.copy(closestVertex);
     pointsMarker.visible = true;
   } else {
     pointsMarker.visible = false;
@@ -172,7 +153,7 @@ const updateClosestVertex = (intersectionPoint, thresholdDistance) => {
   );
 };
 
-const MarkClosestVertexAnimate = () => {
+const markClosestVertexAnimate = () => {
   raycaster.setFromCamera(mouse, camera);
   const intersect = raycaster.intersectObject(paper);
 
@@ -229,4 +210,4 @@ window.addEventListener('mousedown', handleMouseDown);
 window.addEventListener('mouseup', handleMouseUp);
 playCont.addEventListener('dblclick', initializeCamera);
 
-MarkClosestVertexAnimate();
+markClosestVertexAnimate();

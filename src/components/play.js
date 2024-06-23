@@ -62,7 +62,7 @@ homeButton.addEventListener('click', () => {
 
 document.body.addEventListener('click', event => {
   if (event.target.matches('.restart-button')) {
-    window.location.href = `/play`;
+    window.location.reload();
   }
 });
 

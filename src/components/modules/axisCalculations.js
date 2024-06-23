@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 
 const PAPER_BOUNDARY = 1.5;
+const DASH_SIZE = 0.02;
 
 export const calculateRotatedLine = (
   scene,
@@ -140,17 +141,21 @@ export const calculateRotatedLine = (
 
   if (vertexIntervalRotatedBasedOnX) {
     scene.remove(vertexIntervalRotatedBasedOnX);
+    vertexIntervalRotatedBasedOnX = null;
   }
 
   if (vertexIntervalRotatedBasedOnY) {
     scene.remove(vertexIntervalRotatedBasedOnY);
+    vertexIntervalRotatedBasedOnY = null;
   }
 
   const rotatedVertexIntervalMaterial = new THREE.LineDashedMaterial({
     color: 0xffffff,
-    dashSize: 0.02,
-    gapSize: 0.02,
+    dashSize: DASH_SIZE,
+    gapSize: DASH_SIZE,
   });
+
+  let rotatedLineVertex = {};
 
   if (startXBasedOnY <= -PAPER_BOUNDARY) {
     const rotatedVertexIntervalGeometry1 =
@@ -158,6 +163,8 @@ export const calculateRotatedLine = (
         clampedStartBasedOnX,
         clampedEndBasedOnX,
       ]);
+
+    rotatedLineVertex = { clampedStartBasedOnX, clampedEndBasedOnX };
 
     vertexIntervalRotatedBasedOnX = new THREE.Line(
       rotatedVertexIntervalGeometry1,
@@ -173,6 +180,8 @@ export const calculateRotatedLine = (
         clampedEndBasedOnX,
       ]);
 
+    rotatedLineVertex = { clampedStartBasedOnX, clampedEndBasedOnX };
+
     vertexIntervalRotatedBasedOnX = new THREE.Line(
       rotatedVertexIntervalGeometry1,
       rotatedVertexIntervalMaterial
@@ -186,6 +195,8 @@ export const calculateRotatedLine = (
         clampedStartBasedOnX,
         clampedEndBasedOnX,
       ]);
+
+    rotatedLineVertex = { clampedStartBasedOnX, clampedEndBasedOnX };
 
     vertexIntervalRotatedBasedOnX = new THREE.Line(
       rotatedVertexIntervalGeometry1,
@@ -201,6 +212,8 @@ export const calculateRotatedLine = (
         clampedEndBasedOnY,
       ]);
 
+    rotatedLineVertex = { clampedStartBasedOnY, clampedEndBasedOnY };
+
     vertexIntervalRotatedBasedOnY = new THREE.Line(
       rotatedVertexIntervalGeometry2,
       rotatedVertexIntervalMaterial
@@ -210,5 +223,9 @@ export const calculateRotatedLine = (
     scene.add(vertexIntervalRotatedBasedOnY);
   }
 
-  return { vertexIntervalRotatedBasedOnX, vertexIntervalRotatedBasedOnY };
+  return {
+    vertexIntervalRotatedBasedOnX,
+    vertexIntervalRotatedBasedOnY,
+    rotatedLineVertex,
+  };
 };

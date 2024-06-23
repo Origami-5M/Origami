@@ -51,8 +51,7 @@ const addCheckIcon = button => {
 
 const navigateToPlay = () => {
   const activeGuideModeButton = document.querySelector('.guide-mode.active');
-  const modalOpacity = parseFloat(getComputedStyle(modeModal).opacity);
-  if (modalOpacity !== 0) {
+  if (!modeModal.classList.contains('hidden')) {
     const guideMode = activeGuideModeButton.getAttribute('data-mode');
     let url = new URL(`${window.location.origin}/play`);
     let params = new URLSearchParams(url.search);
@@ -68,12 +67,12 @@ const navigateToPlay = () => {
 
 sandboxModeButton.addEventListener('click', () => {
   handleModeButtonClick(sandboxModeButton, guideModeButton);
-  modeModal.style.opacity = '0';
+  modeModal.classList.add('hidden');
 });
 
 guideModeButton.addEventListener('click', () => {
   handleModeButtonClick(guideModeButton, sandboxModeButton);
-  modeModal.style.opacity = '1';
+  modeModal.classList.remove('hidden');
 });
 
 guideModeBox.addEventListener('click', event => {

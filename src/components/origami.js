@@ -14,7 +14,7 @@ const section = document.querySelector('section');
 const playCont = document.querySelector('.play-cont');
 const finishCont = document.querySelector('.complete-scene');
 const finishButton = document.querySelector('.finish-button');
-const completeContainer = document.querySelector('.complete-container');
+const completeCont = document.querySelector('.complete-cont');
 const foldFailToastMessage = document.querySelector('#foldFailToastMessage');
 
 const scene = new THREE.Scene();
@@ -52,7 +52,7 @@ const handleResize = () => {
   camera.updateProjectionMatrix();
   renderer.setSize(sizes.width, sizes.height);
 
-  if (!completeContainer.classList.contains('none')) {
+  if (!completeCont.classList.contains('none')) {
     const finishRect = finishCont.getBoundingClientRect();
     finishSizes.width = finishRect.width;
     finishSizes.height = finishRect.height;
@@ -152,7 +152,7 @@ const MarkClosestVertexAnimate = () => {
 
   controls.update();
 
-  if (completeContainer.classList.contains('none')) {
+  if (completeCont.classList.contains('none')) {
     renderer.render(scene, camera);
   } else {
     updateClosestVertex(0, 0);
@@ -164,7 +164,7 @@ const MarkClosestVertexAnimate = () => {
 };
 
 const launchConfetti = () => {
-  if (!completeContainer.classList.contains('none')) {
+  if (!completeCont.classList.contains('none')) {
     confetti({
       particleCount: 200,
       spread: 130,
@@ -177,7 +177,7 @@ const launchConfetti = () => {
 };
 
 finishButton.addEventListener('click', () => {
-  completeContainer.classList.remove('none');
+  completeCont.classList.remove('none');
   section.classList.add('active');
 
   launchConfetti();

@@ -1,4 +1,4 @@
-.complete-container {
+.complete-cont {
   position: relative;
   z-index: 1;
   width: 100%;
@@ -7,7 +7,7 @@
   background-color: #e7e6ff;
 }
 
-.complete-container::after {
+.complete-cont::after {
   position: fixed;
   z-index: -1;
   top: 0;

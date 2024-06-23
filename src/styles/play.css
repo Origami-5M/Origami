@@ -373,7 +373,7 @@
   text-align: center;
 }
 
-.complete-container {
+.complete-cont {
   position: absolute;
   z-index: 5;
   bottom: 190px;
@@ -385,17 +385,17 @@
   width: 600px;
 }
 
-.complete-container .complete-scene {
+.complete-cont .complete-scene {
   width: 390px;
   height: 390px;
   margin-bottom: 20px;
 }
 
-.complete-container form {
+.complete-cont form {
   width: 100%;
 }
 
-.complete-container form input {
+.complete-cont form input {
   width: 100%;
   height: 60px;
   padding: 15px;

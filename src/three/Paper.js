@@ -16,7 +16,7 @@ const [frontColorIndex, backColorIndex] = getRandomColors(PAPERCOLORS.length);
 const frontColor = PAPERCOLORS[frontColorIndex];
 const backColor = PAPERCOLORS[backColorIndex];
 
-const geometry = new THREE.PlaneGeometry(3, 3, 10, 10);
+const geometry = new THREE.PlaneGeometry(3, 3, 100, 100);
 const material = new THREE.ShaderMaterial({
   uniforms: {
     colorFront: { value: new THREE.Color(frontColor) },
@@ -47,58 +47,50 @@ const material = new THREE.ShaderMaterial({
 
 const paper = new THREE.Mesh(geometry, material);
 
-const getVertices = geometry => {
-  const positions = geometry.attributes.position.array;
-  const vertices = [];
+const findBorderVertices = () => {
+  const corners = [
+    { x: 1.5, y: 1.5, z: 0 },
+    { x: -1.5, y: 1.5, z: 0 },
+    { x: -1.5, y: -1.5, z: 0 },
+    { x: 1.5, y: -1.5, z: 0 },
+  ];
 
-  for (let i = 0; i < positions.length; i += 3) {
-    const x = positions[i];
-    const y = positions[i + 1];
-    const z = positions[i + 2];
-    vertices.push({ x, y, z });
-  }
-
-  return vertices;
+  return corners;
 };
 
-const addEdge = (a, b, edgeCount) => {
-  const edge = a < b ? `${a}_${b}` : `${b}_${a}`;
-  if (edgeCount[edge]) {
-    edgeCount[edge]++;
-  } else {
-    edgeCount[edge] = 1;
+const interpolatePoints = (start, end, numPoints) => {
+  const points = [];
+  const deltaX = (end.x - start.x) / (numPoints + 1);
+  const deltaY = (end.y - start.y) / (numPoints + 1);
+  const deltaZ = (end.z - start.z) / (numPoints + 1);
+
+  points.push(start); // Add the starting corner
+
+  for (let i = 1; i <= numPoints; i++) {
+    points.push({
+      x: start.x + deltaX * i,
+      y: start.y + deltaY * i,
+      z: start.z + deltaZ * i,
+    });
   }
+
+  return points;
 };
 
-const findBorderVertices = geometry => {
-  const edgeCount = {};
-  const indices = geometry.index.array;
+const generateBorderPoints = (corners, pointsPerEdge) => {
+  const borderPoints = [];
 
-  for (let i = 0; i < indices.length; i += 3) {
-    const a = indices[i];
-    const b = indices[i + 1];
-    const c = indices[i + 2];
-
-    addEdge(a, b, edgeCount);
-    addEdge(b, c, edgeCount);
-    addEdge(c, a, edgeCount);
+  for (let i = 0; i < corners.length; i++) {
+    const start = corners[i];
+    const end = corners[(i + 1) % corners.length];
+    const interpolatedPoints = interpolatePoints(start, end, pointsPerEdge);
+    borderPoints.push(...interpolatedPoints);
   }
 
-  const borderVertices = new Set();
-
-  for (const edge in edgeCount) {
-    if (edgeCount[edge] === 1) {
-      const [a, b] = edge.split('_').map(Number);
-      borderVertices.add(a);
-      borderVertices.add(b);
-    }
-  }
-
-  return Array.from(borderVertices);
+  return borderPoints;
 };
 
-const allVertices = getVertices(geometry);
-const borderVerticesIndexs = findBorderVertices(geometry);
-const borderVertices = borderVerticesIndexs.map(index => allVertices[index]);
+const corners = findBorderVertices();
+const borderVertices = generateBorderPoints(corners, 9);
 
 export { paper, borderVertices };

@@ -305,14 +305,14 @@
   position: absolute;
   top: 39px;
   left: 57px;
-  padding: 16px 90px;
+  padding: 16px 60px;
   border-radius: 30px;
   background-color: rgba(255, 255, 255, 0.5);
 }
 
 .guide-wrap > .guide-slider {
-  width: 210px;
-  height: 210px;
+  width: 160px;
+  height: 160px;
   overflow: hidden;
   border-radius: 10px;
 }
@@ -328,26 +328,26 @@
 .guide-wrap > .guide-slider .slider li {
   display: flex;
   justify-content: center;
-  width: 210px;
-  height: 210px;
+  width: 160px;
+  height: 160px;
   background-color: #e7e6ff;
 }
 
 .guide-wrap > .guide-slider img {
-  width: 156px;
-  height: 156px;
+  width: 120px;
+  height: 120px;
 }
 
 .guide-wrap .arrow > a.prev {
   position: absolute;
   top: 42%;
-  left: 40px;
+  left: 24px;
 }
 
 .guide-wrap .arrow > a.next {
   position: absolute;
   top: 42%;
-  right: 40px;
+  right: 20px;
 }
 
 .prev {
@@ -369,7 +369,7 @@
   transform: translateX(-50%);
   margin-top: 10px;
   color: #343394;
-  font-size: 24px;
+  font-size: 16px;
   text-align: center;
 }
 

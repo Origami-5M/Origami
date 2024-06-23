@@ -18,8 +18,8 @@ const prevButton = guideWrap.querySelector('.prev');
 const nextButton = guideWrap.querySelector('.next');
 
 const paginationText = guideWrap.querySelector('.pagination-text');
-const listWidth = 210;
-const sliderWidth = 210 * slideList.length;
+const listWidth = 160;
+const sliderWidth = 160 * slideList.length;
 
 let currentIdx = 0;
 let translate = 0;
@@ -99,7 +99,7 @@ soundButton.addEventListener('click', () => {
 
 slider.style.width = `${sliderWidth}px`;
 
-function updateSlideButtons() {
+const updateSlideButtons = () => {
   if (currentIdx === 0) {
     prevButton.classList.add('hidden');
   } else {
@@ -111,9 +111,9 @@ function updateSlideButtons() {
   } else {
     nextButton.classList.remove('hidden');
   }
-}
+};
 
-function moveSlide(event) {
+const moveSlide = event => {
   event.preventDefault();
 
   if (event.target.className.includes('next')) {
@@ -127,16 +127,16 @@ function moveSlide(event) {
   }
 
   updateSlideButtons();
-}
+};
 
-function goToSlide(index) {
+const goToSlide = index => {
   translate = -listWidth * index;
   slider.style.transform = `translateX(${translate}px)`;
   currentIdx = index;
 
   paginationText.textContent = `${currentIdx + 1} / ${slideList.length}`;
   updateSlideButtons();
-}
+};
 
 paginationText.textContent = `${currentIdx + 1} / ${slideList.length}`;
 updateSlideButtons();

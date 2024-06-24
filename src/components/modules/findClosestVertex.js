@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-export const findClosestVertex = (intersectPoint, borderVertices) => {
+const findClosestVertex = (intersectPoint, borderVertices) => {
   let minDistance = Infinity;
   let closestVertex = null;
   let closestVertexIndex = -1;
@@ -22,3 +22,5 @@ export const findClosestVertex = (intersectPoint, borderVertices) => {
 
   return { closestVertex, closestVertexIndex, minDistance };
 };
+
+export { findClosestVertex };

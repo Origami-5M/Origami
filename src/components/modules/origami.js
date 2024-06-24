@@ -7,8 +7,10 @@ import { controls } from '../../three/Controls';
 import { ambientLight, directionalLight } from '../../three/Lights';
 import { paper, borderVertices } from '../../three/Paper';
 import { renderer, finishRenderer } from '../../three/Renderer';
+
 import { findClosestVertex } from './findClosestVertex';
 import { calculateRotatedLine } from './axisCalculations';
+import { foldingAnimation } from './foldingAnimation';
 
 import { POINTS_MARKER_COLOR, RED_MARKER_COLOR } from '../../constants';
 
@@ -26,7 +28,6 @@ scene.add(directionalLight);
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 
-let isDragging = false;
 let isFinished = false;
 let confettiIntervalId = 0;
 let areMarkersAtSamePosition = false;
@@ -77,12 +78,10 @@ const handleMouseDown = () => {
     pointsMarker.visible = false;
     clickedRedMarker.visible = true;
     controls.enabled = false;
-    isDragging = true;
   }
 };
 
 const handleMouseUp = () => {
-  isDragging = false;
   controls.enabled = true;
 
   if (areMarkersAtSamePosition && clickedRedMarker.visible) {
@@ -130,6 +129,8 @@ const handleMouseUp = () => {
         vertexIntervalRotatedBasedOnY
           ? scene.add(vertexIntervalRotatedBasedOnY)
           : null;
+
+        foldingAnimation(rotatedLines, clickedRedMarker);
       }
     }
   }

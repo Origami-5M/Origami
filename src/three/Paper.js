@@ -1,7 +1,7 @@
 import * as THREE from 'three';
-import { generateBorderPoints } from '../components/makeVertices';
+import { generateBorderPoints } from '../components/modules/makeVertices';
 
-import { PAPERCOLORS } from '../constants';
+import { PAPERCOLORS, SEGMENT_NUM } from '../constants';
 
 const getRandomColors = length => {
   const frontColorIndex = Math.floor(Math.random() * length);
@@ -18,7 +18,7 @@ const [frontColorIndex, backColorIndex] = getRandomColors(PAPERCOLORS.length);
 const frontColor = PAPERCOLORS[frontColorIndex];
 const backColor = PAPERCOLORS[backColorIndex];
 
-const geometry = new THREE.PlaneGeometry(3, 3, 100, 100);
+const geometry = new THREE.PlaneGeometry(3, 3, SEGMENT_NUM, SEGMENT_NUM);
 const material = new THREE.ShaderMaterial({
   uniforms: {
     colorFront: { value: new THREE.Color(frontColor) },

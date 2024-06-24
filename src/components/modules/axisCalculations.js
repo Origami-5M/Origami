@@ -1,7 +1,5 @@
 import * as THREE from 'three';
-
-const PAPER_BOUNDARY = 1.5;
-const DASH_SIZE = 0.02;
+import { PAPER_BOUNDARY, DASH_SIZE } from '../../constants';
 
 export const calculateRotatedLine = (
   scene,

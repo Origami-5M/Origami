@@ -5,12 +5,13 @@ import { sizes } from '../../three/Sizes';
 import { camera, initializeCamera } from '../../three/Camera';
 import { controls } from '../../three/Controls';
 import { ambientLight, directionalLight } from '../../three/Lights';
-import { paper, borderVertices } from '../../three/Paper';
+import { paper } from '../../three/Paper';
 import { renderer, finishRenderer } from '../../three/Renderer';
 
 import { findClosestVertex } from './findClosestVertex';
 import { calculateRotatedLine } from './axisCalculations';
 import { foldingAnimation } from './foldingAnimation';
+import { borderVertices, addVertices } from './makeVertices';
 
 import {
   POINTS_MARKER_COLOR,
@@ -29,6 +30,7 @@ const scene = new THREE.Scene();
 scene.add(paper);
 scene.add(ambientLight);
 scene.add(directionalLight);
+
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 
@@ -113,7 +115,7 @@ const handleMouseUp = () => {
       ).closestVertex;
 
       if (closestVertex) {
-        const rotatedLines = calculateRotatedLine(
+        const axis = calculateRotatedLine(
           scene,
           clickedRedMarker.position,
           closestVertex,
@@ -121,10 +123,8 @@ const handleMouseUp = () => {
           vertexIntervalRotatedBasedOnY
         );
 
-        vertexIntervalRotatedBasedOnX =
-          rotatedLines.vertexIntervalRotatedBasedOnX;
-        vertexIntervalRotatedBasedOnY =
-          rotatedLines.vertexIntervalRotatedBasedOnY;
+        vertexIntervalRotatedBasedOnX = axis.vertexIntervalRotatedBasedOnX;
+        vertexIntervalRotatedBasedOnY = axis.vertexIntervalRotatedBasedOnY;
         vertexIntervalRotatedBasedOnX
           ? scene.add(vertexIntervalRotatedBasedOnX)
           : null;
@@ -132,7 +132,8 @@ const handleMouseUp = () => {
           ? scene.add(vertexIntervalRotatedBasedOnY)
           : null;
 
-        foldingAnimation(rotatedLines, clickedRedMarker);
+        foldingAnimation(axis.axisPoints, clickedRedMarker);
+        addVertices();
       }
     }
   }
@@ -225,25 +226,5 @@ window.addEventListener('mousemove', handleMouseMove);
 window.addEventListener('mousedown', handleMouseDown);
 window.addEventListener('mouseup', handleMouseUp);
 playCont.addEventListener('dblclick', initializeCamera);
-// playCont.addEventListener('click', () => {
-//   /**
-//    * 카메라가 보는 paper 방향 판별
-//    *
-//    */
-
-//   // 클릭 시 카메라가 보고 있는 방향 판별
-//   raycaster.setFromCamera(mouse, camera);
-//   const intersects = raycaster.intersectObject(paper);
-
-//   if (intersects.length > 0) {
-//     const face = intersects[0].face;
-//     console.log9
-//     if (face.normal.z > 0) {
-//       console.log('앞면');
-//     } else {
-//       console.log('뒷면');
-//     }
-//   }
-// });
 
 markClosestVertexAnimate();

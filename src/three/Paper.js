@@ -1,6 +1,4 @@
 import * as THREE from 'three';
-import { generateBorderPoints } from '../components/modules/makeVertices';
-
 import { PAPERCOLORS, SEGMENT_NUM } from '../constants';
 
 const getRandomColors = length => {
@@ -51,18 +49,4 @@ const material = new THREE.ShaderMaterial({
 
 const paper = new THREE.Mesh(geometry, material);
 
-const findBorderVertices = () => {
-  const corners = [
-    { x: 1.5, y: 1.5, z: 0 },
-    { x: -1.5, y: 1.5, z: 0 },
-    { x: -1.5, y: -1.5, z: 0 },
-    { x: 1.5, y: -1.5, z: 0 },
-  ];
-
-  return corners;
-};
-
-const corners = findBorderVertices();
-const borderVertices = generateBorderPoints(corners, 9);
-
-export { paper, borderVertices };
+export { paper };

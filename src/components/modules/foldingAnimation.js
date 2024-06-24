@@ -115,21 +115,13 @@ const fold = (startPoint, endPoint, direction) => {
   }
 
   AllFoldedFaces.push(nowFace);
-  console.log(AllFoldedFaces);
-
   allPositions.needsUpdate = true;
 };
 
-const foldingAnimation = (axis, redMarker) => {
-  const { rotatedLineVertex: borderVertex } = axis;
-  const startPoint = borderVertex.clampedStartBasedOnX
-    ? borderVertex.clampedStartBasedOnX
-    : borderVertex.clampedStartBasedOnY;
-  const endPoint = borderVertex.clampedEndBasedOnX
-    ? borderVertex.clampedEndBasedOnX
-    : borderVertex.clampedEndBasedOnY;
-
+const foldingAnimation = (axisPoints, redMarker) => {
+  const { startPoint, endPoint } = axisPoints;
   const direction = getFoldDirection(startPoint, endPoint, redMarker.position);
+
   fold(startPoint, endPoint, direction);
 };
 

@@ -1,7 +1,13 @@
 import * as THREE from 'three';
 import { PAPER_BOUNDARY, DASH_SIZE } from '../../constants';
 
-export const calculateRotatedLine = (
+let axisPoints = {};
+
+const getAxisPoints = () => {
+  return axisPoints;
+};
+
+const calculateRotatedLine = (
   scene,
   mouseDownVertex,
   mouseUpVertex,
@@ -221,9 +227,20 @@ export const calculateRotatedLine = (
     scene.add(vertexIntervalRotatedBasedOnY);
   }
 
+  const startPoint = rotatedLineVertex.clampedStartBasedOnX
+    ? rotatedLineVertex.clampedStartBasedOnX
+    : rotatedLineVertex.clampedStartBasedOnY;
+  const endPoint = rotatedLineVertex.clampedEndBasedOnX
+    ? rotatedLineVertex.clampedEndBasedOnX
+    : rotatedLineVertex.clampedEndBasedOnY;
+
+  axisPoints = { startPoint, endPoint };
+
   return {
     vertexIntervalRotatedBasedOnX,
     vertexIntervalRotatedBasedOnY,
-    rotatedLineVertex,
+    axisPoints,
   };
 };
+
+export { getAxisPoints, calculateRotatedLine };

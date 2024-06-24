@@ -14,7 +14,9 @@ const getRandomColors = length => {
   return [frontColorIndex, backColorIndex];
 };
 
-const [frontColorIndex, backColorIndex] = getRandomColors(PAPERCOLORS.length);
+const [frontColorIndex, backColorIndex] = getRandomColors(
+  PAPERCOLORS.length - 1
+);
 const frontColor = PAPERCOLORS[frontColorIndex];
 const backColor = PAPERCOLORS[backColorIndex];
 

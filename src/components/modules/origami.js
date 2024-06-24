@@ -101,7 +101,7 @@ const handleMouseUp = () => {
     showToastMessages(TOAST_MESSAGE.SAME_POSITION);
   } else if (!pointsMarker.visible && clickedRedMarker.visible) {
     showToastMessages(TOAST_MESSAGE.NO_POINTMARKER);
-  } else {
+  } else if (pointsMarker.visible && clickedRedMarker.visible) {
     raycaster.setFromCamera(mouse, camera);
     const intersects = raycaster.intersectObject(paper);
 
@@ -225,5 +225,25 @@ window.addEventListener('mousemove', handleMouseMove);
 window.addEventListener('mousedown', handleMouseDown);
 window.addEventListener('mouseup', handleMouseUp);
 playCont.addEventListener('dblclick', initializeCamera);
+// playCont.addEventListener('click', () => {
+//   /**
+//    * 카메라가 보는 paper 방향 판별
+//    *
+//    */
+
+//   // 클릭 시 카메라가 보고 있는 방향 판별
+//   raycaster.setFromCamera(mouse, camera);
+//   const intersects = raycaster.intersectObject(paper);
+
+//   if (intersects.length > 0) {
+//     const face = intersects[0].face;
+//     console.log9
+//     if (face.normal.z > 0) {
+//       console.log('앞면');
+//     } else {
+//       console.log('뒷면');
+//     }
+//   }
+// });
 
 markClosestVertexAnimate();

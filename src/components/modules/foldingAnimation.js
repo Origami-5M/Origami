@@ -1,7 +1,24 @@
 import * as THREE from 'three';
 
+import { camera } from '../../three/Camera';
 import { paper } from '../../three/Paper';
 import { Z_GAP } from '../../constants';
+
+const calculateFrontorBack = () => {
+  const cameraDirection = new THREE.Vector3();
+  camera.getWorldDirection(cameraDirection);
+
+  const paperNormal = new THREE.Vector3(0, 0, 1);
+  paperNormal.applyQuaternion(paper.quaternion);
+
+  const dotProduct = cameraDirection.dot(paperNormal);
+
+  if (dotProduct > 0) {
+    return -1;
+  } else {
+    return 1;
+  }
+};
 
 const getFoldDirection = (startPoint, endPoint, redMarker) => {
   const { x: x1, y: y1 } = startPoint;
@@ -40,6 +57,7 @@ const fold = (startPoint, endPoint, direction) => {
   const { x: x2, y: y2 } = endPoint;
 
   const inequality = getInequalityFunction(direction);
+  const frontOrBack = calculateFrontorBack();
 
   const m = (y2 - y1) / (x2 - x1);
   const c = y1 - m * x1;
@@ -51,7 +69,7 @@ const fold = (startPoint, endPoint, direction) => {
 
       if (inequality(vertex.x, x1)) {
         vertex.x = 2 * x1 - vertex.x;
-        vertex.z += Z_GAP;
+        vertex.z += Z_GAP * frontOrBack;
 
         allPositions.setXYZ(i, vertex.x, vertex.y, vertex.z);
       }
@@ -63,7 +81,7 @@ const fold = (startPoint, endPoint, direction) => {
 
       if (inequality(vertex.y, y1)) {
         vertex.y = 2 * y1 - vertex.y;
-        vertex.z += Z_GAP;
+        vertex.z += Z_GAP * frontOrBack;
 
         allPositions.setXYZ(i, vertex.x, vertex.y, vertex.z);
       }
@@ -83,7 +101,7 @@ const fold = (startPoint, endPoint, direction) => {
 
         vertex.x = 2 * ix - vertex.x;
         vertex.y = 2 * iy - vertex.y;
-        vertex.z += Z_GAP;
+        vertex.z += Z_GAP * frontOrBack;
 
         allPositions.setXYZ(i, vertex.x, vertex.y, vertex.z);
       }

@@ -4,6 +4,8 @@ import { camera } from '../../three/Camera';
 import { paper } from '../../three/Paper';
 import { Z_GAP } from '../../constants';
 
+const AllFoldedFaces = [];
+
 const calculateFrontorBack = () => {
   const cameraDirection = new THREE.Vector3();
   camera.getWorldDirection(cameraDirection);
@@ -56,6 +58,7 @@ const fold = (startPoint, endPoint, direction) => {
   const { x: x1, y: y1 } = startPoint;
   const { x: x2, y: y2 } = endPoint;
 
+  const nowFace = [];
   const inequality = getInequalityFunction(direction);
   const frontOrBack = calculateFrontorBack();
 
@@ -71,6 +74,7 @@ const fold = (startPoint, endPoint, direction) => {
         vertex.x = 2 * x1 - vertex.x;
         vertex.z += Z_GAP * frontOrBack;
 
+        nowFace.push({ x: vertex.x, y: vertex.y, z: vertex.z });
         allPositions.setXYZ(i, vertex.x, vertex.y, vertex.z);
       }
     }
@@ -83,6 +87,7 @@ const fold = (startPoint, endPoint, direction) => {
         vertex.y = 2 * y1 - vertex.y;
         vertex.z += Z_GAP * frontOrBack;
 
+        nowFace.push({ x: vertex.x, y: vertex.y, z: vertex.z });
         allPositions.setXYZ(i, vertex.x, vertex.y, vertex.z);
       }
     }
@@ -103,10 +108,14 @@ const fold = (startPoint, endPoint, direction) => {
         vertex.y = 2 * iy - vertex.y;
         vertex.z += Z_GAP * frontOrBack;
 
+        nowFace.push({ x: vertex.x, y: vertex.y, z: vertex.z });
         allPositions.setXYZ(i, vertex.x, vertex.y, vertex.z);
       }
     }
   }
+
+  AllFoldedFaces.push(nowFace);
+  console.log(AllFoldedFaces);
 
   allPositions.needsUpdate = true;
 };

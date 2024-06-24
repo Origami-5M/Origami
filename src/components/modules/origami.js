@@ -12,7 +12,11 @@ import { findClosestVertex } from './findClosestVertex';
 import { calculateRotatedLine } from './axisCalculations';
 import { foldingAnimation } from './foldingAnimation';
 
-import { POINTS_MARKER_COLOR, RED_MARKER_COLOR } from '../../constants';
+import {
+  POINTS_MARKER_COLOR,
+  RED_MARKER_COLOR,
+  TOAST_MESSAGE,
+} from '../../constants';
 
 const section = document.querySelector('section');
 const playCont = document.querySelector('.play-cont');
@@ -47,6 +51,15 @@ scene.add(pointsMarker);
 
 const clickedRedMarker = createPointsMarker(RED_MARKER_COLOR);
 scene.add(clickedRedMarker);
+
+const showToastMessages = text => {
+  foldFailToastMessage.innerText = text;
+  foldFailToastMessage.classList.add('active');
+
+  setTimeout(() => {
+    foldFailToastMessage.classList.remove('active');
+  }, 2000);
+};
 
 const updateSizesAndCamera = cont => {
   const rect = cont.getBoundingClientRect();
@@ -85,20 +98,9 @@ const handleMouseUp = () => {
   controls.enabled = true;
 
   if (areMarkersAtSamePosition && clickedRedMarker.visible) {
-    foldFailToastMessage.innerText = '마우스를 접을 곳으로 이동해 주세요!';
-    foldFailToastMessage.classList.add('active');
-
-    setTimeout(() => {
-      foldFailToastMessage.classList.remove('active');
-    }, 2000);
+    showToastMessages(TOAST_MESSAGE.SAME_POSITION);
   } else if (!pointsMarker.visible && clickedRedMarker.visible) {
-    foldFailToastMessage.innerText =
-      '꼭짓점이 접을 수 있는 선분에 닿아야 합니다!';
-    foldFailToastMessage.classList.add('active');
-
-    setTimeout(() => {
-      foldFailToastMessage.classList.remove('active');
-    }, 2000);
+    showToastMessages(TOAST_MESSAGE.NO_POINTMARKER);
   } else {
     raycaster.setFromCamera(mouse, camera);
     const intersects = raycaster.intersectObject(paper);

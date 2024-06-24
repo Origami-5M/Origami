@@ -10,6 +10,11 @@ const PAPER_BOUNDARY = 1.5;
 const DASH_SIZE = 0.02;
 const Z_GAP = 0.02;
 
+const TOAST_MESSAGE = {
+  SAME_POSITION: '마우스를 접을 곳으로 이동해 주세요!',
+  NO_POINTMARKER: '꼭짓점이 접을 수 있는 선분에 닿아야 합니다!',
+};
+
 export {
   POINTS_MARKER_COLOR,
   RED_MARKER_COLOR,
@@ -18,4 +23,5 @@ export {
   PAPER_BOUNDARY,
   DASH_SIZE,
   Z_GAP,
+  TOAST_MESSAGE,
 };

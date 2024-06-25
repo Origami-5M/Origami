@@ -8,7 +8,7 @@ import { Z_GAP } from '../../constants';
 
 const AllFoldedFaces = [];
 
-const calculateFrontorBack = () => {
+const calculateFrontOrBack = () => {
   const cameraDirection = new THREE.Vector3();
   camera.getWorldDirection(cameraDirection);
 
@@ -86,7 +86,7 @@ const fold = (allPositions, startPoint, endPoint, direction) => {
 
   const nowFace = [];
   const inequality = getInequalityFunction(direction);
-  const frontOrBack = calculateFrontorBack();
+  const frontOrBack = calculateFrontOrBack();
 
   const m = (y2 - y1) / (x2 - x1);
   const c = y1 - m * x1;

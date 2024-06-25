@@ -2,6 +2,8 @@ import * as THREE from 'three';
 
 import { camera } from '../../three/Camera';
 import { paper } from '../../three/Paper';
+import { borderVertices } from './makeVertices';
+
 import { Z_GAP } from '../../constants';
 
 const AllFoldedFaces = [];
@@ -53,8 +55,32 @@ const getInequalityFunction = direction => {
   return inequalities[direction];
 };
 
-const fold = (startPoint, endPoint, direction) => {
-  const allPositions = paper.geometry.attributes.position;
+const getVertexFromPosition = (allPositions, i) => {
+  if (!allPositions.isBufferAttribute) {
+    return allPositions[i];
+  } else {
+    const vertex = new THREE.Vector3();
+    vertex.fromBufferAttribute(allPositions, i);
+    return vertex;
+  }
+};
+
+const updateVertexPosition = (allPositions, i, vertex, nowFace) => {
+  if (!allPositions.isBufferAttribute) {
+    borderVertices[i] = { x: vertex.x, y: vertex.y, z: vertex.z };
+  } else {
+    nowFace.push({ x: vertex.x, y: vertex.y, z: vertex.z });
+    allPositions.setXYZ(i, vertex.x, vertex.y, vertex.z);
+  }
+};
+
+const fold = (allPositions, startPoint, endPoint, direction) => {
+  let count = allPositions.count;
+
+  if (!allPositions.isBufferAttribute) {
+    count = allPositions.length;
+  }
+
   const { x: x1, y: y1 } = startPoint;
   const { x: x2, y: y2 } = endPoint;
 
@@ -66,37 +92,32 @@ const fold = (startPoint, endPoint, direction) => {
   const c = y1 - m * x1;
 
   if (x1 === x2) {
-    for (let i = 0; i < allPositions.count; i++) {
-      const vertex = new THREE.Vector3();
-      vertex.fromBufferAttribute(allPositions, i);
+    for (let i = 0; i < count; i++) {
+      const vertex = getVertexFromPosition(allPositions, i);
 
       if (inequality(vertex.x, x1)) {
         vertex.x = 2 * x1 - vertex.x;
         vertex.z += Z_GAP * frontOrBack;
 
-        nowFace.push({ x: vertex.x, y: vertex.y, z: vertex.z });
-        allPositions.setXYZ(i, vertex.x, vertex.y, vertex.z);
+        updateVertexPosition(allPositions, i, vertex, nowFace);
       }
     }
   } else if (y1 === y2) {
-    for (let i = 0; i < allPositions.count; i++) {
-      const vertex = new THREE.Vector3();
-      vertex.fromBufferAttribute(allPositions, i);
+    for (let i = 0; i < count; i++) {
+      const vertex = getVertexFromPosition(allPositions, i);
 
       if (inequality(vertex.y, y1)) {
         vertex.y = 2 * y1 - vertex.y;
         vertex.z += Z_GAP * frontOrBack;
 
-        nowFace.push({ x: vertex.x, y: vertex.y, z: vertex.z });
-        allPositions.setXYZ(i, vertex.x, vertex.y, vertex.z);
+        updateVertexPosition(allPositions, i, vertex, nowFace);
       }
     }
   } else {
-    for (let i = 0; i < allPositions.count; i++) {
-      const vertex = new THREE.Vector3();
-      vertex.fromBufferAttribute(allPositions, i);
-
+    for (let i = 0; i < count; i++) {
+      const vertex = getVertexFromPosition(allPositions, i);
       const yOnLine = m * vertex.x + c;
+
       if (inequality(vertex.y, yOnLine)) {
         const m_perp = -1 / m;
         const c_perp = vertex.y - m_perp * vertex.x;
@@ -108,8 +129,7 @@ const fold = (startPoint, endPoint, direction) => {
         vertex.y = 2 * iy - vertex.y;
         vertex.z += Z_GAP * frontOrBack;
 
-        nowFace.push({ x: vertex.x, y: vertex.y, z: vertex.z });
-        allPositions.setXYZ(i, vertex.x, vertex.y, vertex.z);
+        updateVertexPosition(allPositions, i, vertex, nowFace);
       }
     }
   }
@@ -122,7 +142,8 @@ const foldingAnimation = (axisPoints, redMarker) => {
   const { startPoint, endPoint } = axisPoints;
   const direction = getFoldDirection(startPoint, endPoint, redMarker.position);
 
-  fold(startPoint, endPoint, direction);
+  fold(paper.geometry.attributes.position, startPoint, endPoint, direction);
+  fold(borderVertices, startPoint, endPoint, direction);
 };
 
 export { foldingAnimation };

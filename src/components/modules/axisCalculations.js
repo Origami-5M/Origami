@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { PAPER_BOUNDARY, DASH_SIZE } from '../../constants';
+import { calculateCoordinate, getClampedPoint } from './coordinateUtils';
 
 let axisPoints = {};
 
@@ -32,65 +33,13 @@ const calculateRotatedLine = (
     vertexIntervalVector.z
   );
 
-  const adjustCoordinateRange = (
-    startPoint,
-    endPoint,
-    primaryAxis,
-    secondaryAxis
-  ) => {
-    if (startPoint[primaryAxis] < -PAPER_BOUNDARY) {
-      const scaleFactor =
-        (-PAPER_BOUNDARY - endPoint[primaryAxis]) /
-        (startPoint[primaryAxis] - endPoint[primaryAxis]);
-      startPoint[primaryAxis] = -PAPER_BOUNDARY;
-      startPoint[secondaryAxis] +=
-        scaleFactor * (endPoint[secondaryAxis] - startPoint[secondaryAxis]);
-      startPoint.z += scaleFactor * (endPoint.z - startPoint.z);
-    } else if (startPoint[primaryAxis] > PAPER_BOUNDARY) {
-      const scaleFactor =
-        (PAPER_BOUNDARY - endPoint[primaryAxis]) /
-        (startPoint[primaryAxis] - endPoint[primaryAxis]);
-      startPoint[primaryAxis] = PAPER_BOUNDARY;
-      startPoint[secondaryAxis] +=
-        scaleFactor * (endPoint[secondaryAxis] - startPoint[secondaryAxis]);
-      startPoint.z += scaleFactor * (endPoint.z - startPoint.z);
-    }
-
-    return startPoint;
-  };
-
-  const getClampedPoint = (startPoint, endPoint) => {
-    startPoint = adjustCoordinateRange(startPoint, endPoint, 'x', 'y');
-    startPoint = adjustCoordinateRange(startPoint, endPoint, 'y', 'x');
-    return startPoint;
-  };
-
-  const calculateCoordinate = (
-    intervalVector,
-    boundary,
-    primaryAxis,
-    secondaryAxis
-  ) => {
-    const primaryValue = boundary;
-    const secondaryValue =
-      vertexIntervalMidPoint[secondaryAxis] +
-      ((primaryValue - vertexIntervalMidPoint[primaryAxis]) *
-        intervalVector[secondaryAxis]) /
-        intervalVector[primaryAxis];
-    const zValue =
-      vertexIntervalMidPoint.z +
-      ((primaryValue - vertexIntervalMidPoint[primaryAxis]) *
-        intervalVector.z) /
-        intervalVector[primaryAxis];
-    return { primaryValue, secondaryValue, zValue };
-  };
-
   const startXBasedOnX = -PAPER_BOUNDARY;
   const startXBasedOnXCoord = calculateCoordinate(
     rotatedVertexIntervalVector,
     startXBasedOnX,
     'x',
-    'y'
+    'y',
+    vertexIntervalMidPoint
   );
   const startYBasedOnX = startXBasedOnXCoord.secondaryValue;
   const startZBasedOnX = startXBasedOnXCoord.zValue;
@@ -100,7 +49,8 @@ const calculateRotatedLine = (
     rotatedVertexIntervalVector,
     endXBasedOnX,
     'x',
-    'y'
+    'y',
+    vertexIntervalMidPoint
   );
   const endYBasedOnX = endXBasedOnXCoord.secondaryValue;
   const endZBasedOnX = endXBasedOnXCoord.zValue;
@@ -110,7 +60,8 @@ const calculateRotatedLine = (
     rotatedVertexIntervalVector,
     startYBasedOnY,
     'y',
-    'x'
+    'x',
+    vertexIntervalMidPoint
   );
   const startXBasedOnY = startYBasedOnYCoord.secondaryValue;
   const startZBasedOnY = startYBasedOnYCoord.zValue;
@@ -120,7 +71,8 @@ const calculateRotatedLine = (
     rotatedVertexIntervalVector,
     endYBasedOnY,
     'y',
-    'x'
+    'x',
+    vertexIntervalMidPoint
   );
   const endXBasedOnY = endYBasedOnYCoord.secondaryValue;
   const endZBasedOnY = endYBasedOnYCoord.zValue;

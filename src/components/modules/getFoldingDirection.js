@@ -4,6 +4,10 @@ import { paper } from '../../three/Paper';
 import { camera } from '../../three/Camera';
 
 const getFoldingDirection = (startPoint, endPoint, redMarker) => {
+  if (!startPoint || !endPoint) {
+    return;
+  }
+
   const { x: x1, y: y1 } = startPoint;
   const { x: x2, y: y2 } = endPoint;
   const { x: xR, y: yR } = redMarker;

@@ -1,9 +1,8 @@
 import { paper } from '../../three/Paper';
-import { borderVertices } from './makeVertices';
 import { foldingVertexPosition } from './foldingVertexPosition';
 import { getFoldingDirection } from './getFoldingDirection';
 
-const foldingAnimation = (axisPoints, redMarker) => {
+const foldingAnimation = (axisPoints, redMarker, isFolding) => {
   const { startPoint, endPoint } = axisPoints;
   const direction = getFoldingDirection(
     startPoint,
@@ -15,9 +14,11 @@ const foldingAnimation = (axisPoints, redMarker) => {
     paper.geometry.attributes.position,
     startPoint,
     endPoint,
-    direction
+    direction,
+    isFolding
   );
-  foldingVertexPosition(borderVertices, startPoint, endPoint, direction);
+
+  return foldingVertexPosition;
 };
 
 export { foldingAnimation };

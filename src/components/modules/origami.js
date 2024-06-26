@@ -12,6 +12,9 @@ import { findClosestVertex } from './findClosestVertex';
 import { calculateRotatedLine } from './axisCalculations';
 import { foldingAnimation } from './foldingAnimation';
 import { borderVertices, addVertices } from './makeVertices';
+import { getFoldingDirection } from './getFoldingDirection';
+import { foldingVertexPosition } from './foldingVertexPosition';
+import { prevFoldingArea } from './prevFoldingArea';
 
 import {
   POINTS_MARKER_COLOR,
@@ -34,11 +37,14 @@ scene.add(directionalLight);
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 
+let isDragging = false;
+let startVertex = {};
+let hoverVertex = {};
 let isFinished = false;
 let confettiIntervalId = 0;
 let areMarkersAtSamePosition = false;
-let vertexIntervalRotatedBasedOnX = null;
-let vertexIntervalRotatedBasedOnY = null;
+let vertexIntervalRotatedBasedOnX = {};
+let vertexIntervalRotatedBasedOnY = {};
 
 const createPointsMarker = color => {
   const geometry = new THREE.SphereGeometry(0.03, 16, 16);
@@ -85,19 +91,169 @@ const handleMouseMove = event => {
   const rect = playCont.getBoundingClientRect();
   mouse.x = ((event.clientX - rect.left) / sizes.width) * 2 - 1;
   mouse.y = -((event.clientY - rect.top) / sizes.height) * 2 + 1;
+
+  if (isDragging) {
+    updateFoldOnMouseMove(event);
+  }
 };
 
-const handleMouseDown = () => {
+const updateClosestVertexHover = intersectionPoint => {
+  const { closestVertex } = findClosestVertex(
+    intersectionPoint,
+    borderVertices
+  );
+  return closestVertex;
+};
+
+const handleMouseDown = event => {
   if (pointsMarker.visible) {
     clickedRedMarker.position.copy(pointsMarker.position);
     pointsMarker.visible = false;
     clickedRedMarker.visible = true;
     controls.enabled = false;
   }
+
+  handleMouseMove(event);
+
+  const intersects = raycaster.intersectObject(paper);
+
+  if (intersects.length > 0) {
+    const intersectPoint = intersects[0].point;
+    startVertex = findClosestVertex(
+      intersectPoint,
+      borderVertices
+    ).closestVertex;
+
+    if (startVertex) {
+      isDragging = true;
+      clickedRedMarker.position.copy(startVertex);
+      clickedRedMarker.visible = true;
+      controls.enabled = false;
+      pointsMarker.visible = false;
+    }
+  }
+};
+
+const updateFoldOnMouseMove = () => {
+  raycaster.setFromCamera(mouse, camera);
+  const intersects = raycaster.intersectObject(paper);
+
+  if (intersects.length > 0) {
+    const intersectPoint = intersects[0].point;
+    hoverVertex = updateClosestVertexHover(intersectPoint);
+
+    if (hoverVertex) {
+      const axisLines = calculateRotatedLine(
+        scene,
+        clickedRedMarker.position,
+        hoverVertex,
+        vertexIntervalRotatedBasedOnX,
+        vertexIntervalRotatedBasedOnY
+      );
+
+      vertexIntervalRotatedBasedOnX = axisLines.vertexIntervalRotatedBasedOnX;
+      vertexIntervalRotatedBasedOnY = axisLines.vertexIntervalRotatedBasedOnY;
+
+      const existingPolygon = scene.getObjectByName('foldedAreaPolygon');
+      if (existingPolygon) {
+        scene.remove(existingPolygon);
+      }
+
+      const axis = {
+        rotatedLineVertex: {
+          clampedStartBasedOnX: axisLines.vertexIntervalRotatedBasedOnX
+            ? axisLines.vertexIntervalRotatedBasedOnX.geometry.attributes.position.array.slice(
+                0,
+                3
+              )
+            : null,
+          clampedEndBasedOnX: axisLines.vertexIntervalRotatedBasedOnX
+            ? axisLines.vertexIntervalRotatedBasedOnX.geometry.attributes.position.array.slice(
+                3,
+                6
+              )
+            : null,
+          clampedStartBasedOnY: axisLines.vertexIntervalRotatedBasedOnY
+            ? axisLines.vertexIntervalRotatedBasedOnY.geometry.attributes.position.array.slice(
+                0,
+                3
+              )
+            : null,
+          clampedEndBasedOnY: axisLines.vertexIntervalRotatedBasedOnY
+            ? axisLines.vertexIntervalRotatedBasedOnY.geometry.attributes.position.array.slice(
+                3,
+                6
+              )
+            : null,
+        },
+      };
+
+      const startPoint = axis.rotatedLineVertex.clampedStartBasedOnX
+        ? new THREE.Vector3().fromArray(
+            axis.rotatedLineVertex.clampedStartBasedOnX
+          )
+        : axis.rotatedLineVertex.clampedStartBasedOnY
+          ? new THREE.Vector3().fromArray(
+              axis.rotatedLineVertex.clampedStartBasedOnY
+            )
+          : null;
+      const endPoint = axis.rotatedLineVertex.clampedEndBasedOnX
+        ? new THREE.Vector3().fromArray(
+            axis.rotatedLineVertex.clampedEndBasedOnX
+          )
+        : axis.rotatedLineVertex.clampedEndBasedOnY
+          ? new THREE.Vector3().fromArray(
+              axis.rotatedLineVertex.clampedEndBasedOnY
+            )
+          : null;
+
+      const direction = getFoldingDirection(
+        startPoint,
+        endPoint,
+        clickedRedMarker.position
+      );
+
+      const currentFoldedArea = foldingVertexPosition(
+        paper.geometry.attributes.position,
+        startPoint,
+        endPoint,
+        direction,
+        false
+      );
+
+      const foldedAreaPolygon = prevFoldingArea(currentFoldedArea);
+
+      if (foldedAreaPolygon) {
+        foldedAreaPolygon.name = 'foldedAreaPolygon';
+        scene.add(foldedAreaPolygon);
+      }
+    }
+  }
 };
 
 const handleMouseUp = () => {
   controls.enabled = true;
+  isDragging = false;
+
+  const existingPrevArea = scene.getObjectByName('prevFoldingAreaLine');
+  if (existingPrevArea) {
+    scene.remove(existingPrevArea);
+  }
+
+  const existingPolygon = scene.getObjectByName('foldedAreaPolygon');
+  if (existingPolygon) {
+    scene.remove(existingPolygon);
+  }
+
+  if (vertexIntervalRotatedBasedOnX) {
+    scene.remove(vertexIntervalRotatedBasedOnX);
+    vertexIntervalRotatedBasedOnX = null;
+  }
+
+  if (vertexIntervalRotatedBasedOnY) {
+    scene.remove(vertexIntervalRotatedBasedOnY);
+    vertexIntervalRotatedBasedOnY = null;
+  }
 
   if (areMarkersAtSamePosition && clickedRedMarker.visible) {
     showToastMessages(TOAST_MESSAGE.SAME_POSITION);
@@ -114,7 +270,7 @@ const handleMouseUp = () => {
         borderVertices
       ).closestVertex;
 
-      if (closestVertex) {
+      if (startVertex && hoverVertex) {
         const axis = calculateRotatedLine(
           scene,
           clickedRedMarker.position,
@@ -132,12 +288,14 @@ const handleMouseUp = () => {
           ? scene.add(vertexIntervalRotatedBasedOnY)
           : null;
 
-        foldingAnimation(axis.axisPoints, clickedRedMarker);
+        foldingAnimation(axis.axisPoints, clickedRedMarker, true);
         addVertices();
       }
     }
   }
 
+  startVertex = null;
+  hoverVertex = null;
   clickedRedMarker.visible = false;
 };
 

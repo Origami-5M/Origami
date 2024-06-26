@@ -2,7 +2,7 @@ import * as THREE from 'three';
 
 const findClosestVertex = (intersectPoint, borderVertices) => {
   let minDistance = Infinity;
-  let closestVertex = null;
+  let closestVertex = {};
   let closestVertexIndex = -1;
 
   for (let i = 0; i < borderVertices.length; i++) {

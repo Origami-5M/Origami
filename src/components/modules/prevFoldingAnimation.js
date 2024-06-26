@@ -1,28 +1,11 @@
 import * as THREE from 'three';
 
-import { calculateRotatedLine } from './axisCalculations';
+import { paper } from '../../three/Paper';
 import { getFoldingDirection } from './getFoldingDirection';
 import { foldingVertexPosition } from './foldingVertexPosition';
 import { prevFoldingArea } from './prevFoldingArea';
 
-const prevFoldingAnimation = (
-  scene,
-  mouseUpVertex,
-  vertexIntervalRotatedBasedOnX,
-  vertexIntervalRotatedBasedOnY,
-  clickedRedMarker
-) => {
-  const axisLines = calculateRotatedLine(
-    scene,
-    clickedRedMarker.position,
-    mouseUpVertex,
-    vertexIntervalRotatedBasedOnX,
-    vertexIntervalRotatedBasedOnY
-  );
-
-  vertexIntervalRotatedBasedOnX = axisLines.vertexIntervalRotatedBasedOnX;
-  vertexIntervalRotatedBasedOnY = axisLines.vertexIntervalRotatedBasedOnY;
-
+const prevFoldingAnimation = (scene, axisLines, clickedRedMarker) => {
   const existingPolygon = scene.getObjectByName('foldedAreaPolygon');
   if (existingPolygon) {
     scene.remove(existingPolygon);
@@ -75,13 +58,17 @@ const prevFoldingAnimation = (
     endPoint,
     clickedRedMarker.position
   );
-  const foldedVertices = foldingVertexPosition(
+
+  let foldedVertices = foldingVertexPosition(
+    paper.geometry.attributes.position,
     startPoint,
     endPoint,
     direction,
     false
   );
+
   const foldedAreaPolygon = prevFoldingArea(foldedVertices);
+
   if (foldedAreaPolygon) {
     foldedAreaPolygon.name = 'foldedAreaPolygon';
     scene.add(foldedAreaPolygon);

@@ -1,7 +1,10 @@
-import { getInequalityFunction } from './getFoldingDirection';
-import { calculateFrontOrBack } from './getFoldingDirection';
+import * as THREE from 'three';
+import {
+  getInequalityFunction,
+  calculateFrontOrBack,
+} from './getFoldingDirection';
 import { getVertexFromPosition } from './getVertexFromPosition';
-import { updateVertexPosition } from './updateVertexPosition';
+import { borderVertices } from './makeVertices';
 
 import { Z_GAP } from '../../constants';
 
@@ -11,7 +14,8 @@ const foldingVertexPosition = (
   allPositions,
   startPoint,
   endPoint,
-  direction
+  direction,
+  isFolding
 ) => {
   let count = allPositions.count;
 
@@ -19,10 +23,15 @@ const foldingVertexPosition = (
     count = allPositions.length;
   }
 
+  if (!startPoint || !endPoint) {
+    return;
+  }
+
   const { x: x1, y: y1 } = startPoint;
   const { x: x2, y: y2 } = endPoint;
 
   const nowFace = [];
+
   const inequality = getInequalityFunction(direction);
   const frontOrBack = calculateFrontOrBack();
 
@@ -37,7 +46,11 @@ const foldingVertexPosition = (
         vertex.x = 2 * x1 - vertex.x;
         vertex.z += Z_GAP * frontOrBack;
 
-        updateVertexPosition(allPositions, i, vertex, nowFace);
+        nowFace.push(new THREE.Vector3(vertex.x, vertex.y, vertex.z));
+
+        if (isFolding) {
+          updateVertexPosition(allPositions, i, vertex, nowFace);
+        }
       }
     }
   } else if (y1 === y2) {
@@ -48,7 +61,11 @@ const foldingVertexPosition = (
         vertex.y = 2 * y1 - vertex.y;
         vertex.z += Z_GAP * frontOrBack;
 
-        updateVertexPosition(allPositions, i, vertex, nowFace);
+        nowFace.push(new THREE.Vector3(vertex.x, vertex.y, vertex.z));
+
+        if (isFolding) {
+          updateVertexPosition(allPositions, i, vertex, nowFace);
+        }
       }
     }
   } else {
@@ -67,13 +84,35 @@ const foldingVertexPosition = (
         vertex.y = 2 * iy - vertex.y;
         vertex.z += Z_GAP * frontOrBack;
 
-        updateVertexPosition(allPositions, i, vertex, nowFace);
+        nowFace.push(new THREE.Vector3(vertex.x, vertex.y, vertex.z));
+
+        if (isFolding) {
+          updateVertexPosition(allPositions, i, vertex, nowFace);
+        }
       }
     }
   }
 
-  AllFoldedFaces.push(nowFace);
+  if (allPositions.isBufferAttribute && isFolding) {
+    AllFoldedFaces.push(nowFace);
+  }
+
   allPositions.needsUpdate = true;
+
+  return nowFace;
 };
 
-export { foldingVertexPosition };
+const updateVertexPosition = (allPositions, i, vertex, nowFace) => {
+  if (!allPositions.isBufferAttribute) {
+    borderVertices[i] = { x: vertex.x, y: vertex.y, z: vertex.z };
+  } else {
+    nowFace.push(new THREE.Vector3(vertex.x, vertex.y, vertex.z));
+    allPositions.setXYZ(i, vertex.x, vertex.y, vertex.z);
+  }
+};
+
+const getAllFoldedFaces = () => {
+  return AllFoldedFaces;
+};
+
+export { foldingVertexPosition, getAllFoldedFaces };

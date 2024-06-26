@@ -15,17 +15,22 @@ const calculateRotatedLine = (
   vertexIntervalRotatedBasedOnX,
   vertexIntervalRotatedBasedOnY
 ) => {
-  const vertexIntervalVector = new THREE.Vector3(
-    mouseUpVertex.x - mouseDownVertex.x,
-    mouseUpVertex.y - mouseDownVertex.y,
-    mouseUpVertex.z - mouseDownVertex.z
-  );
+  let vertexIntervalVector = {};
+  let vertexIntervalMidPoint = {};
 
-  const vertexIntervalMidPoint = new THREE.Vector3(
-    (mouseDownVertex.x + mouseUpVertex.x) / 2,
-    (mouseDownVertex.y + mouseUpVertex.y) / 2,
-    (mouseDownVertex.z + mouseUpVertex.z) / 2
-  );
+  if (mouseDownVertex) {
+    vertexIntervalVector = new THREE.Vector3(
+      mouseUpVertex.x - mouseDownVertex.x,
+      mouseUpVertex.y - mouseDownVertex.y,
+      mouseUpVertex.z - mouseDownVertex.z
+    );
+
+    vertexIntervalMidPoint = new THREE.Vector3(
+      (mouseDownVertex.x + mouseUpVertex.x) / 2,
+      (mouseDownVertex.y + mouseUpVertex.y) / 2,
+      (mouseDownVertex.z + mouseUpVertex.z) / 2
+    );
+  }
 
   const rotatedVertexIntervalVector = new THREE.Vector3(
     -vertexIntervalVector.y,

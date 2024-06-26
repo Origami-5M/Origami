@@ -16,6 +16,12 @@ import { getFoldingDirection } from './getFoldingDirection';
 import { foldingVertexPosition } from './foldingVertexPosition';
 import { prevFoldingArea } from './prevFoldingArea';
 import { activeButtons } from './prevNextButtons';
+import {
+  checkActiveButtons,
+  changeToPrevFold,
+  changeToNextFold,
+  saveFoldHistory,
+} from './prevNextButtons';
 
 import {
   POINTS_MARKER_COLOR,
@@ -295,9 +301,16 @@ const handleMouseUp = () => {
           ? scene.add(vertexIntervalRotatedBasedOnY)
           : null;
 
+        saveFoldHistory({
+          paper: new Float32Array(
+            paper.geometry.attributes.position.array.slice()
+          ),
+          borderVertices: borderVertices.slice(),
+        });
         foldingAnimation(axis.axisPoints, clickedRedMarker, true);
         addVertices();
-        activeButtons(prevButton, nextButton);
+
+        checkActiveButtons(prevButton, nextButton);
       }
     }
   }
@@ -376,8 +389,14 @@ finishButton.addEventListener('click', () => {
   initializeCamera();
 });
 
-prevButton.addEventListener('click', () => {});
-nextButton.addEventListener('click', () => {});
+prevButton.addEventListener('click', () => {
+  changeToPrevFold();
+  checkActiveButtons(prevButton, nextButton);
+});
+nextButton.addEventListener('click', () => {
+  changeToNextFold();
+  checkActiveButtons(prevButton, nextButton);
+});
 
 window.addEventListener('resize', handleResize);
 window.addEventListener('mousemove', handleMouseMove);

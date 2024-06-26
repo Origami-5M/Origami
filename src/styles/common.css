@@ -85,8 +85,13 @@ p {
   opacity: 50%;
 }
 
-.button-purple:hover {
+.button-purple:not(:disabled):hover {
   opacity: 100%;
+}
+
+.button-purple:disabled {
+  background-color: #838383;
+  cursor: default;
 }
 
 .circle-button {

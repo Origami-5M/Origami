@@ -15,6 +15,7 @@ import { borderVertices, addVertices } from './makeVertices';
 import { getFoldingDirection } from './getFoldingDirection';
 import { foldingVertexPosition } from './foldingVertexPosition';
 import { prevFoldingArea } from './prevFoldingArea';
+import { activeButtons } from './prevNextButtons';
 
 import {
   POINTS_MARKER_COLOR,
@@ -28,6 +29,9 @@ const finishCont = document.querySelector('.complete-scene');
 const finishButton = document.querySelector('.finish-button');
 const completeCont = document.querySelector('.complete-cont');
 const foldFailToastMessage = document.querySelector('#foldFailToastMessage');
+
+const prevButton = document.querySelector('#prevButton');
+const nextButton = document.querySelector('#nextButton');
 
 const scene = new THREE.Scene();
 scene.add(paper);
@@ -293,6 +297,7 @@ const handleMouseUp = () => {
 
         foldingAnimation(axis.axisPoints, clickedRedMarker, true);
         addVertices();
+        activeButtons(prevButton, nextButton);
       }
     }
   }
@@ -344,17 +349,6 @@ const markClosestVertexAnimate = () => {
   requestAnimationFrame(markClosestVertexAnimate);
 };
 
-finishButton.addEventListener('click', () => {
-  isFinished = true;
-  completeCont.classList.remove('none');
-  section.classList.add('active');
-  launchConfetti();
-  confettiIntervalId = setInterval(launchConfetti, 3500);
-  renderer.clear();
-  handleResize();
-  initializeCamera();
-});
-
 const launchConfetti = () => {
   if (isFinished) {
     confetti({
@@ -381,6 +375,9 @@ finishButton.addEventListener('click', () => {
   handleResize();
   initializeCamera();
 });
+
+prevButton.addEventListener('click', () => {});
+nextButton.addEventListener('click', () => {});
 
 window.addEventListener('resize', handleResize);
 window.addEventListener('mousemove', handleMouseMove);

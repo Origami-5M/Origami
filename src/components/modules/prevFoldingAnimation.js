@@ -11,32 +11,32 @@ const prevFoldingAnimation = (scene, axisLines, clickedRedMarker) => {
     scene.remove(existingPolygon);
   }
 
+  const getClampedVertices = (axisLines, axisType) => {
+    return {
+      clampedStart: axisLines[axisType]
+        ? axisLines[axisType].geometry.attributes.position.array.slice(0, 3)
+        : null,
+      clampedEnd: axisLines[axisType]
+        ? axisLines[axisType].geometry.attributes.position.array.slice(3, 6)
+        : null,
+    };
+  };
+
+  const xVertices = getClampedVertices(
+    axisLines,
+    'vertexIntervalRotatedBasedOnX'
+  );
+  const yVertices = getClampedVertices(
+    axisLines,
+    'vertexIntervalRotatedBasedOnY'
+  );
+
   const axis = {
     rotatedLineVertex: {
-      clampedStartBasedOnX: axisLines.vertexIntervalRotatedBasedOnX
-        ? axisLines.vertexIntervalRotatedBasedOnX.geometry.attributes.position.array.slice(
-            0,
-            3
-          )
-        : null,
-      clampedEndBasedOnX: axisLines.vertexIntervalRotatedBasedOnX
-        ? axisLines.vertexIntervalRotatedBasedOnX.geometry.attributes.position.array.slice(
-            3,
-            6
-          )
-        : null,
-      clampedStartBasedOnY: axisLines.vertexIntervalRotatedBasedOnY
-        ? axisLines.vertexIntervalRotatedBasedOnY.geometry.attributes.position.array.slice(
-            0,
-            3
-          )
-        : null,
-      clampedEndBasedOnY: axisLines.vertexIntervalRotatedBasedOnY
-        ? axisLines.vertexIntervalRotatedBasedOnY.geometry.attributes.position.array.slice(
-            3,
-            6
-          )
-        : null,
+      clampedStartBasedOnX: xVertices.clampedStart,
+      clampedEndBasedOnX: xVertices.clampedEnd,
+      clampedStartBasedOnY: yVertices.clampedStart,
+      clampedEndBasedOnY: yVertices.clampedEnd,
     },
   };
 

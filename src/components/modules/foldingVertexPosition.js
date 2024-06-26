@@ -8,7 +8,7 @@ import { borderVertices } from './makeVertices';
 
 import { Z_GAP } from '../../constants';
 
-const AllFoldedFaces = [];
+const allFoldedFaces = [];
 
 const foldingVertexPosition = (
   allPositions,
@@ -94,7 +94,7 @@ const foldingVertexPosition = (
   }
 
   if (allPositions.isBufferAttribute && isFolding) {
-    AllFoldedFaces.push(nowFace);
+    allFoldedFaces.push(nowFace);
   }
 
   allPositions.needsUpdate = true;
@@ -111,8 +111,8 @@ const updateVertexPosition = (allPositions, i, vertex, nowFace) => {
   }
 };
 
-const getAllFoldedFaces = () => {
-  return AllFoldedFaces;
+const getallFoldedFaces = () => {
+  return allFoldedFaces;
 };
 
-export { foldingVertexPosition, getAllFoldedFaces };
+export { foldingVertexPosition, getallFoldedFaces };

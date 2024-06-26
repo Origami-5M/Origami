@@ -188,24 +188,27 @@ const updateFoldOnMouseMove = () => {
         },
       };
 
-      const startPoint = axis.rotatedLineVertex.clampedStartBasedOnX
-        ? new THREE.Vector3().fromArray(
-            axis.rotatedLineVertex.clampedStartBasedOnX
-          )
-        : axis.rotatedLineVertex.clampedStartBasedOnY
-          ? new THREE.Vector3().fromArray(
-              axis.rotatedLineVertex.clampedStartBasedOnY
-            )
-          : null;
-      const endPoint = axis.rotatedLineVertex.clampedEndBasedOnX
-        ? new THREE.Vector3().fromArray(
-            axis.rotatedLineVertex.clampedEndBasedOnX
-          )
-        : axis.rotatedLineVertex.clampedEndBasedOnY
-          ? new THREE.Vector3().fromArray(
-              axis.rotatedLineVertex.clampedEndBasedOnY
-            )
-          : null;
+      let startPoint = null;
+      if (axis.rotatedLineVertex.clampedStartBasedOnX) {
+        startPoint = new THREE.Vector3().fromArray(
+          axis.rotatedLineVertex.clampedStartBasedOnX
+        );
+      } else if (axis.rotatedLineVertex.clampedStartBasedOnY) {
+        startPoint = new THREE.Vector3().fromArray(
+          axis.rotatedLineVertex.clampedStartBasedOnY
+        );
+      }
+
+      let endPoint = null;
+      if (axis.rotatedLineVertex.clampedEndBasedOnX) {
+        endPoint = new THREE.Vector3().fromArray(
+          axis.rotatedLineVertex.clampedEndBasedOnX
+        );
+      } else if (axis.rotatedLineVertex.clampedEndBasedOnY) {
+        endPoint = new THREE.Vector3().fromArray(
+          axis.rotatedLineVertex.clampedEndBasedOnY
+        );
+      }
 
       const direction = getFoldingDirection(
         startPoint,

@@ -8,6 +8,7 @@ import { ambientLight, directionalLight } from '../../three/Lights';
 import { paper } from '../../three/Paper';
 import { renderer, finishRenderer } from '../../three/Renderer';
 
+import { debounce } from './debounce';
 import { findClosestVertex } from './findClosestVertex';
 import { calculateRotatedLine } from './axisCalculations';
 import { foldingAnimation } from './foldingAnimation';
@@ -48,11 +49,13 @@ const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 
 let isDragging = false;
+let isFinished = false;
+let areMarkersAtSamePosition = false;
+let confettiIntervalId = 0;
+let isAxisPoint = false;
+
 let startVertex = {};
 let hoverVertex = {};
-let isFinished = false;
-let confettiIntervalId = 0;
-let areMarkersAtSamePosition = false;
 let vertexIntervalRotatedBasedOnX = {};
 let vertexIntervalRotatedBasedOnY = {};
 
@@ -103,7 +106,7 @@ const handleMouseMove = event => {
   mouse.y = -((event.clientY - rect.top) / sizes.height) * 2 + 1;
 
   if (isDragging) {
-    updateFoldOnMouseMove(event);
+    debouncedUpdateFoldOnMouseMove(event);
   }
 };
 
@@ -140,6 +143,9 @@ const handleMouseDown = event => {
       clickedRedMarker.visible = true;
       controls.enabled = false;
       pointsMarker.visible = false;
+
+      const { closestVertex } = findClosestVertex(startVertex, borderVertices);
+      isAxisPoint = closestVertex.isAxisPoint;
     }
   }
 };
@@ -244,6 +250,8 @@ const updateFoldOnMouseMove = () => {
   }
 };
 
+const debouncedUpdateFoldOnMouseMove = debounce(updateFoldOnMouseMove, 10);
+
 const handleMouseUp = () => {
   controls.enabled = true;
   isDragging = false;
@@ -307,7 +315,12 @@ const handleMouseUp = () => {
           ),
           borderVertices: JSON.parse(JSON.stringify(borderVertices)),
         });
-        foldingAnimation(axis.axisPoints, clickedRedMarker, true);
+        foldingAnimation(
+          axis.axisPoints,
+          clickedRedMarker.position,
+          true,
+          isAxisPoint
+        );
         addVertices();
 
         checkActiveButtons(prevButton, nextButton);

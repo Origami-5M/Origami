@@ -20,9 +20,9 @@ const changeToPrevFold = () => {
       borderVertices: currentBorderVertices,
     });
 
-    const lastIndex = prevHistory.pop();
-    const prevPositions = lastIndex.paper;
-    const prevVertices = lastIndex.borderVertices;
+    const lastHistory = prevHistory.pop();
+    const prevPositions = lastHistory.paper;
+    const prevVertices = lastHistory.borderVertices;
 
     paper.geometry.setAttribute(
       'position',
@@ -42,9 +42,9 @@ const changeToNextFold = () => {
       borderVertices: currentBorderVertices,
     });
 
-    const lastIndex = nextHistory.pop();
-    const nextPositions = lastIndex.paper;
-    const nextVertices = lastIndex.borderVertices;
+    const lastHistory = nextHistory.pop();
+    const nextPositions = lastHistory.paper;
+    const nextVertices = lastHistory.borderVertices;
 
     paper.geometry.setAttribute(
       'position',

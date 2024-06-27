@@ -15,7 +15,7 @@ import { borderVertices, addVertices } from './makeVertices';
 import { getFoldingDirection } from './getFoldingDirection';
 import { foldingVertexPosition } from './foldingVertexPosition';
 import { prevFoldingArea } from './prevFoldingArea';
-import { activeButtons } from './prevNextButtons';
+
 import {
   checkActiveButtons,
   changeToPrevFold,

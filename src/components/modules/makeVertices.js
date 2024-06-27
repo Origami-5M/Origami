@@ -1,6 +1,7 @@
 import { getAxisPoints } from './axisCalculations';
 
 const borderPoints = [];
+let borderVertices = [];
 
 const interpolatePoints = (start, end, numPoints) => {
   const points = [];
@@ -27,6 +28,7 @@ const generateBorderPoints = (corners, pointsPerEdge = 9) => {
     const end = corners[(i + 1) % corners.length];
     const interpolatedPoints = interpolatePoints(start, end, pointsPerEdge);
     borderPoints.push(...interpolatedPoints);
+    borderVertices.push(...interpolatedPoints);
   }
 
   return borderPoints;
@@ -53,6 +55,6 @@ const changeBorderVertices = newData => {
 };
 
 const corners = findBorderVertices();
-let borderVertices = generateBorderPoints(corners);
+borderVertices = generateBorderPoints(corners);
 
 export { borderVertices, addVertices, changeBorderVertices };

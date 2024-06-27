@@ -22,11 +22,13 @@ const changeToPrevFold = () => {
 
     const lastIndex = prevHistory.pop();
     const prevPositions = lastIndex.paper;
+    const prevVertices = lastIndex.borderVertices;
 
     paper.geometry.setAttribute(
       'position',
       new THREE.BufferAttribute(prevPositions, 3)
     );
+    changeBorderVertices(prevVertices);
   }
 };
 
@@ -42,11 +44,13 @@ const changeToNextFold = () => {
 
     const lastIndex = nextHistory.pop();
     const nextPositions = lastIndex.paper;
+    const nextVertices = lastIndex.borderVertices;
 
     paper.geometry.setAttribute(
       'position',
       new THREE.BufferAttribute(nextPositions, 3)
     );
+    changeBorderVertices(nextVertices);
   }
 };
 

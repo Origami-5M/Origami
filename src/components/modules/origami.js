@@ -305,7 +305,7 @@ const handleMouseUp = () => {
           paper: new Float32Array(
             paper.geometry.attributes.position.array.slice()
           ),
-          borderVertices: borderVertices.slice(),
+          borderVertices: JSON.parse(JSON.stringify(borderVertices)),
         });
         foldingAnimation(axis.axisPoints, clickedRedMarker, true);
         addVertices();

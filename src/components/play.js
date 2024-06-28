@@ -1,3 +1,5 @@
+import { guideImages } from '../constants/guide';
+
 const homeButton = document.querySelector('.home-button');
 const sidebarToggleButton = document.querySelector('.mode-button');
 const infoButton = document.querySelector('.info-button');
@@ -13,17 +15,34 @@ const guideMode = urlParams.get('mode');
 
 const guideWrap = document.querySelector('.guide-wrap');
 const slider = guideWrap.querySelector('.slider');
-const slideList = slider.querySelectorAll('li');
 const prevButton = guideWrap.querySelector('.prev');
 const nextButton = guideWrap.querySelector('.next');
 
 const paginationText = guideWrap.querySelector('.pagination-text');
 const listWidth = 160;
-const sliderWidth = 160 * slideList.length;
+
+let slideList;
+let sliderWidth;
 
 let currentIdx = 0;
 let translate = 0;
 let isMuted = false;
+
+if (guideMode) {
+  guideWrap.classList.remove('none');
+
+  guideImages[guideMode].forEach((src, i) => {
+    const li = document.createElement('li');
+    const img = document.createElement('img');
+    img.src = src;
+    img.alt = `가이드 순서 ${i}`;
+    li.appendChild(img);
+    slider.appendChild(li);
+  });
+
+  slideList = slider.querySelectorAll('li');
+  sliderWidth = 160 * slideList.length;
+}
 
 const toggleInfo = () => {
   const infoWrap = document.querySelector('.info-wrap');
@@ -46,10 +65,6 @@ modeLists.forEach(item => {
     item.classList.add('none');
   }
 });
-
-if (guideMode) {
-  guideWrap.classList.remove('none');
-}
 
 infoButton.addEventListener('click', toggleInfo);
 modeLists.forEach(item => {

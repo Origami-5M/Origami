@@ -21,6 +21,16 @@ const guideSteps = {
         { x: 0, y: -1.5, z: 0 },
       ],
       axis: null,
+      unfold: false,
+      singleSide: false,
+    },
+    {
+      points: [
+        { x: 0, y: 1.5, z: 0 },
+        { x: 0, y: -1.5, z: 0 },
+      ],
+      axis: null,
+      unfold: true,
       singleSide: false,
     },
   ],

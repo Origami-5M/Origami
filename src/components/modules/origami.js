@@ -415,10 +415,12 @@ finishButton.addEventListener('click', () => {
 prevButton.addEventListener('click', () => {
   changeToPrevFold();
   checkActiveButtons(prevButton, nextButton);
+  updateStep(-1);
 });
 nextButton.addEventListener('click', () => {
   changeToNextFold();
   checkActiveButtons(prevButton, nextButton);
+  updateStep(1);
 });
 
 window.addEventListener('resize', handleResize);

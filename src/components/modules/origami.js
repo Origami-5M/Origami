@@ -60,8 +60,7 @@ let isAxisPoint = false;
 
 let startVertex = {};
 let hoverVertex = {};
-let vertexIntervalRotatedBasedOnX = {};
-let vertexIntervalRotatedBasedOnY = {};
+let allVertex = paper.geometry.attributes.position;
 
 if (isGuideMode) {
   changeBorderVertices(guideStep[nowStep].points);
@@ -172,68 +171,16 @@ const updateFoldOnMouseMove = () => {
         scene,
         clickedRedMarker.position,
         hoverVertex,
-        vertexIntervalRotatedBasedOnX,
-        vertexIntervalRotatedBasedOnY
+        allVertex
       );
-
-      vertexIntervalRotatedBasedOnX = axisLines.vertexIntervalRotatedBasedOnX;
-      vertexIntervalRotatedBasedOnY = axisLines.vertexIntervalRotatedBasedOnY;
 
       const existingPolygon = scene.getObjectByName('foldedAreaPolygon');
       if (existingPolygon) {
         scene.remove(existingPolygon);
       }
 
-      const axis = {
-        rotatedLineVertex: {
-          clampedStartBasedOnX: axisLines.vertexIntervalRotatedBasedOnX
-            ? axisLines.vertexIntervalRotatedBasedOnX.geometry.attributes.position.array.slice(
-                0,
-                3
-              )
-            : null,
-          clampedEndBasedOnX: axisLines.vertexIntervalRotatedBasedOnX
-            ? axisLines.vertexIntervalRotatedBasedOnX.geometry.attributes.position.array.slice(
-                3,
-                6
-              )
-            : null,
-          clampedStartBasedOnY: axisLines.vertexIntervalRotatedBasedOnY
-            ? axisLines.vertexIntervalRotatedBasedOnY.geometry.attributes.position.array.slice(
-                0,
-                3
-              )
-            : null,
-          clampedEndBasedOnY: axisLines.vertexIntervalRotatedBasedOnY
-            ? axisLines.vertexIntervalRotatedBasedOnY.geometry.attributes.position.array.slice(
-                3,
-                6
-              )
-            : null,
-        },
-      };
-
-      let startPoint = null;
-      if (axis.rotatedLineVertex.clampedStartBasedOnX) {
-        startPoint = new THREE.Vector3().fromArray(
-          axis.rotatedLineVertex.clampedStartBasedOnX
-        );
-      } else if (axis.rotatedLineVertex.clampedStartBasedOnY) {
-        startPoint = new THREE.Vector3().fromArray(
-          axis.rotatedLineVertex.clampedStartBasedOnY
-        );
-      }
-
-      let endPoint = null;
-      if (axis.rotatedLineVertex.clampedEndBasedOnX) {
-        endPoint = new THREE.Vector3().fromArray(
-          axis.rotatedLineVertex.clampedEndBasedOnX
-        );
-      } else if (axis.rotatedLineVertex.clampedEndBasedOnY) {
-        endPoint = new THREE.Vector3().fromArray(
-          axis.rotatedLineVertex.clampedEndBasedOnY
-        );
-      }
+      let startPoint = axisLines.axisPoints.startPoint;
+      let endPoint = axisLines.axisPoints.endPoint;
 
       const direction = getFoldingDirection(
         startPoint,
@@ -242,7 +189,7 @@ const updateFoldOnMouseMove = () => {
       );
 
       const currentFoldedArea = foldingVertexPosition(
-        paper.geometry.attributes.position,
+        allVertex,
         startPoint,
         endPoint,
         direction,
@@ -275,16 +222,6 @@ const handleMouseUp = () => {
     scene.remove(existingPolygon);
   }
 
-  if (vertexIntervalRotatedBasedOnX) {
-    scene.remove(vertexIntervalRotatedBasedOnX);
-    vertexIntervalRotatedBasedOnX = null;
-  }
-
-  if (vertexIntervalRotatedBasedOnY) {
-    scene.remove(vertexIntervalRotatedBasedOnY);
-    vertexIntervalRotatedBasedOnY = null;
-  }
-
   if (areMarkersAtSamePosition && clickedRedMarker.visible) {
     showToastMessages(TOAST_MESSAGE.SAME_POSITION);
   } else if (!pointsMarker.visible && clickedRedMarker.visible) {
@@ -305,26 +242,15 @@ const handleMouseUp = () => {
           scene,
           clickedRedMarker.position,
           closestVertex,
-          vertexIntervalRotatedBasedOnX,
-          vertexIntervalRotatedBasedOnY
+          allVertex
         );
 
-        vertexIntervalRotatedBasedOnX = axis.vertexIntervalRotatedBasedOnX;
-        vertexIntervalRotatedBasedOnY = axis.vertexIntervalRotatedBasedOnY;
-        vertexIntervalRotatedBasedOnX
-          ? scene.add(vertexIntervalRotatedBasedOnX)
-          : null;
-        vertexIntervalRotatedBasedOnY
-          ? scene.add(vertexIntervalRotatedBasedOnY)
-          : null;
-
         saveFoldHistory({
-          paper: new Float32Array(
-            paper.geometry.attributes.position.array.slice()
-          ),
+          paper: new Float32Array(allVertex.array.slice()),
           borderVertices: JSON.parse(JSON.stringify(borderVertices)),
         });
         foldingAnimation(
+          scene,
           axis.axisPoints,
           clickedRedMarker.position,
           true,

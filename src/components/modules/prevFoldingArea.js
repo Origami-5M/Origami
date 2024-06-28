@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-const getConvexHull = points => {
+const getBoundaryPoint = points => {
   if (!points) {
     return;
   }
@@ -87,7 +87,7 @@ const drawThickLine = (points, color, thickness) => {
 };
 
 const prevFoldingArea = (foldedVertices, thickness = 0.01) => {
-  const hullVertices = getConvexHull(foldedVertices);
+  const hullVertices = getBoundaryPoint(foldedVertices);
   const line = drawThickLine(hullVertices, 0x098cea, thickness);
 
   if (!line) {

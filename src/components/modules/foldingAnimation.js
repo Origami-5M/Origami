@@ -5,11 +5,7 @@ import { borderVertices } from './makeVertices';
 
 const foldingAnimation = (axisPoints, redMarker, isFolding) => {
   const { startPoint, endPoint } = axisPoints;
-  const direction = getFoldingDirection(
-    startPoint,
-    endPoint,
-    redMarker.position
-  );
+  const direction = getFoldingDirection(startPoint, endPoint, redMarker);
 
   foldingVertexPosition(
     paper.geometry.attributes.position,

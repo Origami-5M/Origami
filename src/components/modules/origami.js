@@ -266,8 +266,8 @@ const handleMouseUp = () => {
     }
   }
 
-  startVertex = null;
-  hoverVertex = null;
+  startVertex = {};
+  hoverVertex = {};
   clickedRedMarker.visible = false;
 };
 

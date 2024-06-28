@@ -12,11 +12,15 @@ import { debounce } from './debounce';
 import { findClosestVertex } from './findClosestVertex';
 import { calculateRotatedLine } from './axisCalculations';
 import { foldingAnimation } from './foldingAnimation';
-import { borderVertices, addVertices } from './makeVertices';
+import {
+  borderVertices,
+  addVertices,
+  changeBorderVertices,
+} from './makeVertices';
 import { getFoldingDirection } from './getFoldingDirection';
 import { foldingVertexPosition } from './foldingVertexPosition';
 import { prevFoldingArea } from './prevFoldingArea';
-
+import { nowStep, isGuideMode, guideStep, updateStep } from './guideModules';
 import {
   checkActiveButtons,
   changeToPrevFold,
@@ -59,19 +63,26 @@ let hoverVertex = {};
 let vertexIntervalRotatedBasedOnX = {};
 let vertexIntervalRotatedBasedOnY = {};
 
+if (isGuideMode) {
+  changeBorderVertices(guideStep[nowStep].points);
+}
+
 const createPointsMarker = color => {
   const geometry = new THREE.SphereGeometry(0.03, 16, 16);
   const material = new THREE.MeshBasicMaterial({ color });
   const marker = new THREE.Mesh(geometry, material);
-  marker.visible = false;
+
+  if (!isGuideMode) {
+    marker.visible = false;
+  }
   return marker;
 };
 
 const pointsMarker = createPointsMarker(POINTS_MARKER_COLOR);
-scene.add(pointsMarker);
-
 const clickedRedMarker = createPointsMarker(RED_MARKER_COLOR);
+scene.add(pointsMarker);
 scene.add(clickedRedMarker);
+clickedRedMarker.visible = false;
 
 const showToastMessages = text => {
   foldFailToastMessage.innerText = text;
@@ -118,15 +129,13 @@ const updateClosestVertexHover = intersectionPoint => {
   return closestVertex;
 };
 
-const handleMouseDown = event => {
+const handleMouseDown = () => {
   if (pointsMarker.visible) {
     clickedRedMarker.position.copy(pointsMarker.position);
     pointsMarker.visible = false;
     clickedRedMarker.visible = true;
     controls.enabled = false;
   }
-
-  handleMouseMove(event);
 
   const intersects = raycaster.intersectObject(paper);
 
@@ -322,8 +331,9 @@ const handleMouseUp = () => {
           isAxisPoint
         );
         addVertices();
-
         checkActiveButtons(prevButton, nextButton);
+
+        updateStep(1);
       }
     }
   }

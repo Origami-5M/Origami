@@ -1,4 +1,9 @@
 import { guideImages } from '../constants/guide';
+import {
+  currentIdx,
+  moveSlide,
+  updateSlideButtons,
+} from './modules/guideSlide';
 
 const homeButton = document.querySelector('.home-button');
 const sidebarToggleButton = document.querySelector('.mode-button');
@@ -17,15 +22,10 @@ const guideWrap = document.querySelector('.guide-wrap');
 const slider = guideWrap.querySelector('.slider');
 const prevButton = guideWrap.querySelector('.prev');
 const nextButton = guideWrap.querySelector('.next');
-
 const paginationText = guideWrap.querySelector('.pagination-text');
-const listWidth = 160;
 
 let slideList = 0;
 let sliderWidth;
-
-let currentIdx = 0;
-let translate = 0;
 let isMuted = false;
 
 if (guideMode) {
@@ -113,45 +113,6 @@ soundButton.addEventListener('click', () => {
 });
 
 slider.style.width = `${sliderWidth}px`;
-
-const updateSlideButtons = () => {
-  if (currentIdx === 0) {
-    prevButton.classList.add('hidden');
-  } else {
-    prevButton.classList.remove('hidden');
-  }
-
-  if (currentIdx === slideList.length - 1) {
-    nextButton.classList.add('hidden');
-  } else {
-    nextButton.classList.remove('hidden');
-  }
-};
-
-const moveSlide = event => {
-  event.preventDefault();
-
-  if (event.target.className.includes('next')) {
-    if (currentIdx !== slideList.length - 1) {
-      goToSlide(currentIdx + 1);
-    }
-  } else if (event.target.className.includes('prev')) {
-    if (currentIdx !== 0) {
-      goToSlide(currentIdx - 1);
-    }
-  }
-
-  updateSlideButtons();
-};
-
-const goToSlide = index => {
-  translate = -listWidth * index;
-  slider.style.transform = `translateX(${translate}px)`;
-  currentIdx = index;
-
-  paginationText.textContent = `${currentIdx + 1} / ${slideList.length}`;
-  updateSlideButtons();
-};
 
 paginationText.textContent = `${currentIdx + 1} / ${slideList.length}`;
 updateSlideButtons();

@@ -112,8 +112,8 @@ const updateVertexPosition = (allPositions, i, vertex, nowFace) => {
   }
 };
 
-const getallFoldedFaces = () => {
+const getAllFolderFaces = () => {
   return allFoldedFaces;
 };
 
-export { foldingVertexPosition, getallFoldedFaces };
+export { foldingVertexPosition, getAllFolderFaces };

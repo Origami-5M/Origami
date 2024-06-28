@@ -5,7 +5,7 @@ import { sizes } from '../../three/Sizes';
 import { camera, initializeCamera } from '../../three/Camera';
 import { controls } from '../../three/Controls';
 import { ambientLight, directionalLight } from '../../three/Lights';
-import { paper } from '../../three/Paper';
+import { paper, geometry } from '../../three/Paper';
 import { renderer, finishRenderer } from '../../three/Renderer';
 
 import { debounce } from './debounce';
@@ -18,9 +18,18 @@ import {
   changeBorderVertices,
 } from './makeVertices';
 import { getFoldingDirection } from './getFoldingDirection';
-import { foldingVertexPosition } from './foldingVertexPosition';
+import {
+  foldingVertexPosition,
+  rotatedData,
+  borderData,
+} from './foldingVertexPosition';
 import { prevFoldingArea } from './prevFoldingArea';
 import { nowStep, isGuideMode, guideStep, updateStep } from './guideModules';
+import {
+  rotateSelectedVertices,
+  findAndSelectClosestVertices,
+} from './rotateSelectedVertices';
+
 import {
   checkActiveButtons,
   changeToPrevFold,
@@ -61,6 +70,8 @@ let isAxisPoint = false;
 let startVertex = {};
 let hoverVertex = {};
 let allVertex = paper.geometry.attributes.position;
+let initialMousePosition = new THREE.Vector2();
+let selectedVertices = new Set();
 
 if (isGuideMode) {
   changeBorderVertices(guideStep[nowStep].points);
@@ -129,6 +140,19 @@ const updateClosestVertexHover = intersectionPoint => {
 };
 
 const handleMouseDown = () => {
+  selectedVertices = new Set();
+
+  const positions = rotatedData.face;
+  if (positions) {
+    controls.enabled = false;
+    findAndSelectClosestVertices(positions, geometry, selectedVertices);
+  }
+
+  if (pointsMarker.visible) {
+    initialMousePosition.set(event.clientX, event.clientY);
+    isDragging = true;
+  }
+
   if (pointsMarker.visible) {
     clickedRedMarker.position.copy(pointsMarker.position);
     pointsMarker.visible = false;
@@ -211,6 +235,32 @@ const debouncedUpdateFoldOnMouseMove = debounce(updateFoldOnMouseMove, 10);
 const handleMouseUp = () => {
   controls.enabled = true;
   isDragging = false;
+
+  if (isDragging && !pointsMarker.visible) {
+    rotateSelectedVertices(
+      geometry,
+      selectedVertices,
+      Math.PI,
+      50,
+      false,
+      rotatedData
+    );
+    selectedVertices = new Set();
+
+    const direction = getFoldingDirection(
+      borderData.startPoint,
+      borderData.endPoint,
+      clickedRedMarker.position
+    );
+    foldingVertexPosition(
+      borderData.face,
+      borderData.startPoint,
+      borderData.endPoint,
+      direction,
+      true,
+      true
+    );
+  }
 
   const existingPrevArea = scene.getObjectByName('prevFoldingAreaLine');
   if (existingPrevArea) {

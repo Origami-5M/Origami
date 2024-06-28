@@ -13,4 +13,17 @@ const guideImages = {
   ],
 };
 
-export { guideImages };
+const guideSteps = {
+  plane: [
+    {
+      points: [
+        { x: 0, y: 1.5, z: 0 },
+        { x: 0, y: -1.5, z: 0 },
+      ],
+      axis: null,
+      singleSide: false,
+    },
+  ],
+};
+
+export { guideImages, guideSteps };

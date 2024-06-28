@@ -21,7 +21,7 @@ const nextButton = guideWrap.querySelector('.next');
 const paginationText = guideWrap.querySelector('.pagination-text');
 const listWidth = 160;
 
-let slideList;
+let slideList = 0;
 let sliderWidth;
 
 let currentIdx = 0;

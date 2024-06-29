@@ -3,16 +3,16 @@ import { guideImages } from '../../constants/guide';
 const urlParams = new URLSearchParams(window.location.search);
 const guideMode = urlParams.get('mode');
 
-let currentIdx = 0;
-let translate = 0;
-let slideList = guideImages[guideMode];
-const listWidth = 160;
-
 const guideWrap = document.querySelector('.guide-wrap');
 const prevButton = guideWrap.querySelector('.prev');
 const nextButton = guideWrap.querySelector('.next');
 const slider = guideWrap.querySelector('.slider');
 const paginationText = guideWrap.querySelector('.pagination-text');
+
+const listWidth = 160;
+let slideList = guideImages[guideMode];
+let translate = 0;
+let currentIdx = 0;
 
 const updateSlideButtons = () => {
   if (currentIdx === 0) {

@@ -25,7 +25,7 @@ const nextButton = guideWrap.querySelector('.next');
 const paginationText = guideWrap.querySelector('.pagination-text');
 
 let slideList = 0;
-let sliderWidth;
+let sliderWidth = 160;
 let isMuted = false;
 
 if (guideMode) {
@@ -42,6 +42,11 @@ if (guideMode) {
 
   slideList = slider.querySelectorAll('li');
   sliderWidth = 160 * slideList.length;
+
+  slider.style.width = `${sliderWidth}px`;
+
+  paginationText.textContent = `${currentIdx + 1} / ${slideList.length}`;
+  updateSlideButtons();
 }
 
 const toggleInfo = () => {
@@ -111,11 +116,6 @@ soundButton.addEventListener('click', () => {
   isMuted = !isMuted;
   changeSoundButton(isMuted);
 });
-
-slider.style.width = `${sliderWidth}px`;
-
-paginationText.textContent = `${currentIdx + 1} / ${slideList.length}`;
-updateSlideButtons();
 
 prevButton.addEventListener('click', moveSlide);
 nextButton.addEventListener('click', moveSlide);

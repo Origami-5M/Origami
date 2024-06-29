@@ -235,14 +235,15 @@ const handleMouseUp = () => {
   controls.enabled = true;
   const isFolding = true;
   const isBorderVertices = true;
+  const isClockwise = false;
 
   if (isDragging && !pointsMarker.visible) {
     rotateSelectedVertices(
       allVertex,
       selectedVertices,
       Math.PI,
-      50,
-      false,
+      20,
+      isClockwise,
       rotatedData
     );
 

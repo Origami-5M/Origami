@@ -4,6 +4,8 @@ import {
   moveSlide,
   updateSlideButtons,
 } from './modules/guideSlide';
+import { showToastMessage } from './modules/showToastMessage';
+import { TOAST_MESSAGE } from '../constants';
 
 const urlParams = new URLSearchParams(window.location.search);
 const guideMode = urlParams.get('mode');
@@ -14,10 +16,7 @@ const prevButton = guideWrap.querySelector('.prev');
 const nextButton = guideWrap.querySelector('.next');
 const paginationText = guideWrap.querySelector('.pagination-text');
 const shareButton = document.querySelector('.share-button');
-const section = document.querySelector('section');
-const completeCont = document.querySelector('.complete-cont');
-const shareCont = document.querySelector('.share-modal');
-const deleteButton = document.querySelector('.close-button');
+const userNameInput = document.querySelector('.complete-input');
 
 let slideList = 0;
 let sliderWidth = 160;
@@ -52,22 +51,14 @@ document.body.addEventListener('click', event => {
 prevButton.addEventListener('click', moveSlide);
 nextButton.addEventListener('click', moveSlide);
 
-const navigateToShare = () => {
-  window.location.href = '/gallery';
-};
+const regex = /\S/;
+shareButton.addEventListener('click', event => {
+  event.preventDefault();
 
-shareButton.addEventListener('click', navigateToShare);
-
-const shareModalOn = () => {
-  section.classList.add('active');
-  completeCont.classList.add('none');
-  shareCont.classList.remove('none');
-};
-
-const closeModal = () => {
-  section.classList.remove('active');
-  shareCont.classList.remove('none');
-};
-
-shareButton.addEventListener('click', shareModalOn);
-deleteButton.addEventListener('click', closeModal);
+  const userName = userNameInput.value;
+  if (!regex.test(userName)) {
+    showToastMessage(TOAST_MESSAGE.NO_NICKNAME);
+  } else {
+    window.location.href = `/gallery`;
+  }
+});

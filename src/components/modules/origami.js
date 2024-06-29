@@ -246,6 +246,19 @@ const handleMouseUp = () => {
       rotatedData
     );
     selectedVertices = new Set();
+    const direction = getFoldingDirection(
+      borderData.startPoint,
+      borderData.endPoint,
+      clickedRedMarker.position
+    );
+    foldingVertexPosition(
+      borderData.face,
+      borderData.startPoint,
+      borderData.endPoint,
+      direction,
+      true,
+      true
+    );
   }
 
   const existingPrevArea = scene.getObjectByName('prevFoldingAreaLine');

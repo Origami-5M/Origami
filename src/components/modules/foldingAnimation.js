@@ -21,7 +21,8 @@ const foldingAnimation = (scene, axisPoints, redMarker, isFolding) => {
     startPoint,
     endPoint,
     direction,
-    isFolding
+    isFolding,
+    false
   );
 
   foldingVertexPosition(
@@ -29,7 +30,8 @@ const foldingAnimation = (scene, axisPoints, redMarker, isFolding) => {
     startPoint,
     endPoint,
     direction,
-    isFolding
+    isFolding,
+    false
   );
 
   const startMarker = createMarker(0xff0000, startPoint);

@@ -1,4 +1,6 @@
-const showToastMessages = (toastMessage, text) => {
+const toastMessage = document.querySelector('#toastMessage');
+
+const showToastMessage = text => {
   toastMessage.innerText = text;
   toastMessage.classList.add('active');
 
@@ -7,4 +9,4 @@ const showToastMessages = (toastMessage, text) => {
   }, 2000);
 };
 
-export { showToastMessages };
+export { showToastMessage };

@@ -144,7 +144,6 @@ const handleMouseDown = () => {
 
   const positions = rotatedData.face;
   if (positions) {
-    controls.enabled = false;
     findAndSelectClosestVertices(positions, geometry, selectedVertices);
   }
 
@@ -234,8 +233,6 @@ const debouncedUpdateFoldOnMouseMove = debounce(updateFoldOnMouseMove, 10);
 
 const handleMouseUp = () => {
   controls.enabled = true;
-  isDragging = false;
-
   if (isDragging && !pointsMarker.visible) {
     rotateSelectedVertices(
       geometry,
@@ -260,6 +257,8 @@ const handleMouseUp = () => {
       true
     );
   }
+
+  isDragging = false;
 
   const existingPrevArea = scene.getObjectByName('prevFoldingAreaLine');
   if (existingPrevArea) {

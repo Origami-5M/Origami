@@ -31,7 +31,7 @@ const foldingVertexPosition = (
   const { x: x2, y: y2 } = endPoint;
 
   const nowFace = [];
-  const prevFace = [];
+  const previewFace = [];
 
   const inequality = getInequalityFunction(direction);
   const frontOrBack = calculateFrontOrBack();
@@ -47,7 +47,7 @@ const foldingVertexPosition = (
         vertex.x = 2 * x1 - vertex.x;
         vertex.z += Z_GAP * frontOrBack;
 
-        prevFace.push(new THREE.Vector3(vertex.x, vertex.y, vertex.z));
+        previewFace.push(new THREE.Vector3(vertex.x, vertex.y, vertex.z));
 
         if (isFolding) {
           updateVertexPosition(allPositions, i, vertex, nowFace);
@@ -62,7 +62,7 @@ const foldingVertexPosition = (
         vertex.y = 2 * y1 - vertex.y;
         vertex.z += Z_GAP * frontOrBack;
 
-        prevFace.push(new THREE.Vector3(vertex.x, vertex.y, vertex.z));
+        previewFace.push(new THREE.Vector3(vertex.x, vertex.y, vertex.z));
 
         if (isFolding) {
           updateVertexPosition(allPositions, i, vertex, nowFace);
@@ -85,7 +85,7 @@ const foldingVertexPosition = (
         vertex.y = 2 * iy - vertex.y;
         vertex.z += Z_GAP * frontOrBack;
 
-        prevFace.push(new THREE.Vector3(vertex.x, vertex.y, vertex.z));
+        previewFace.push(new THREE.Vector3(vertex.x, vertex.y, vertex.z));
 
         if (isFolding) {
           updateVertexPosition(allPositions, i, vertex, nowFace);
@@ -100,7 +100,7 @@ const foldingVertexPosition = (
 
   allPositions.needsUpdate = true;
 
-  return prevFace;
+  return previewFace;
 };
 
 const updateVertexPosition = (allPositions, i, vertex, nowFace) => {

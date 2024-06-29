@@ -6,7 +6,7 @@ const PAPERCOLORS = [
 ];
 
 const SEGMENT_NUM = 300;
-const PAPER_BOUNDARY = 1.5;
+const AXIS_BOUNDARY = 10000;
 const DASH_SIZE = 0.02;
 const Z_GAP = 0.02;
 
@@ -20,7 +20,7 @@ export {
   RED_MARKER_COLOR,
   PAPERCOLORS,
   SEGMENT_NUM,
-  PAPER_BOUNDARY,
+  AXIS_BOUNDARY,
   DASH_SIZE,
   Z_GAP,
   TOAST_MESSAGE,

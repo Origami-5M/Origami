@@ -1,43 +1,55 @@
 import * as THREE from 'three';
-import { DASH_SIZE } from '../../constants';
+import { DASH_SIZE, AXIS_BOUNDARY } from '../../constants';
 
 let axisPoints = {};
 
 const getAxisPoints = () => axisPoints;
 
-const computeConvexHull = points => {
+const computeBoundaryPoints = points => {
   points.sort((a, b) => a.x - b.x || a.y - b.y);
 
-  const lower = [];
+  const lowerPoints = [];
   for (let point of points) {
     while (
-      lower.length >= 2 &&
-      !isLeftTurn(lower[lower.length - 2], lower[lower.length - 1], point)
+      lowerPoints.length >= 2 &&
+      !isLeftTurn(
+        lowerPoints[lowerPoints.length - 2],
+        lowerPoints[lowerPoints.length - 1],
+        point
+      )
     ) {
-      lower.pop();
+      lowerPoints.pop();
     }
-    lower.push(point);
+    lowerPoints.push(point);
   }
 
-  const upper = [];
+  const upperPoints = [];
   for (let i = points.length - 1; i >= 0; i--) {
     let point = points[i];
     while (
-      upper.length >= 2 &&
-      !isLeftTurn(upper[upper.length - 2], upper[upper.length - 1], point)
+      upperPoints.length >= 2 &&
+      !isLeftTurn(
+        upperPoints[upperPoints.length - 2],
+        upperPoints[upperPoints.length - 1],
+        point
+      )
     ) {
-      upper.pop();
+      upperPoints.pop();
     }
-    upper.push(point);
+    upperPoints.push(point);
   }
 
-  upper.pop();
-  lower.pop();
-  return lower.concat(upper);
+  upperPoints.pop();
+  lowerPoints.pop();
+  return lowerPoints.concat(upperPoints);
 };
 
-const isLeftTurn = (a, b, c) => {
-  return (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x) > 0;
+const isLeftTurn = (referencePoint, currentPoint, nextPoint) => {
+  return (
+    (currentPoint.x - referencePoint.x) * (nextPoint.y - referencePoint.y) -
+      (currentPoint.y - referencePoint.y) * (nextPoint.x - referencePoint.x) >
+    0
+  );
 };
 
 const calculateRotatedLine = (
@@ -54,7 +66,7 @@ const calculateRotatedLine = (
     );
   }
 
-  const hull = computeConvexHull(paperVerticesList);
+  const boundaryPoint = computeBoundaryPoints(paperVerticesList);
 
   const midpoint = new THREE.Vector3(
     (mouseDownVertex.x + mouseUpVertex.x) / 2,
@@ -74,20 +86,13 @@ const calculateRotatedLine = (
     direction.z
   ).normalize();
 
-  let startPoint = extendToBoundary(midpoint, rotatedDirection, hull, -1);
-  let endPoint = extendToBoundary(midpoint, rotatedDirection, hull, 1);
-
-  if (
-    !isFinite(startPoint.x) ||
-    !isFinite(startPoint.y) ||
-    !isFinite(startPoint.z) ||
-    !isFinite(endPoint.x) ||
-    !isFinite(endPoint.y) ||
-    !isFinite(endPoint.z)
-  ) {
-    console.error('Invalid start or end point:', startPoint, endPoint);
-    return;
-  }
+  let startPoint = extendToBoundary(
+    midpoint,
+    rotatedDirection,
+    boundaryPoint,
+    -1
+  );
+  let endPoint = extendToBoundary(midpoint, rotatedDirection, boundaryPoint, 1);
 
   const geometry = new THREE.BufferGeometry().setFromPoints([
     startPoint,
@@ -102,7 +107,6 @@ const calculateRotatedLine = (
   const rotatedLine = new THREE.Line(geometry, material);
   rotatedLine.computeLineDistances();
 
-  paperVertices.needsUpdate = true;
   scene.children.forEach(child => {
     if (child.geometry && child.geometry.attributes.position) {
       child.geometry.attributes.position.needsUpdate = true;
@@ -114,14 +118,20 @@ const calculateRotatedLine = (
   return { rotatedLine, axisPoints };
 };
 
-const extendToBoundary = (midpoint, direction, hull, scale) => {
+const extendToBoundary = (midpoint, direction, boundaryPoint, scale) => {
   let closestIntersection = null;
   let minDistance = Infinity;
 
-  for (let i = 0; i < hull.length; i++) {
-    const a = hull[i];
-    const b = hull[(i + 1) % hull.length];
-    const intersection = getIntersection(midpoint, direction, a, b, scale);
+  for (let i = 0; i < boundaryPoint.length; i++) {
+    const currentPoint = boundaryPoint[i];
+    const nextPoint = boundaryPoint[(i + 1) % boundaryPoint.length];
+    const intersection = getIntersection(
+      midpoint,
+      direction,
+      currentPoint,
+      nextPoint,
+      scale
+    );
 
     if (intersection) {
       const distance = midpoint.distanceTo(intersection);
@@ -135,43 +145,50 @@ const extendToBoundary = (midpoint, direction, hull, scale) => {
   return (
     closestIntersection ||
     new THREE.Vector3(
-      midpoint.x + direction.x * 10000,
-      midpoint.y + direction.y * 10000,
-      midpoint.z + direction.z * 10000
+      midpoint.x + direction.x * AXIS_BOUNDARY,
+      midpoint.y + direction.y * AXIS_BOUNDARY,
+      midpoint.z + direction.z * AXIS_BOUNDARY
     )
   );
 };
 
-const getIntersection = (midpoint, direction, a, b, scale) => {
-  const dir = new THREE.Vector3().copy(direction).multiplyScalar(scale);
-  const lineEnd = new THREE.Vector3().copy(midpoint).add(dir);
+const getIntersection = (midpoint, direction, pointA, pointB, scale) => {
+  const scaledDirection = new THREE.Vector3()
+    .copy(direction)
+    .multiplyScalar(scale);
+  const lineEnd = new THREE.Vector3().copy(midpoint).add(scaledDirection);
 
-  const p1 = midpoint;
-  const d1 = new THREE.Vector3().subVectors(lineEnd, midpoint);
+  const start = midpoint;
+  const rayDirection = new THREE.Vector3().subVectors(lineEnd, start);
 
-  const p2 = a;
-  const d2 = new THREE.Vector3().subVectors(b, a);
+  const linePoint = pointA;
+  const lineDirection = new THREE.Vector3().subVectors(pointB, pointA);
 
-  const d1CrossD2 = new THREE.Vector3().crossVectors(d1, d2);
-  const denom = d1CrossD2.lengthSq();
-
-  if (denom === 0) {
-    return null;
-  }
-
-  const p2SubP1 = new THREE.Vector3().subVectors(p2, p1);
-  const t1 =
-    new THREE.Vector3().crossVectors(p2SubP1, d2).dot(d1CrossD2) / denom;
-
-  if (t1 < 0) {
-    return null;
-  }
-
-  const intersection = new THREE.Vector3().addVectors(
-    p1,
-    d1.multiplyScalar(t1)
+  const crossProduct = new THREE.Vector3().crossVectors(
+    rayDirection,
+    lineDirection
   );
-  return intersection;
+  const denominator = crossProduct.lengthSq();
+
+  if (denominator === 0) {
+    return null;
+  }
+
+  const startToPoint = new THREE.Vector3().subVectors(linePoint, start);
+  const intersectionCoefficient =
+    new THREE.Vector3()
+      .crossVectors(startToPoint, lineDirection)
+      .dot(crossProduct) / denominator;
+
+  if (intersectionCoefficient < 0) {
+    return null;
+  }
+
+  const intersectionPoint = new THREE.Vector3().addVectors(
+    start,
+    rayDirection.multiplyScalar(intersectionCoefficient)
+  );
+  return intersectionPoint;
 };
 
 export { getAxisPoints, calculateRotatedLine };

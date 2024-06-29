@@ -51,8 +51,7 @@
 }
 
 .complete-button-container {
-  justify-content: space-evenly;
-  width: 420px;
+  justify-content: space-between;
   margin-top: 20px;
 }
 

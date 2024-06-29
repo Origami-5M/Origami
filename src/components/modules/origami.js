@@ -256,7 +256,6 @@ const handleMouseUp = () => {
       borderData.startPoint,
       borderData.endPoint,
       direction,
-      true,
       true
     );
   }

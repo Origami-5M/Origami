@@ -6,6 +6,9 @@ import {
 } from './modules/guideSlide';
 import { showToastMessage } from './modules/showToastMessage';
 import { TOAST_MESSAGE } from '../constants';
+import { saveUserInfo } from './services/userService';
+
+import { paper } from '../three/Paper';
 
 const urlParams = new URLSearchParams(window.location.search);
 const guideMode = urlParams.get('mode');
@@ -59,6 +62,8 @@ shareButton.addEventListener('click', event => {
   if (!regex.test(userName)) {
     showToastMessage(TOAST_MESSAGE.NO_NICKNAME);
   } else {
-    window.location.href = `/gallery`;
+    const origamiPositions = paper.position.toArray();
+
+    saveUserInfo(userName, 'thumbnail urls', origamiPositions);
   }
 });

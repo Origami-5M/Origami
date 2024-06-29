@@ -42,6 +42,14 @@ const foldingVertexPosition = (
   const m = (y2 - y1) / (x2 - x1);
   const c = y1 - m * x1;
 
+  const updateZ = vertex => {
+    if (vertex.z < 0) {
+      vertex.z += Z_GAP;
+    } else {
+      vertex.z -= Z_GAP;
+    }
+  };
+
   if (x1 === x2) {
     for (let i = 0; i < count; i++) {
       const vertex = getVertexFromPosition(allPositions, i);
@@ -49,9 +57,7 @@ const foldingVertexPosition = (
       if (inequality(vertex.x, x1)) {
         vertex.x = 2 * x1 - vertex.x;
         vertex.z = -vertex.z;
-        if (!isBorderVerties) {
-          vertex.z += Z_GAP * frontOrBack;
-        }
+        updateZ(vertex);
 
         previewFace.push(new THREE.Vector3(vertex.x, vertex.y, vertex.z));
 
@@ -67,9 +73,7 @@ const foldingVertexPosition = (
       if (inequality(vertex.y, y1)) {
         vertex.y = 2 * y1 - vertex.y;
         vertex.z = -vertex.z;
-        if (!isBorderVerties) {
-          vertex.z += Z_GAP * frontOrBack;
-        }
+        updateZ(vertex);
 
         previewFace.push(new THREE.Vector3(vertex.x, vertex.y, vertex.z));
 
@@ -93,9 +97,7 @@ const foldingVertexPosition = (
         vertex.x = 2 * ix - vertex.x;
         vertex.y = 2 * iy - vertex.y;
         vertex.z = -vertex.z;
-        if (!isBorderVerties) {
-          vertex.z += Z_GAP * frontOrBack;
-        }
+        updateZ(vertex);
 
         previewFace.push(new THREE.Vector3(vertex.x, vertex.y, vertex.z));
 

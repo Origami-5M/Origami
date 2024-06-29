@@ -1,28 +1,28 @@
 import * as THREE from 'three';
-import { getAxisPoints } from './axisCalculations';
-import { geometry } from '../../three/Paper';
+// import { rotatedData } from './foldingVertexPosition';
 
 const rotateSelectedVertices = (
+  geometry,
   selectedVertices,
-  totalRotation = Math.PI,
-  steps = 180,
-  interval = 16,
-  clockwise = true
+  totalRotation,
+  steps,
+  clockwise,
+  rotatedData
 ) => {
   const stepAngle = (totalRotation / steps) * (clockwise ? 1 : -1);
   let currentStep = 0;
-
   const performRotation = () => {
-    const axisPoints = getAxisPoints();
-    const startPoint = axisPoints.startPoint;
-    const endPoint = axisPoints.endPoint;
+    const startPoint = rotatedData.startPoint;
+    const endPoint = rotatedData.endPoint;
 
     if (startPoint && endPoint) {
       const direction = new THREE.Vector3()
-        .subVectors(startPoint, endPoint)
+        .subVectors(endPoint, startPoint)
         .normalize();
 
-      const pivot = startPoint.clone();
+      const pivot = new THREE.Vector3()
+        .addVectors(startPoint, endPoint)
+        .multiplyScalar(0.5);
       const quaternion = new THREE.Quaternion().setFromAxisAngle(
         direction,
         stepAngle
@@ -48,21 +48,14 @@ const rotateSelectedVertices = (
     }
 
     currentStep++;
-
     if (currentStep < steps) {
-      setTimeout(performRotation, interval);
+      requestAnimationFrame(performRotation);
     }
   };
 
   performRotation();
 };
 
-/**
- *  x,y,z를 인덱스로 바꿔서 저장시키는 함수
- * @param {*} positions
- * @param {*} geometry
- * @param {*} selectedVertices 선택된 x,y,z 의 좌표
- */
 const findAndSelectClosestVertices = (
   positions,
   geometry,

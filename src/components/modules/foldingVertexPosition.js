@@ -9,13 +9,16 @@ import { borderVertices } from './makeVertices';
 import { Z_GAP } from '../../constants';
 
 const allFoldedFaces = [];
+const rotatedData = {};
+const borderData = {};
 
 const foldingVertexPosition = (
   allPositions,
   startPoint,
   endPoint,
   direction,
-  isFolding
+  isFolding,
+  isBorderVerties
 ) => {
   let count = allPositions.count;
 
@@ -96,6 +99,13 @@ const foldingVertexPosition = (
 
   if (allPositions.isBufferAttribute && isFolding) {
     allFoldedFaces.push(nowFace);
+    rotatedData.face = nowFace;
+    rotatedData.startPoint = startPoint;
+    rotatedData.endPoint = endPoint;
+  } else {
+    borderData.face = nowFace;
+    borderData.startPoint = startPoint;
+    borderData.endPoint = endPoint;
   }
 
   allPositions.needsUpdate = true;
@@ -116,4 +126,4 @@ const getAllFolderFaces = () => {
   return allFoldedFaces;
 };
 
-export { foldingVertexPosition, getAllFolderFaces };
+export { foldingVertexPosition, getAllFolderFaces, rotatedData, borderData };

@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-// import { rotatedData } from './foldingVertexPosition';
 
 const rotateSelectedVertices = (
   geometry,
@@ -50,6 +49,21 @@ const rotateSelectedVertices = (
     currentStep++;
     if (currentStep < steps) {
       requestAnimationFrame(performRotation);
+    } else {
+      const positionAttribute = geometry.attributes.position;
+      for (let i = 0; i < positionAttribute.count; i++) {
+        if (selectedVertices.has(i)) {
+          const z = positionAttribute.getZ(i);
+          if (z !== 0) {
+            if (z < 0) {
+              positionAttribute.setZ(i, z + 0.02);
+            } else {
+              positionAttribute.setZ(i, z - 0.02);
+            }
+          }
+        }
+      }
+      positionAttribute.needsUpdate = true;
     }
   };
 

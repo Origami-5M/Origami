@@ -5,7 +5,7 @@ import { sizes } from '../../three/Sizes';
 import { camera, initializeCamera } from '../../three/Camera';
 import { controls } from '../../three/Controls';
 import { ambientLight, directionalLight } from '../../three/Lights';
-import { paper, geometry } from '../../three/Paper';
+import { paper } from '../../three/Paper';
 import { renderer, finishRenderer } from '../../three/Renderer';
 
 import { debounce } from './debounce';
@@ -144,7 +144,7 @@ const handleMouseDown = () => {
 
   const positions = rotatedData.face;
   if (positions) {
-    findAndSelectClosestVertices(positions, geometry, selectedVertices);
+    findAndSelectClosestVertices(positions, allVertex, selectedVertices);
   }
 
   if (pointsMarker.visible) {
@@ -233,28 +233,32 @@ const debouncedUpdateFoldOnMouseMove = debounce(updateFoldOnMouseMove, 10);
 
 const handleMouseUp = () => {
   controls.enabled = true;
+  const isFolding = true;
+  const isBorderVertices = true;
+
   if (isDragging && !pointsMarker.visible) {
     rotateSelectedVertices(
-      geometry,
+      allVertex,
       selectedVertices,
       Math.PI,
       50,
       false,
       rotatedData
     );
-    selectedVertices = new Set();
+
     const direction = getFoldingDirection(
       borderData.startPoint,
       borderData.endPoint,
       clickedRedMarker.position
     );
+
     foldingVertexPosition(
       borderData.face,
       borderData.startPoint,
       borderData.endPoint,
       direction,
-      true,
-      true
+      isFolding,
+      isBorderVertices
     );
   }
 

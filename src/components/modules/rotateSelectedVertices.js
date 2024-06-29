@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 
 const rotateSelectedVertices = (
-  geometry,
+  positionAttribute,
   selectedVertices,
   totalRotation,
   steps,
@@ -9,7 +9,9 @@ const rotateSelectedVertices = (
   rotatedData
 ) => {
   const stepAngle = (totalRotation / steps) * (clockwise ? 1 : -1);
+
   let currentStep = 0;
+
   const performRotation = () => {
     const startPoint = rotatedData.startPoint;
     const endPoint = rotatedData.endPoint;
@@ -22,12 +24,10 @@ const rotateSelectedVertices = (
       const pivot = new THREE.Vector3()
         .addVectors(startPoint, endPoint)
         .multiplyScalar(0.5);
-      const quaternion = new THREE.Quaternion().setFromAxisAngle(
+      const rotationQuaternion = new THREE.Quaternion().setFromAxisAngle(
         direction,
         stepAngle
       );
-
-      const positionAttribute = geometry.attributes.position;
 
       const vector = new THREE.Vector3();
       for (let i = 0; i < positionAttribute.count; i++) {
@@ -38,7 +38,7 @@ const rotateSelectedVertices = (
           vector.set(x, y, z);
 
           vector.sub(pivot);
-          vector.applyQuaternion(quaternion);
+          vector.applyQuaternion(rotationQuaternion);
           vector.add(pivot);
           positionAttribute.setXYZ(i, vector.x, vector.y, vector.z);
         }
@@ -50,7 +50,6 @@ const rotateSelectedVertices = (
     if (currentStep < steps) {
       requestAnimationFrame(performRotation);
     } else {
-      const positionAttribute = geometry.attributes.position;
       for (let i = 0; i < positionAttribute.count; i++) {
         if (selectedVertices.has(i)) {
           const z = positionAttribute.getZ(i);
@@ -72,10 +71,9 @@ const rotateSelectedVertices = (
 
 const findAndSelectClosestVertices = (
   positions,
-  geometry,
+  positionAttribute,
   selectedVertices
 ) => {
-  const positionAttribute = geometry.attributes.position;
   const vertex = new THREE.Vector3();
 
   positions.forEach(target => {

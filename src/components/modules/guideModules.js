@@ -18,6 +18,7 @@ const updateStep = step => {
   nowStep += step;
   goToSlide(nowStep);
   checkUnfoldButtons();
+  changeBorderVertices();
 };
 
 export { nowStep, isGuideMode, guideStep, updateStep };

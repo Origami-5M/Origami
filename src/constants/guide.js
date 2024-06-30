@@ -25,13 +25,109 @@ const GUIDE_STEPS = {
       singleSide: false,
     },
     {
-      points: [
-        { x: 0, y: 1.5, z: 0 },
-        { x: 0, y: -1.5, z: 0 },
-      ],
+      points: [],
       axis: null,
       unfold: true,
       singleSide: false,
+    },
+    {
+      points: [
+        { x: -1.5, y: 1.5, z: 0 },
+        { x: 0, y: 0, z: 0 },
+      ],
+      axis: null,
+      unfold: false,
+      singleSide: false,
+    },
+    {
+      points: [
+        { x: -1.5, y: -1.5, z: 0 },
+        { x: 0, y: 0, z: 0 },
+      ],
+      axis: null,
+      unfold: false,
+      singleSide: false,
+    },
+    {
+      //5
+      points: [
+        { x: 0, y: 1.5, z: 0 },
+        { x: 0.62, y: 0.00019991115391304604, z: 0 },
+      ],
+      axis: null,
+      unfold: false,
+      singleSide: false,
+    },
+    {
+      points: [
+        { x: 0, y: -1.5, z: 0 },
+        { x: 0.62, y: 0.00019991115391304604, z: 0 },
+      ],
+      axis: null,
+      unfold: false,
+      singleSide: false,
+    },
+    {
+      //7
+      points: [
+        { x: -1.5, y: 0, z: 0 },
+        { x: -1, y: 0, z: 0 },
+      ],
+      axis: null,
+      unfold: false,
+      singleSide: false,
+    },
+    {
+      //8
+      points: [
+        {
+          x: 0.6159830537825293,
+          y: -0.8763932215130115,
+          z: 0,
+        },
+        {
+          x: 0.6159830537825293,
+          y: 0.8763932215130115,
+          z: 0,
+        },
+      ],
+      axis: null,
+      unfold: false,
+      singleSide: false,
+    },
+    {
+      points: [
+        {
+          x: 0.3198644103773862,
+          y: 0.7579457641509544,
+          z: 0,
+        },
+        {
+          x: 0.48,
+          y: 0,
+          z: 0,
+        },
+      ],
+      axis: null,
+      unfold: false,
+      singleSide: true,
+    },
+    {
+      points: [
+        {
+          x: 0.3198644103773862,
+          y: 0.7579457641509544,
+          z: 0,
+        },
+        {
+          x: 0.48,
+          y: 0,
+          z: 0,
+        },
+      ],
+      axis: null,
+      unfold: false,
+      singleSide: true,
     },
   ],
 };

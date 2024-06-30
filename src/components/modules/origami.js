@@ -7,7 +7,6 @@ import { controls } from '../../three/Controls';
 import { ambientLight, directionalLight } from '../../three/Lights';
 import { paper } from '../../three/Paper';
 import { renderer, finishRenderer } from '../../three/Renderer';
-import { showToastMessage } from './showToastMessage';
 
 import { debounce } from './debounce';
 import { findClosestVertex } from './findClosestVertex';

@@ -28,6 +28,16 @@ const checkList = event => {
   modeLists.forEach(item => {
     if (item !== event.currentTarget) {
       item.classList.remove('active');
+    } else {
+      if (event.currentTarget.hasAttribute('data-guideMode')) {
+        let url = new URL(`${window.location.origin}/play`);
+        let params = new URLSearchParams(url.search);
+        const selectGuideMode =
+          event.currentTarget.getAttribute('data-guideMode');
+        params.append('mode', selectGuideMode);
+        url.search = params.toString();
+        window.location.href = url.toString();
+      }
     }
   });
 

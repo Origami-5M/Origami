@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SharePage</title>
+    <link rel="stylesheet" href="./src/styles/share.css" />
+    <link rel="stylesheet" href="./src/styles/sidebar.css" />
+    <link rel="stylesheet" href="./src/styles/common.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/reset-css@4.0.1/reset.min.css"
+    />
+  </head>
+  <body>
+    <main class="main-container share-container">
+      <section>
+        <p class="newest red-color"><span></span>Newest</p>
+        <div class="slide-wrapper">
+          <div class="slide-inner"></div>
+        </div>
+        <button class="list-prev"></button>
+        <button class="list-next"></button>
+        <div class="share-modal none">
+          <button class="close-button"></button>
+          <div class="detail-scene"></div>
+          <h3>Test</h3>
+          <button class="share-icon-button circle-button"></button>
+        </div>
+      </section>
+      <nav class="side-nav">
+        <div>
+          <button class="home-button nav-button"></button>
+          <button class="mode-button nav-button"></button>
+          <button class="gallery-button nav-button"></button>
+        </div>
+        <div>
+          <button class="sound-button nav-button">
+            <audio
+              class="main-bgm"
+              src="/src/assets/sound/origami_main_music.mp3"
+              loop
+              autoplay
+            ></audio>
+          </button>
+          <button class="info-button nav-button"></button>
+          <div class="info-wrap">
+            <p>
+              안녕하세요! 드래그를 사용하여 종이를 접는 방법을
+              알려드리겠습니다.<br /><br />
+              <span>드래그 하기:</span> 마우스를 사용하여 접고 싶은 부분을
+              클릭한 상태에서 원하는 방향으로 드래그하세요. 예를 들어, 종이의
+              한쪽 끝을 클릭한 상태에서 위로 드래그하면, 종이가 위쪽으로
+              접힙니다.<br /><br />
+              <span>접기 방향 조절하기:</span> 드래그 중에 마우스를 움직이는
+              방향에 따라 접히는 각도와 방향이 실시간으로 조정됩니다. 원하는
+              각도에 도달하면 마우스 클릭을 놓으세요. 그러면 종이가 그 상태로
+              접힙니다.<br /><br />
+              <span>다양한 각도에서 보기:</span> 배경을 드래그하면 3D 공간에서
+              종이를 회전시켜 다양한 각도에서 확인할 수 있습니다. 이렇게 하면
+              접힌 부분을 더 명확하게 볼 수 있습니다. 재설정 및 되돌리기: 실수로
+              잘못 접었다면, 상단 메뉴의 '되돌리기' 버튼을 눌러 이전 상태로
+              돌아갈 수 있습니다. 또한, 처음부터 다시 시작하고 싶다면 '재설정'
+              버튼을 누르면 됩니다. 지금부터 즐거운 종이접기를 즐겨보세요!
+            </p>
+          </div>
+        </div>
+      </nav>
+      <aside class="mode-sidebar">
+        <ul class="mode-list">
+          <li data-guideMode="plane">
+            <div>
+              <h3>Plane</h3>
+              <p>
+                <img
+                  src="/src/assets/img/rocket-img.png"
+                  alt="종이접기 로켓 이미지"
+                />
+              </p>
+            </div>
+          </li>
+          <li class="mode-list" data-guideMode="heart">
+            <div>
+              <h3>Boat</h3>
+              <p>
+                <img
+                  src="/src/assets/img/rocket-img.png"
+                  alt="종이접기 로켓 이미지"
+                />
+              </p>
+            </div>
+          </li>
+          <li class="mode-list" data-guideMode="bell">
+            <div>
+              <h3>Heart</h3>
+              <p>
+                <img
+                  src="/src/assets/img/rocket-img.png"
+                  alt="종이접기 로켓 이미지"
+                />
+              </p>
+            </div>
+          </li>
+        </ul>
+        <div class="sidebar-footer">
+          <button class="button-red small-start-button">START</button>
+        </div>
+      </aside>
+    </main>
+    <script type="module" src="src/components/share.js" defer></script>
+    <script type="module" src="src/components/sidebar.js" defer></script>
+  </body>
+</html>

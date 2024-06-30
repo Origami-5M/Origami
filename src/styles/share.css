@@ -1,0 +1,225 @@
+.main-container.share-container section {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.main-container.share-container section.active:after {
+  background-color: #000;
+  opacity: 0.4;
+}
+
+.share-container section p {
+  display: flex;
+  align-items: center;
+  margin: 50px 0 50px 80px;
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.newest span {
+  margin-right: 10px;
+}
+
+.newest span {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-bottom: 3px;
+  border-radius: 999px;
+  background-color: #f2482e;
+}
+
+.slide-wrapper {
+  overflow: hidden;
+  width: 95%;
+  height: 100%;
+  margin: 0 auto;
+}
+
+.slide-inner {
+  display: flex;
+  transition: transform 0.3s ease-in-out;
+  width: 100%;
+  height: 100%;
+}
+
+.share-modal {
+  position: absolute;
+  z-index: 5;
+  top: 0;
+  left: 0;
+}
+
+.share-lists {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 0 120px 80px;
+  gap: 0 30px;
+}
+
+.share-lists li {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: calc(20% - 20px);
+  height: 30%;
+  margin-bottom: 30px;
+  cursor: pointer;
+}
+
+.share-lists li .img-wrap {
+  border: 3px solid rgba(52, 51, 148, 0);
+  transition: all 0.2s ease-in-out;
+}
+
+.share-lists li .img-wrap:hover {
+  border: 4px solid rgba(52, 51, 148, 0.3);
+}
+
+.share-lists li .list-cont {
+  width: 85%;
+}
+
+.share-lists li .img-wrap {
+  padding: 10%;
+  border-radius: 30px;
+  background: #fff;
+  text-align: center;
+}
+
+.share-lists li .img-wrap img {
+  width: 100%;
+}
+
+.share-lists li h3 {
+  padding-top: 30px;
+  color: #343394;
+  font-size: 20px;
+  font-weight: 900;
+  text-align: center;
+}
+
+.list-prev,
+.list-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 28px;
+  height: 84px;
+  background: url('/src/assets/img/css_sprites.png') no-repeat;
+  cursor: pointer;
+}
+
+.list-prev {
+  left: 100px;
+  background-position: -52px -8px;
+}
+
+.list-next {
+  right: 100px;
+  background-position: -8px -8px;
+}
+
+.detail-scene {
+  width: 400px;
+  height: 400px;
+  background-color: #8f8f8f;
+}
+
+.detail-name {
+  color: #343394;
+  font-size: 32px;
+  font-weight: 900;
+}
+
+.main-container .detail-container {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 60px;
+}
+
+.main-container .detail-container .share-icon {
+  width: 50px;
+  height: 50px;
+  background: url('/src/assets/img/shareIcon.png') no-repeat 40% 50%;
+  background-color: #838383;
+  object-fit: contain;
+  opacity: 50%;
+}
+
+.main-container .detail-container .share-icon:hover {
+  opacity: 100%;
+}
+
+.share-info {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 400px;
+}
+
+.share-info .share-icon {
+  position: absolute;
+  right: 60px;
+}
+
+.share-modal {
+  position: absolute;
+  z-index: 5;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 60%;
+  height: 60%;
+  padding: 80px 50px 50px 50px;
+  border-radius: 50px;
+  background-color: #fff;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.25));
+}
+
+.detail-scene {
+  width: 250px;
+  height: 250px;
+  background-color: #e7e6ff;
+}
+
+.share-modal h3 {
+  margin-top: 50px;
+  color: #343394;
+  font-size: 32px;
+  font-weight: 900;
+}
+
+.close-button {
+  position: absolute;
+  top: 50px;
+  right: 50px;
+  width: 35px;
+  height: 35px;
+  padding: 22px;
+  border-radius: 5px;
+  background: url(/src/assets/img/css_sprites.png) no-repeat -111px -166px;
+  background-color: #343394;
+}
+
+.share-icon-button.circle-button {
+  position: absolute;
+  bottom: 50px;
+  right: 50px;
+  width: 55px;
+  height: 55px;
+  background: url('/src/assets/img/shareIcon.png') no-repeat 40% 50%;
+  background-color: #838383;
+  opacity: 50%;
+  object-fit: contain;
+}

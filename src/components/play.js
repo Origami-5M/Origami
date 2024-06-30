@@ -12,6 +12,10 @@ import { saveUserInfo } from './services/userService';
 
 import { paper } from '../three/Paper';
 
+const finishCanvas = document.querySelector('.finish-canvas');
+const userNameInput = document.querySelector('.complete-input');
+const shareButton = document.querySelector('.share-button');
+
 const urlParams = new URLSearchParams(window.location.search);
 const guideMode = urlParams.get('mode');
 
@@ -20,9 +24,6 @@ const slider = guideWrap.querySelector('.slider');
 const prevButton = guideWrap.querySelector('.prev');
 const nextButton = guideWrap.querySelector('.next');
 const paginationText = guideWrap.querySelector('.pagination-text');
-const shareButton = document.querySelector('.share-button');
-const userNameInput = document.querySelector('.complete-input');
-const finishCanvas = document.querySelector('.finish-canvas');
 
 let slideList = 0;
 let sliderWidth = 160;

@@ -85,10 +85,9 @@ const shareModalOn = id => {
   const listId = id.toString();
   section.classList.add('active');
   shareCont.classList.remove('none');
-  console.log(listId);
 };
 
-const deleteModal = () => {
+const closeModal = () => {
   shareCont.classList.add('none');
   section.classList.remove('active');
 
@@ -109,14 +108,14 @@ slideInner.addEventListener('click', event => {
 
     const url = new URL(window.location.href);
     const params = new URLSearchParams(url.search);
-    params.set('ID', listId);
+    params.set('id', listId);
     const newUrl = `${url.pathname}?${params.toString()}`;
 
     history.pushState({ id: listId }, '', newUrl);
   }
 });
 
-deleteButton.addEventListener('click', deleteModal);
+deleteButton.addEventListener('click', closeModal);
 
 const copyUrl = () => {
   const currentUrl = window.location.href;
@@ -135,7 +134,7 @@ shareIconButton.addEventListener('click', copyUrl);
 const checkUrlForModal = () => {
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.search);
-  const listId = params.get('ID');
+  const listId = params.get('id');
 
   if (listId) {
     const activeShareList = document.querySelector(`#${listId}`);

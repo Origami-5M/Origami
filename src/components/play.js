@@ -53,7 +53,7 @@ prevButton.addEventListener('click', moveSlide);
 nextButton.addEventListener('click', moveSlide);
 
 const navigateToShare = () => {
-  window.location.href = '/shareList';
+  window.location.href = '/gallery';
 };
 
 shareButton.addEventListener('click', navigateToShare);
@@ -64,10 +64,10 @@ const shareModalOn = () => {
   shareCont.classList.remove('none');
 };
 
-const deleteModal = () => {
+const closeModal = () => {
   section.classList.remove('active');
   shareCont.classList.remove('none');
 };
 
 shareButton.addEventListener('click', shareModalOn);
-deleteButton.addEventListener('click', deleteModal);
+deleteButton.addEventListener('click', closeModal);

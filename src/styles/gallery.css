@@ -223,3 +223,8 @@
   opacity: 50%;
   object-fit: contain;
 }
+
+#toastMessage.active {
+  background-color: #fff;
+  color: #555;
+}

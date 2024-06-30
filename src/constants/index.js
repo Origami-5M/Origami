@@ -15,6 +15,7 @@ const FRAMES = 30;
 const TOAST_MESSAGE = {
   SAME_POSITION: '마우스를 접을 곳으로 이동해 주세요!',
   NO_POINTMARKER: '꼭짓점이 접을 수 있는 선분에 닿아야 합니다!',
+  URL_COPY: '링크가 복사되었습니다.',
 };
 
 export {

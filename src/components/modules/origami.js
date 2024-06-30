@@ -7,6 +7,7 @@ import { controls } from '../../three/Controls';
 import { ambientLight, directionalLight } from '../../three/Lights';
 import { paper } from '../../three/Paper';
 import { renderer, finishRenderer } from '../../three/Renderer';
+import { showToastMessages } from './showToastMessage';
 
 import { debounce } from './debounce';
 import { findClosestVertex } from './findClosestVertex';
@@ -50,7 +51,7 @@ const playCont = document.querySelector('.play-cont');
 const finishCont = document.querySelector('.complete-scene');
 const finishButton = document.querySelector('.finish-button');
 const completeCont = document.querySelector('.complete-cont');
-const foldFailToastMessage = document.querySelector('#foldFailToastMessage');
+const toastMessage = document.querySelector('#toastMessage');
 
 const prevButton = document.querySelector('#prevButton');
 const nextButton = document.querySelector('#nextButton');
@@ -99,15 +100,6 @@ const clickedRedMarker = createPointsMarker(RED_MARKER_COLOR);
 scene.add(pointsMarker);
 scene.add(clickedRedMarker);
 clickedRedMarker.visible = false;
-
-const showToastMessages = text => {
-  foldFailToastMessage.innerText = text;
-  foldFailToastMessage.classList.add('active');
-
-  setTimeout(() => {
-    foldFailToastMessage.classList.remove('active');
-  }, 2000);
-};
 
 const updateSizesAndCamera = cont => {
   const rect = cont.getBoundingClientRect();
@@ -281,9 +273,9 @@ const handleMouseUp = () => {
   }
 
   if (areMarkersAtSamePosition && clickedRedMarker.visible) {
-    showToastMessages(TOAST_MESSAGE.SAME_POSITION);
+    showToastMessages(toastMessage, TOAST_MESSAGE.SAME_POSITION);
   } else if (!pointsMarker.visible && clickedRedMarker.visible) {
-    showToastMessages(TOAST_MESSAGE.NO_POINTMARKER);
+    showToastMessages(toastMessage, TOAST_MESSAGE.NO_POINTMARKER);
   } else if (pointsMarker.visible && clickedRedMarker.visible) {
     raycaster.setFromCamera(mouse, camera);
     const intersects = raycaster.intersectObject(paper);

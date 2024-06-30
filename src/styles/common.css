@@ -44,6 +44,25 @@ section.active:after {
   content: '';
 }
 
+#toastMessage {
+  opacity: 0;
+  position: fixed;
+  bottom: -100px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  padding: 10px 50px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 100px;
+  color: #000000;
+  transition: all 0.5s;
+}
+
+#toastMessage.active {
+  z-index: 20;
+  opacity: 100%;
+  bottom: 50px;
+}
+
 button {
   cursor: pointer;
   border: none;

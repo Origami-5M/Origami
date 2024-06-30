@@ -1,3 +1,6 @@
+import { showToastMessages } from './modules/showToastMessage';
+import { TOAST_MESSAGE } from '../constants';
+
 const slideInner = document.querySelector('.slide-inner');
 const prevButton = document.querySelector('.list-prev');
 const nextButton = document.querySelector('.list-next');
@@ -5,6 +8,7 @@ const shareCont = document.querySelector('.share-modal');
 const deleteButton = document.querySelector('.close-button');
 const section = document.querySelector('section');
 const shareIconButton = document.querySelector('.share-icon-button');
+const toastMessage = document.querySelector('#toastMessage');
 
 const totalItems = 18;
 const itemsPerPage = 8;
@@ -122,7 +126,7 @@ const copyUrl = () => {
   navigator.clipboard
     .writeText(currentUrl)
     .then(() => {
-      alert('URL이 복사되었습니다.');
+      showToastMessages(toastMessage, TOAST_MESSAGE.URL_COPY);
     })
     .catch(err => {
       console.error('URL 복사 중 오류가 발생했습니다:', err);

@@ -7,7 +7,7 @@ import { controls } from '../../three/Controls';
 import { ambientLight, directionalLight } from '../../three/Lights';
 import { paper } from '../../three/Paper';
 import { renderer, finishRenderer } from '../../three/Renderer';
-import { showToastMessages } from './showToastMessage';
+import { showToastMessage } from './showToastMessage';
 
 import { debounce } from './debounce';
 import { findClosestVertex } from './findClosestVertex';
@@ -30,7 +30,6 @@ import {
   rotateSelectedVertices,
   findAndSelectClosestVertices,
 } from './rotateSelectedVertices';
-import { showToastMessage } from './showToastMessage';
 
 import {
   checkActiveButtons,
@@ -274,9 +273,9 @@ const handleMouseUp = () => {
   }
 
   if (areMarkersAtSamePosition && clickedRedMarker.visible) {
-    showToastMessages(toastMessage, TOAST_MESSAGE.SAME_POSITION);
+    showToastMessage(toastMessage, TOAST_MESSAGE.SAME_POSITION);
   } else if (!pointsMarker.visible && clickedRedMarker.visible) {
-    showToastMessages(toastMessage, TOAST_MESSAGE.NO_POINTMARKER);
+    showToastMessage(toastMessage, TOAST_MESSAGE.NO_POINTMARKER);
   } else if (pointsMarker.visible && clickedRedMarker.visible) {
     raycaster.setFromCamera(mouse, camera);
     const intersects = raycaster.intersectObject(paper);

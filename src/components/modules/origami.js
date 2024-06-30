@@ -88,6 +88,10 @@ const createPointsMarker = color => {
   return marker;
 };
 
+const selectedVerticesInitializeSet = () => {
+  selectedVertices = new Set();
+};
+
 const pointsMarker = createPointsMarker(POINTS_MARKER_COLOR);
 const clickedRedMarker = createPointsMarker(RED_MARKER_COLOR);
 scene.add(pointsMarker);
@@ -140,8 +144,7 @@ const updateClosestVertexHover = intersectionPoint => {
 };
 
 const handleMouseDown = () => {
-  selectedVertices = new Set();
-
+  selectedVerticesInitializeSet();
   const positions = rotatedData.face;
   if (positions) {
     findAndSelectClosestVertices(positions, allVertex, selectedVertices);
@@ -236,13 +239,15 @@ const handleMouseUp = () => {
   const isFolding = true;
   const isBorderVertices = true;
   const isClockwise = false;
+  const degree = Math.PI;
+  const frames = 20;
 
   if (isDragging && !pointsMarker.visible) {
     rotateSelectedVertices(
       allVertex,
       selectedVertices,
-      Math.PI,
-      20,
+      degree,
+      frames,
       isClockwise,
       rotatedData
     );

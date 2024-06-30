@@ -1,16 +1,17 @@
 import * as THREE from 'three';
+import { Z_GAP } from '../../constants';
 
 const rotateSelectedVertices = (
   positionAttribute,
   selectedVertices,
   totalRotation,
-  steps,
+  frames,
   clockwise,
   rotatedData
 ) => {
-  const stepAngle = (totalRotation / steps) * (clockwise ? 1 : -1);
+  const stepAngle = (totalRotation / frames) * (clockwise ? 1 : -1);
 
-  let currentStep = 0;
+  let currentFrame = 0;
 
   const performRotation = () => {
     const startPoint = rotatedData.startPoint;
@@ -24,7 +25,7 @@ const rotateSelectedVertices = (
       const pivot = new THREE.Vector3()
         .addVectors(startPoint, endPoint)
         .multiplyScalar(0.5);
-      const rotationQuaternion = new THREE.Quaternion().setFromAxisAngle(
+      const unfoldQuaternion = new THREE.Quaternion().setFromAxisAngle(
         direction,
         stepAngle
       );
@@ -38,7 +39,7 @@ const rotateSelectedVertices = (
           vector.set(x, y, z);
 
           vector.sub(pivot);
-          vector.applyQuaternion(rotationQuaternion);
+          vector.applyQuaternion(unfoldQuaternion);
           vector.add(pivot);
           positionAttribute.setXYZ(i, vector.x, vector.y, vector.z);
         }
@@ -46,8 +47,8 @@ const rotateSelectedVertices = (
       positionAttribute.needsUpdate = true;
     }
 
-    currentStep++;
-    if (currentStep < steps) {
+    currentFrame++;
+    if (currentFrame < frames) {
       requestAnimationFrame(performRotation);
     } else {
       for (let i = 0; i < positionAttribute.count; i++) {
@@ -55,9 +56,9 @@ const rotateSelectedVertices = (
           const z = positionAttribute.getZ(i);
           if (z !== 0) {
             if (z < 0) {
-              positionAttribute.setZ(i, z + 0.02);
+              positionAttribute.setZ(i, z + Z_GAP);
             } else {
-              positionAttribute.setZ(i, z - 0.02);
+              positionAttribute.setZ(i, z - Z_GAP);
             }
           }
         }

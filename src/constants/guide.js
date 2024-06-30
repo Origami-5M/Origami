@@ -1,4 +1,4 @@
-const guideImages = {
+const GUIDE_IMAGES = {
   plane: [
     '/src/assets/img/guide/plane-guide1.png',
     '/src/assets/img/guide/plane-guide2.png',
@@ -13,7 +13,7 @@ const guideImages = {
   ],
 };
 
-const guideSteps = {
+const GUIDE_STEPS = {
   plane: [
     {
       points: [
@@ -36,4 +36,6 @@ const guideSteps = {
   ],
 };
 
-export { guideImages, guideSteps };
+const CHUNK_SIZE = 1000;
+
+export { GUIDE_IMAGES, GUIDE_STEPS, CHUNK_SIZE };

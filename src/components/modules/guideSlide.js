@@ -1,4 +1,4 @@
-import { guideImages } from '../../constants/guide';
+import { GUIDE_IMAGES } from '../../constants/guide';
 
 const urlParams = new URLSearchParams(window.location.search);
 const guideMode = urlParams.get('mode');
@@ -10,7 +10,7 @@ const slider = guideWrap.querySelector('.slider');
 const paginationText = guideWrap.querySelector('.pagination-text');
 
 const listWidth = 160;
-let slideList = guideImages[guideMode];
+let slideList = GUIDE_IMAGES[guideMode];
 let translate = 0;
 let currentIdx = 0;
 

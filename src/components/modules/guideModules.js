@@ -1,4 +1,5 @@
-import { guideSteps } from '../../constants/guide';
+import { GUIDE_STEPS } from '../../constants/guide';
+import { changeBorderVertices } from './makeVertices';
 import { goToSlide } from './guideSlide';
 
 let nowStep = 0;
@@ -6,7 +7,7 @@ let nowStep = 0;
 const urlParams = new URLSearchParams(window.location.search);
 const mode = urlParams.get('mode');
 const isGuideMode = Boolean(mode);
-const guideStep = guideSteps[mode];
+const guideStep = GUIDE_STEPS[mode];
 const unfoldButton = document.querySelector('#unfoldButton');
 
 const checkUnfoldButtons = () => {

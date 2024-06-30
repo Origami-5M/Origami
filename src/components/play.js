@@ -2,7 +2,7 @@ import html2canvas from 'html2canvas';
 
 import { showToastMessage } from './modules/showToastMessage';
 import { TOAST_MESSAGE } from '../constants';
-import { guideImages } from '../constants/guide';
+import { GUIDE_IMAGES, CHUNK_SIZE } from '../constants/guide';
 import {
   currentIdx,
   moveSlide,
@@ -30,7 +30,7 @@ let sliderWidth = 160;
 if (guideMode) {
   guideWrap.classList.remove('none');
 
-  guideImages[guideMode].forEach((src, i) => {
+  GUIDE_IMAGES[guideMode].forEach((src, i) => {
     const li = document.createElement('li');
     const img = document.createElement('img');
     img.src = src;
@@ -66,6 +66,14 @@ const captureThumbnail = async element => {
   return canvas.toDataURL('image/png');
 };
 
+const chunkArray = (array, chunkSize) => {
+  const chunks = [];
+  for (let i = 0; i < array.length; i += chunkSize) {
+    chunks.push(array.slice(i, i + chunkSize));
+  }
+  return chunks;
+};
+
 shareButton.addEventListener('click', async event => {
   event.preventDefault();
   const regex = /\S/;
@@ -75,14 +83,19 @@ shareButton.addEventListener('click', async event => {
     showToastMessage(TOAST_MESSAGE.NO_NICKNAME);
     return;
   }
+
   try {
-    const origamiPositions = paper.position.toArray();
+    const origamiPositions = Array.from(
+      paper.geometry.attributes.position.array
+    );
+    const origamiChunks = chunkArray(origamiPositions, CHUNK_SIZE);
 
     saveUserInfo(userName, 'thumbnail urls', origamiPositions);
     const thumbnailURL = await captureThumbnail(finishCanvas);
-    const userId = await saveUserInfo(userName, thumbnailURL, origamiPositions);
+    const userId = await saveUserInfo(userName, thumbnailURL, origamiChunks);
+
     window.location.href = `/gallery?id=${userId}`;
   } catch (error) {
-    showToastMessage(TOAST_MESSAGE.ERROR_SAVE);
+    showToastMessage(TOAST_MESSAGE.ERROR_SAVE, error);
   }
 });

@@ -1,19 +1,31 @@
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, doc, setDoc } from 'firebase/firestore';
 import { db } from '../../../firebase';
 
-const saveUserInfo = async (nickname, thumbnail, origamiPositions) => {
+import { frontColor, backColor } from '../../three/Paper';
+import { showToastMessage } from '../modules/showToastMessage';
+import { TOAST_MESSAGE } from '../../constants';
+
+const saveUserInfo = async (nickname, thumbnail, origamiChunks) => {
   try {
     const userRef = collection(db, 'users');
-    const docRef = await addDoc(userRef, {
+    const userDocRef = await addDoc(userRef, {
       nickname: nickname,
       thumbnail: thumbnail,
-      positions: origamiPositions,
+      colors: [frontColor, backColor],
     });
 
-    console.log('사용자 정보가 Firestore에 저장되었습니다.');
-    return docRef.id;
+    const positionsCollectionRef = collection(userDocRef, 'positions');
+
+    origamiChunks.forEach(async (chunk, index) => {
+      const docRef = doc(positionsCollectionRef, index.toString());
+      await setDoc(docRef, { positions: chunk });
+    });
+
+    showToastMessage(TOAST_MESSAGE.SUCCESS_SAVE);
+
+    return userDocRef.id;
   } catch (error) {
-    console.error('사용자 정보 저장 중 오류가 발생했습니다:', error);
+    showToastMessage(TOAST_MESSAGE.ERROR_SAVE);
     throw error;
   }
 };

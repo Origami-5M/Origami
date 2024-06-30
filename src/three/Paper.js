@@ -49,4 +49,4 @@ const material = new THREE.ShaderMaterial({
 
 const paper = new THREE.Mesh(geometry, material);
 
-export { paper };
+export { paper, frontColor, backColor };

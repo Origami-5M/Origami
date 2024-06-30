@@ -1,5 +1,9 @@
 import { showToastMessage } from './modules/showToastMessage';
 import { TOAST_MESSAGE } from '../constants';
+import {
+  fetchUserDocument,
+  fetchAllUserDocuments,
+} from '../components/services/getUserService';
 
 const slideInner = document.querySelector('.slide-inner');
 const prevButton = document.querySelector('.list-prev');
@@ -8,22 +12,17 @@ const shareCont = document.querySelector('.share-modal');
 const deleteButton = document.querySelector('.close-button');
 const section = document.querySelector('section');
 const shareIconButton = document.querySelector('.share-icon-button');
-
-const totalItems = 18;
-const itemsPerPage = 8;
-const totalPages = Math.ceil(totalItems / itemsPerPage);
+const toastMessage = document.querySelector('#toastMessage');
+const url = new URL(window.location.href);
+const params = new URLSearchParams(url.search);
+const idValue = params.get('id');
 
 let currentPage = 0;
+let totalPages = 0;
 
-for (let i = 0; i < totalPages; i++) {
-  const newPage = document.createElement('ul');
-  newPage.classList.add('share-lists');
-  newPage.style.flex = '0 0 100%';
-
-  for (let j = 0; j < itemsPerPage; j++) {
-    const itemIndex = i * itemsPerPage + j;
-    if (itemIndex >= totalItems) break;
-
+const makeShareList = async id => {
+  try {
+    const shareListData = await fetchUserDocument(id);
     const newList = document.createElement('li');
     newList.setAttribute('class', 'share-list');
     const newListContWrap = document.createElement('div');
@@ -41,16 +40,47 @@ for (let i = 0; i < totalPages; i++) {
     newListContWrap.appendChild(newListName);
     newListName.setAttribute('class', 'share-title');
 
-    newList.setAttribute('id', `share-list-${itemIndex + 1}`);
+    newList.setAttribute('id', id);
+    newListImg.src = shareListData.thumbnail || '../assets/img/guide/guide.png';
+    newListName.textContent = `${shareListData.nickname}`;
 
-    newListImg.src = '/src/assets/img/complete.png';
-    newListName.textContent = `New List Item ${itemIndex + 1}`;
-
-    newPage.appendChild(newList);
+    return newList;
+  } catch (error) {
+    console.error('Error fetching user document:', error);
   }
+};
 
-  slideInner.appendChild(newPage);
-}
+const createPages = async () => {
+  try {
+    const allItems = await fetchAllUserDocuments();
+    const totalItems = allItems.length;
+    const itemsPerPage = 8;
+    totalPages = Math.ceil(totalItems / itemsPerPage);
+
+    for (let i = 0; i < totalPages; i++) {
+      const newPage = document.createElement('ul');
+      newPage.classList.add('share-lists');
+      newPage.style.flex = '0 0 100%';
+
+      for (let j = 0; j < itemsPerPage; j++) {
+        const itemIndex = i * itemsPerPage + j;
+        if (itemIndex >= totalItems) break;
+
+        const newList = await makeShareList(allItems[itemIndex].id);
+        if (newList) {
+          newPage.appendChild(newList);
+        }
+      }
+
+      slideInner.appendChild(newPage);
+    }
+
+    updateSlidePosition();
+    checkUrlForModal(idValue);
+  } catch (error) {
+    console.error('Error creating pages:', error);
+  }
+};
 
 const updateSlidePosition = () => {
   slideInner.style.transform = `translateX(-${currentPage * 100}%)`;
@@ -68,7 +98,7 @@ const updateSlidePosition = () => {
   }
 };
 
-updateSlidePosition();
+createPages();
 
 nextButton.addEventListener('click', () => {
   if (currentPage < totalPages - 1) {
@@ -84,10 +114,15 @@ prevButton.addEventListener('click', () => {
   }
 });
 
-const shareModalOn = id => {
-  const listId = id.toString();
+const shareModalOn = async id => {
   section.classList.add('active');
   shareCont.classList.remove('none');
+
+  const userDocument = await fetchUserDocument(id);
+  const nickname = userDocument.nickname;
+
+  const modalHeading = shareCont.querySelector('h3');
+  modalHeading.textContent = nickname;
 };
 
 const closeModal = () => {
@@ -97,7 +132,7 @@ const closeModal = () => {
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.search);
 
-  params.delete('ID');
+  params.delete('id');
   const newUrl = `${url.pathname}?${params.toString()}`;
 
   history.pushState({}, '', newUrl);
@@ -134,17 +169,14 @@ const copyUrl = () => {
 
 shareIconButton.addEventListener('click', copyUrl);
 
-const checkUrlForModal = () => {
-  const url = new URL(window.location.href);
-  const params = new URLSearchParams(url.search);
-  const listId = params.get('id');
-
-  if (listId) {
-    const activeShareList = document.querySelector(`#${listId}`);
+const checkUrlForModal = async idValue => {
+  if (idValue) {
+    await new Promise(resolve => setTimeout(resolve, 100));
+    const activeShareList = document.querySelector(`#${idValue}`);
     if (activeShareList) {
-      shareModalOn(listId);
+      shareModalOn(idValue);
     }
   }
 };
 
-checkUrlForModal();
+checkUrlForModal(idValue);

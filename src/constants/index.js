@@ -5,11 +5,11 @@ const PAPERCOLORS = [
   0xff8158,
 ];
 
-const SEGMENT_NUM = 70;
+const SEGMENT_NUM = 150;
 const THRESHOLD = 0.3;
+const AXIS_BOUNDARY = 10000;
 const DASH_SIZE = 0.02;
 const Z_GAP = 0.02;
-const AXIS_BOUNDARY = 10000;
 const FRAMES = 30;
 const DIAMETER = Math.PI;
 

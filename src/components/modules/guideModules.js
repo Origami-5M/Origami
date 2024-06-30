@@ -1,5 +1,4 @@
 import { guideSteps } from '../../constants/guide';
-import { changeBorderVertices } from './makeVertices';
 import { goToSlide } from './guideSlide';
 
 let nowStep = 0;

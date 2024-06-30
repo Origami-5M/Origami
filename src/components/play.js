@@ -5,16 +5,6 @@ import {
   updateSlideButtons,
 } from './modules/guideSlide';
 
-const homeButton = document.querySelector('.home-button');
-const sidebarToggleButton = document.querySelector('.mode-button');
-const infoButton = document.querySelector('.info-button');
-const soundButton = document.querySelector('.sound-button');
-
-const modeSidebar = document.querySelector('.mode-sidebar');
-const modeLists = document.querySelectorAll('.mode-list li');
-
-const mainBgm = document.querySelector('.main-bgm');
-
 const urlParams = new URLSearchParams(window.location.search);
 const guideMode = urlParams.get('mode');
 
@@ -23,10 +13,14 @@ const slider = guideWrap.querySelector('.slider');
 const prevButton = guideWrap.querySelector('.prev');
 const nextButton = guideWrap.querySelector('.next');
 const paginationText = guideWrap.querySelector('.pagination-text');
+const shareButton = document.querySelector('.share-button');
+const section = document.querySelector('section');
+const completeCont = document.querySelector('.complete-cont');
+const shareCont = document.querySelector('.share-modal');
+const deleteButton = document.querySelector('.close-button');
 
 let slideList = 0;
 let sliderWidth = 160;
-let isMuted = false;
 
 if (guideMode) {
   guideWrap.classList.remove('none');
@@ -49,73 +43,31 @@ if (guideMode) {
   updateSlideButtons();
 }
 
-const toggleInfo = () => {
-  const infoWrap = document.querySelector('.info-wrap');
-  infoWrap.classList.toggle('visible');
-  infoButton.classList.toggle('active');
-};
-
-const checkList = event => {
-  modeLists.forEach(item => {
-    if (item !== event.currentTarget) {
-      item.classList.remove('active');
-    }
-  });
-
-  event.currentTarget.classList.toggle('active');
-};
-
-modeLists.forEach(item => {
-  if (item.getAttribute('data-guideMode') === guideMode) {
-    item.classList.add('none');
-  }
-});
-
-infoButton.addEventListener('click', toggleInfo);
-modeLists.forEach(item => {
-  item.addEventListener('click', checkList);
-});
-
-homeButton.addEventListener('click', () => {
-  window.location.href = `/`;
-});
-
 document.body.addEventListener('click', event => {
   if (event.target.matches('.restart-button')) {
     window.location.reload();
   }
 });
 
-sidebarToggleButton.addEventListener('click', event => {
-  sidebarToggleButton.classList.toggle('active');
-  modeSidebar.classList.toggle('visible');
-  event.stopPropagation();
-});
-
-document.addEventListener('click', event => {
-  if (
-    !event.target.closest('.mode-sidebar') &&
-    !event.target.closest('.mode-button')
-  ) {
-    modeSidebar.classList.remove('visible');
-    sidebarToggleButton.classList.remove('active');
-  }
-});
-
-const changeSoundButton = isMuted => {
-  if (isMuted) {
-    soundButton.style.backgroundPosition = '-100px -137px';
-    mainBgm.pause();
-  } else {
-    soundButton.style.backgroundPosition = '-100px -80px';
-    mainBgm.play();
-  }
-};
-
-soundButton.addEventListener('click', () => {
-  isMuted = !isMuted;
-  changeSoundButton(isMuted);
-});
-
 prevButton.addEventListener('click', moveSlide);
 nextButton.addEventListener('click', moveSlide);
+
+const navigateToShare = () => {
+  window.location.href = '/shareList';
+};
+
+shareButton.addEventListener('click', navigateToShare);
+
+const shareModalOn = () => {
+  section.classList.add('active');
+  completeCont.classList.add('none');
+  shareCont.classList.remove('none');
+};
+
+const deleteModal = () => {
+  section.classList.remove('active');
+  shareCont.classList.remove('none');
+};
+
+shareButton.addEventListener('click', shareModalOn);
+deleteButton.addEventListener('click', deleteModal);

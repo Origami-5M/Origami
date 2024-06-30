@@ -8,6 +8,7 @@ const createRenderer = canvas => {
   const renderer = new THREE.WebGLRenderer({
     alpha: true,
     canvas: canvas,
+    preserveDrawingBuffer: true,
   });
 
   renderer.setClearColor(0x000000, 0);

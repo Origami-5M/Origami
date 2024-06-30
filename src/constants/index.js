@@ -17,6 +17,7 @@ const TOAST_MESSAGE = {
   NO_POINTMARKER: '꼭짓점이 접을 수 있는 선분에 닿아야 합니다!',
   URL_COPY: '링크가 복사되었습니다.',
   NO_NICKNAME: '등록할 이름은 공백으로만 이루어질 수 없습니다!',
+  ERROR_SAVE: '사용자 정보 저장 중 오류가 발생했습니다.',
 };
 
 export {

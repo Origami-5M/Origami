@@ -1,11 +1,13 @@
+import html2canvas from 'html2canvas';
+
+import { showToastMessage } from './modules/showToastMessage';
+import { TOAST_MESSAGE } from '../constants';
 import { guideImages } from '../constants/guide';
 import {
   currentIdx,
   moveSlide,
   updateSlideButtons,
 } from './modules/guideSlide';
-import { showToastMessage } from './modules/showToastMessage';
-import { TOAST_MESSAGE } from '../constants';
 import { saveUserInfo } from './services/userService';
 
 import { paper } from '../three/Paper';
@@ -20,6 +22,7 @@ const nextButton = guideWrap.querySelector('.next');
 const paginationText = guideWrap.querySelector('.pagination-text');
 const shareButton = document.querySelector('.share-button');
 const userNameInput = document.querySelector('.complete-input');
+const finishCanvas = document.querySelector('.finish-canvas');
 
 let slideList = 0;
 let sliderWidth = 160;
@@ -54,16 +57,32 @@ document.body.addEventListener('click', event => {
 prevButton.addEventListener('click', moveSlide);
 nextButton.addEventListener('click', moveSlide);
 
-const regex = /\S/;
-shareButton.addEventListener('click', event => {
-  event.preventDefault();
+const captureThumbnail = async element => {
+  const canvas = await html2canvas(element, {
+    useCORS: true,
+    logging: true,
+    allowTaint: true,
+  });
+  return canvas.toDataURL('image/png');
+};
 
+shareButton.addEventListener('click', async event => {
+  event.preventDefault();
+  const regex = /\S/;
   const userName = userNameInput.value;
+
   if (!regex.test(userName)) {
     showToastMessage(TOAST_MESSAGE.NO_NICKNAME);
-  } else {
+    return;
+  }
+  try {
     const origamiPositions = paper.position.toArray();
 
     saveUserInfo(userName, 'thumbnail urls', origamiPositions);
+    const thumbnailURL = await captureThumbnail(finishCanvas);
+    const userId = await saveUserInfo(userName, thumbnailURL, origamiPositions);
+    window.location.href = `/gallery?id=${userId}`;
+  } catch (error) {
+    showToastMessage(TOAST_MESSAGE.ERROR_SAVE);
   }
 });

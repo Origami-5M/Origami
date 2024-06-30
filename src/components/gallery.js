@@ -1,4 +1,4 @@
-import { showToastMessages } from './modules/showToastMessage';
+import { showToastMessage } from './modules/showToastMessage';
 import { TOAST_MESSAGE } from '../constants';
 
 const slideInner = document.querySelector('.slide-inner');
@@ -126,7 +126,7 @@ const copyUrl = () => {
   navigator.clipboard
     .writeText(currentUrl)
     .then(() => {
-      showToastMessages(toastMessage, TOAST_MESSAGE.URL_COPY);
+      showToastMessage(toastMessage, TOAST_MESSAGE.URL_COPY);
     })
     .catch(err => {
       console.error('URL 복사 중 오류가 발생했습니다:', err);

@@ -22,7 +22,6 @@ const saveUserInfo = async (nickname, thumbnail, origamiChunks) => {
     });
 
     showToastMessage(TOAST_MESSAGE.SUCCESS_SAVE);
-
     return userDocRef.id;
   } catch (error) {
     showToastMessage(TOAST_MESSAGE.ERROR_SAVE);

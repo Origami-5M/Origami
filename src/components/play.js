@@ -90,7 +90,6 @@ shareButton.addEventListener('click', async event => {
     );
     const origamiChunks = chunkArray(origamiPositions, CHUNK_SIZE);
 
-    saveUserInfo(userName, 'thumbnail urls', origamiPositions);
     const thumbnailURL = await captureThumbnail(finishCanvas);
     const userId = await saveUserInfo(userName, thumbnailURL, origamiChunks);
 

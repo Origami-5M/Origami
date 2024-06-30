@@ -9,6 +9,8 @@ const SEGMENT_NUM = 300;
 const AXIS_BOUNDARY = 10000;
 const DASH_SIZE = 0.02;
 const Z_GAP = 0.02;
+const DIAMETER = Math.PI;
+const FRAMES = 30;
 
 const TOAST_MESSAGE = {
   SAME_POSITION: '마우스를 접을 곳으로 이동해 주세요!',
@@ -24,4 +26,6 @@ export {
   DASH_SIZE,
   Z_GAP,
   TOAST_MESSAGE,
+  DIAMETER,
+  FRAMES,
 };

@@ -38,6 +38,8 @@ import {
 } from './prevNextButtons';
 
 import {
+  DIAMETER,
+  FRAMES,
   POINTS_MARKER_COLOR,
   RED_MARKER_COLOR,
   TOAST_MESSAGE,
@@ -239,15 +241,13 @@ const handleMouseUp = () => {
   const isFolding = true;
   const isBorderVertices = true;
   const isClockwise = false;
-  const degree = Math.PI;
-  const frames = 20;
 
   if (isDragging && !pointsMarker.visible) {
     rotateSelectedVertices(
       allVertex,
       selectedVertices,
-      degree,
-      frames,
+      DIAMETER,
+      FRAMES,
       isClockwise,
       rotatedData
     );

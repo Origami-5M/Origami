@@ -5,7 +5,7 @@ const PAPERCOLORS = [
   0xff8158,
 ];
 
-const SEGMENT_NUM = 300;
+const SEGMENT_NUM = 70;
 const AXIS_BOUNDARY = 10000;
 const DASH_SIZE = 0.02;
 const Z_GAP = 0.02;

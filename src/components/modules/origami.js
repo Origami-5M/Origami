@@ -18,11 +18,7 @@ import {
   changeBorderVertices,
 } from './makeVertices';
 import { getFoldingDirection } from './getFoldingDirection';
-import {
-  foldingVertexPosition,
-  rotatedData,
-  borderData,
-} from './foldingVertexPosition';
+import { foldingVertexPosition, rotatedData } from './foldingVertexPosition';
 import { prevFoldingArea } from './prevFoldingArea';
 import { nowStep, isGuideMode, guideStep, updateStep } from './guideModules';
 import {
@@ -35,7 +31,8 @@ import {
   checkActiveButtons,
   changeToPrevFold,
   changeToNextFold,
-  saveFoldHistory,
+  saveHistory,
+  changeUnfoldVertex,
 } from './prevNextButtons';
 
 import {
@@ -229,11 +226,10 @@ const debouncedUpdateFoldOnMouseMove = debounce(updateFoldOnMouseMove, 10);
 
 const handleMouseUp = () => {
   controls.enabled = true;
-  const isFolding = true;
-  const isBorderVertices = true;
+  const isFolding = isGuideMode ? guideStep[nowStep].unfold : true;
   const isClockwise = false;
 
-  if (isDragging && !pointsMarker.visible) {
+  if (isFolding && !pointsMarker.visible) {
     rotateSelectedVertices(
       allVertex,
       selectedVertices,
@@ -243,20 +239,7 @@ const handleMouseUp = () => {
       rotatedData
     );
 
-    const direction = getFoldingDirection(
-      borderData.startPoint,
-      borderData.endPoint,
-      clickedRedMarker.position
-    );
-
-    foldingVertexPosition(
-      borderData.face,
-      borderData.startPoint,
-      borderData.endPoint,
-      direction,
-      isFolding,
-      isBorderVertices
-    );
+    changeUnfoldVertex();
   }
 
   isDragging = false;
@@ -294,7 +277,7 @@ const handleMouseUp = () => {
           allVertex
         );
 
-        saveFoldHistory({
+        saveHistory({
           paper: new Float32Array(allVertex.array.slice()),
           borderVertices: JSON.parse(JSON.stringify(borderVertices)),
         });

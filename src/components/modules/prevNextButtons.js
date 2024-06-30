@@ -5,7 +5,7 @@ import { borderVertices, changeBorderVertices } from './makeVertices';
 const prevHistory = [];
 const nextHistory = [];
 
-const saveFoldHistory = history => {
+const saveHistory = history => {
   prevHistory.push(history);
   nextHistory.length = 0;
 };
@@ -30,6 +30,12 @@ const changeToPrevFold = () => {
     );
     changeBorderVertices(prevVertices);
   }
+};
+
+const changeUnfoldVertex = () => {
+  const lastHistory = prevHistory[prevHistory.length - 1];
+  const prevVertices = lastHistory.borderVertices;
+  changeBorderVertices(prevVertices);
 };
 
 const changeToNextFold = () => {
@@ -61,7 +67,8 @@ const checkActiveButtons = (prev, next) => {
 
 export {
   checkActiveButtons,
-  saveFoldHistory,
+  saveHistory,
   changeToPrevFold,
   changeToNextFold,
+  changeUnfoldVertex,
 };

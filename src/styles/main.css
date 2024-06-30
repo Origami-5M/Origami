@@ -15,6 +15,7 @@
 .sidebar-container {
   position: relative;
   width: 410px;
+  height: 100%;
 }
 
 .sound-box {

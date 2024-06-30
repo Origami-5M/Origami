@@ -29,6 +29,7 @@ import {
   rotateSelectedVertices,
   findAndSelectClosestVertices,
 } from './rotateSelectedVertices';
+import { showToastMessage } from './showToastMessage';
 
 import {
   checkActiveButtons,
@@ -50,7 +51,6 @@ const playCont = document.querySelector('.play-cont');
 const finishCont = document.querySelector('.complete-scene');
 const finishButton = document.querySelector('.finish-button');
 const completeCont = document.querySelector('.complete-cont');
-const toastMessage = document.querySelector('#toastMessage');
 
 const prevButton = document.querySelector('#prevButton');
 const nextButton = document.querySelector('#nextButton');
@@ -272,9 +272,9 @@ const handleMouseUp = () => {
   }
 
   if (areMarkersAtSamePosition && clickedRedMarker.visible) {
-    showToastMessage(toastMessage, TOAST_MESSAGE.SAME_POSITION);
+    showToastMessage(TOAST_MESSAGE.SAME_POSITION);
   } else if (!pointsMarker.visible && clickedRedMarker.visible) {
-    showToastMessage(toastMessage, TOAST_MESSAGE.NO_POINTMARKER);
+    showToastMessage(TOAST_MESSAGE.NO_POINTMARKER);
   } else if (pointsMarker.visible && clickedRedMarker.visible) {
     raycaster.setFromCamera(mouse, camera);
     const intersects = raycaster.intersectObject(paper);

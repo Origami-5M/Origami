@@ -8,7 +8,6 @@ const shareCont = document.querySelector('.share-modal');
 const deleteButton = document.querySelector('.close-button');
 const section = document.querySelector('section');
 const shareIconButton = document.querySelector('.share-icon-button');
-const toastMessage = document.querySelector('#toastMessage');
 
 const totalItems = 18;
 const itemsPerPage = 8;
@@ -126,7 +125,7 @@ const copyUrl = () => {
   navigator.clipboard
     .writeText(currentUrl)
     .then(() => {
-      showToastMessage(toastMessage, TOAST_MESSAGE.URL_COPY);
+      showToastMessage(TOAST_MESSAGE.URL_COPY);
     })
     .catch(err => {
       console.error('URL 복사 중 오류가 발생했습니다:', err);

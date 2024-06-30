@@ -7,6 +7,12 @@ import { getVertexFromPosition } from './getVertexFromPosition';
 import { borderVertices } from './makeVertices';
 
 import { Z_GAP } from '../../constants';
+import {
+  isGuideMode,
+  nowStep,
+  stepVertex8,
+  updateZPosition,
+} from './guideModules';
 
 const allFoldedFaces = [];
 const rotatedData = {};
@@ -42,6 +48,15 @@ const foldingVertexPosition = (
   const m = (y2 - y1) / (x2 - x1);
   const c = y1 - m * x1;
 
+  const isInStepVertex8 = vertex => {
+    return stepVertex8.some(
+      v =>
+        Math.abs(v.x - vertex.x) < 1e-6 &&
+        Math.abs(v.y - vertex.y) < 1e-6 &&
+        Math.abs(v.z - vertex.z) < 1e-6
+    );
+  };
+
   if (x1 === x2) {
     for (let i = 0; i < count; i++) {
       const vertex = getVertexFromPosition(allPositions, i);
@@ -56,7 +71,8 @@ const foldingVertexPosition = (
         previewFace.push(new THREE.Vector3(vertex.x, vertex.y, vertex.z));
 
         if (isFolding) {
-          updateVertexPosition(allPositions, i, vertex, nowFace);
+          const updateVertex = isGuideMode ? updateZPosition(vertex) : vertex;
+          updateVertexPosition(allPositions, i, updateVertex, nowFace);
         }
       }
     }
@@ -75,7 +91,8 @@ const foldingVertexPosition = (
         previewFace.push(new THREE.Vector3(vertex.x, vertex.y, vertex.z));
 
         if (isFolding) {
-          updateVertexPosition(allPositions, i, vertex, nowFace);
+          const updateVertex = isGuideMode ? updateZPosition(vertex) : vertex;
+          updateVertexPosition(allPositions, i, updateVertex, nowFace);
         }
       }
     }
@@ -84,7 +101,10 @@ const foldingVertexPosition = (
       const vertex = getVertexFromPosition(allPositions, i);
       const yOnLine = m * vertex.x + c;
 
-      if (inequality(vertex.y, yOnLine)) {
+      if (
+        inequality(vertex.y, yOnLine) &&
+        (nowStep === 8 ? !isInStepVertex8(vertex) : true)
+      ) {
         const m_perp = -1 / m;
         const c_perp = vertex.y - m_perp * vertex.x;
 
@@ -102,7 +122,8 @@ const foldingVertexPosition = (
         previewFace.push(new THREE.Vector3(vertex.x, vertex.y, vertex.z));
 
         if (isFolding) {
-          updateVertexPosition(allPositions, i, vertex, nowFace);
+          const updateVertex = isGuideMode ? updateZPosition(vertex) : vertex;
+          updateVertexPosition(allPositions, i, updateVertex, nowFace);
         }
       }
     }
@@ -118,8 +139,6 @@ const foldingVertexPosition = (
     borderData.startPoint = startPoint;
     borderData.endPoint = endPoint;
   }
-
-  allPositions.needsUpdate = true;
 
   return previewFace;
 };

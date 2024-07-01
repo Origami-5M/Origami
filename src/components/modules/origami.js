@@ -37,6 +37,7 @@ import {
 
 import {
   DIAMETER,
+  THRESHOLD,
   FRAMES,
   POINTS_MARKER_COLOR,
   RED_MARKER_COLOR,
@@ -327,8 +328,7 @@ const markClosestVertexAnimate = () => {
   const intersect = raycaster.intersectObject(paper);
 
   if (intersect.length) {
-    const threshold = 0.6;
-    updateClosestVertex(intersect[0].point, threshold);
+    updateClosestVertex(intersect[0].point, THRESHOLD);
   } else {
     pointsMarker.visible = false;
   }

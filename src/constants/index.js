@@ -6,11 +6,12 @@ const PAPERCOLORS = [
 ];
 
 const SEGMENT_NUM = 70;
-const AXIS_BOUNDARY = 10000;
+const THRESHOLD = 0.3;
 const DASH_SIZE = 0.02;
 const Z_GAP = 0.02;
-const DIAMETER = Math.PI;
+const AXIS_BOUNDARY = 10000;
 const FRAMES = 30;
+const DIAMETER = Math.PI;
 
 const TOAST_MESSAGE = {
   SAME_POSITION: '마우스를 접을 곳으로 이동해 주세요!',
@@ -26,10 +27,11 @@ export {
   RED_MARKER_COLOR,
   PAPERCOLORS,
   SEGMENT_NUM,
-  AXIS_BOUNDARY,
+  THRESHOLD,
   DASH_SIZE,
   Z_GAP,
-  TOAST_MESSAGE,
+  AXIS_BOUNDARY,
   DIAMETER,
   FRAMES,
+  TOAST_MESSAGE,
 };

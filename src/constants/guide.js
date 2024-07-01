@@ -1,4 +1,14 @@
 const GUIDE_IMAGES = {
+  puppy: [
+    '/src/assets/img/guide/puppy-guide1.png',
+    '/src/assets/img/guide/puppy-guide2.png',
+    '/src/assets/img/guide/puppy-guide3.png',
+    '/src/assets/img/guide/puppy-guide4.png',
+    '/src/assets/img/guide/puppy-guide5.png',
+    '/src/assets/img/guide/puppy-guide6.png',
+    '/src/assets/img/guide/puppy-guide7.png',
+    '/src/assets/img/guide/puppy-guide8.png',
+  ],
   plane: [
     '/src/assets/img/guide/plane-guide1.png',
     '/src/assets/img/guide/plane-guide2.png',
@@ -10,10 +20,41 @@ const GUIDE_IMAGES = {
     '/src/assets/img/guide/plane-guide8.png',
     '/src/assets/img/guide/plane-guide9.png',
     '/src/assets/img/guide/plane-guide10.png',
+    '/src/assets/img/guide/plane-guide11.png',
+    '/src/assets/img/guide/plane-guide12.png',
   ],
 };
 
 const GUIDE_STEPS = {
+  puppy: [
+    {
+      points: [
+        { x: 0, y: 2.1, z: 0 },
+        { x: 0, y: -2.1, z: 0 },
+      ],
+      axis: null,
+      unfold: false,
+      singleSide: false,
+    },
+    {
+      points: [
+        { x: 0, y: 1.5, z: 0 },
+        { x: 0, y: -1.5, z: 0 },
+      ],
+      axis: null,
+      unfold: true,
+      singleSide: false,
+    },
+    {
+      points: [
+        { x: 0, y: 1.5, z: 0 },
+        { x: 0, y: -1.5, z: 0 },
+      ],
+      axis: null,
+      unfold: false,
+      singleSide: false,
+    },
+  ],
   plane: [
     {
       points: [

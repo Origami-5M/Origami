@@ -80,6 +80,7 @@ const updateZPosition = vertex => {
 };
 
 export {
+  mode,
   nowStep,
   isGuideMode,
   guideStep,

@@ -21,6 +21,7 @@ import { getFoldingDirection } from './getFoldingDirection';
 import { foldingVertexPosition, rotatedData } from './foldingVertexPosition';
 import { prevFoldingArea } from './prevFoldingArea';
 import {
+  mode,
   nowStep,
   isGuideMode,
   guideStep,
@@ -31,6 +32,7 @@ import {
   rotateSelectedVertices,
   findAndSelectClosestVertices,
 } from './rotateSelectedVertices';
+import { makeDiamondPaper } from './makeDiamondPaper';
 import { showToastMessage } from './showToastMessage';
 
 import {
@@ -59,11 +61,6 @@ const completeCont = document.querySelector('.complete-cont');
 const prevButton = document.querySelector('#prevButton');
 const nextButton = document.querySelector('#nextButton');
 
-const scene = new THREE.Scene();
-scene.add(paper);
-scene.add(ambientLight);
-scene.add(directionalLight);
-
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 
@@ -79,8 +76,19 @@ let allVertex = paper.geometry.attributes.position;
 let initialMousePosition = new THREE.Vector2();
 let selectedVertices = new Set();
 
+const scene = new THREE.Scene();
+
+scene.add(paper);
+scene.add(ambientLight);
+scene.add(directionalLight);
+
 if (isGuideMode) {
   changeBorderVertices(guideStep[nowStep].points);
+
+  if (mode === 'puppy') {
+    const angle = DIAMETER / 4;
+    makeDiamondPaper(angle);
+  }
 }
 
 const createPointsMarker = color => {

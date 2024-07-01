@@ -25,7 +25,6 @@ import {
   isGuideMode,
   guideStep,
   updateStep,
-  stepVertex8,
   stepVertex9,
   stepVertex10,
 } from './guideModules';
@@ -33,17 +32,19 @@ import {
   rotateSelectedVertices,
   findAndSelectClosestVertices,
 } from './rotateSelectedVertices';
+import { showToastMessage } from './showToastMessage';
 
 import {
   checkActiveButtons,
   changeToPrevFold,
   changeToNextFold,
-  saveFoldHistory,
+  saveHistory,
   changeUnfoldVertex,
 } from './prevNextButtons';
 
 import {
   DIAMETER,
+  THRESHOLD,
   FRAMES,
   POINTS_MARKER_COLOR,
   RED_MARKER_COLOR,
@@ -55,7 +56,6 @@ const playCont = document.querySelector('.play-cont');
 const finishCont = document.querySelector('.complete-scene');
 const finishButton = document.querySelector('.finish-button');
 const completeCont = document.querySelector('.complete-cont');
-const foldFailToastMessage = document.querySelector('#foldFailToastMessage');
 
 const prevButton = document.querySelector('#prevButton');
 const nextButton = document.querySelector('#nextButton');
@@ -105,15 +105,6 @@ scene.add(pointsMarker);
 scene.add(clickedRedMarker);
 clickedRedMarker.visible = false;
 
-const showToastMessages = text => {
-  foldFailToastMessage.innerText = text;
-  foldFailToastMessage.classList.add('active');
-
-  setTimeout(() => {
-    foldFailToastMessage.classList.remove('active');
-  }, 2000);
-};
-
 const updateSizesAndCamera = cont => {
   const rect = cont.getBoundingClientRect();
   sizes.width = rect.width;
@@ -152,20 +143,17 @@ const updateClosestVertexHover = intersectionPoint => {
 
 const handleMouseDown = () => {
   selectedVerticesInitializeSet();
-  console.log(nowStep);
   if (nowStep === 10) {
-    console.log(1);
     const positions = stepVertex9;
     findAndSelectClosestVertices(positions, allVertex, selectedVertices);
   } else if (nowStep === 11) {
     const positions = stepVertex10;
     findAndSelectClosestVertices(positions, allVertex, selectedVertices);
   } else if (isGuideMode) {
-    if (guideStep[nowStep].unfold) {
+    if (guideStep[nowStep]?.unfold) {
       const positions = rotatedData.face;
 
       if (positions) {
-        console.log(selectedVertices);
         findAndSelectClosestVertices(positions, allVertex, selectedVertices);
       }
     }
@@ -202,7 +190,6 @@ const handleMouseDown = () => {
       const { closestVertex } = findClosestVertex(startVertex, borderVertices);
       isAxisPoint = closestVertex.isAxisPoint;
     }
-    // console.log(clickedRedMarker.position, 111);
   }
 };
 
@@ -260,10 +247,9 @@ const handleMouseUp = () => {
   if (isGuideMode) {
     if (guideStep[nowStep].unfold || nowStep === 10 || nowStep === 11) {
       controls.enabled = true;
-      const isFolding = isGuideMode ? guideStep[nowStep].unfold : true;
       let isClockwise = false;
 
-      if (isFolding && !pointsMarker.visible) {
+      if (isDragging && !pointsMarker.visible) {
         let degree = DIAMETER;
         if (nowStep === 10 || nowStep === 11) {
           degree = DIAMETER / 2;
@@ -299,12 +285,13 @@ const handleMouseUp = () => {
   }
 
   if (areMarkersAtSamePosition && clickedRedMarker.visible) {
-    showToastMessages(TOAST_MESSAGE.SAME_POSITION);
+    showToastMessage(TOAST_MESSAGE.SAME_POSITION);
   } else if (!pointsMarker.visible && clickedRedMarker.visible) {
-    showToastMessages(TOAST_MESSAGE.NO_POINTMARKER);
+    showToastMessage(TOAST_MESSAGE.NO_POINTMARKER);
   } else if (pointsMarker.visible && clickedRedMarker.visible) {
     raycaster.setFromCamera(mouse, camera);
     const intersects = raycaster.intersectObject(paper);
+
     if (intersects.length > 0) {
       const intersectPoint = intersects[0].point;
       const closestVertex = findClosestVertex(
@@ -320,7 +307,7 @@ const handleMouseUp = () => {
           allVertex
         );
 
-        saveFoldHistory({
+        saveHistory({
           paper: new Float32Array(allVertex.array.slice()),
           borderVertices: JSON.parse(JSON.stringify(borderVertices)),
         });
@@ -336,7 +323,6 @@ const handleMouseUp = () => {
 
         if (isGuideMode) {
           updateStep(1);
-          console.log(stepVertex8, stepVertex9, stepVertex10);
         }
       }
     }
@@ -374,8 +360,7 @@ const markClosestVertexAnimate = () => {
   const intersect = raycaster.intersectObject(paper);
 
   if (intersect.length) {
-    const threshold = 0.6;
-    updateClosestVertex(intersect[0].point, threshold);
+    updateClosestVertex(intersect[0].point, THRESHOLD);
   } else {
     pointsMarker.visible = false;
   }

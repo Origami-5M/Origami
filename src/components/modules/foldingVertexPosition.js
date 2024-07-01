@@ -10,7 +10,7 @@ import { Z_GAP } from '../../constants';
 import {
   isGuideMode,
   nowStep,
-  stepVertex8,
+  stepVertex,
   updateZPosition,
 } from './guideModules';
 
@@ -49,7 +49,7 @@ const foldingVertexPosition = (
   const c = y1 - m * x1;
 
   const isInStepVertex8 = vertex => {
-    return stepVertex8.some(
+    return stepVertex.stepVertex8.some(
       v =>
         Math.abs(v.x - vertex.x) < 1e-6 &&
         Math.abs(v.y - vertex.y) < 1e-6 &&

@@ -9,12 +9,14 @@ const mode = urlParams.get('mode');
 const isGuideMode = Boolean(mode);
 const guideStep = GUIDE_STEPS[mode];
 const unfoldButton = document.querySelector('#unfoldButton');
-const stepVertex8 = [];
-const stepVertex9 = [];
-const stepVertex10 = [];
+const stepVertex = {
+  stepVertex8: [],
+  stepVertex9: [],
+  stepVertex10: [],
+};
 
 const checkUnfoldButtons = () => {
-  unfoldButton.disabled = !guideStep[nowStep]?.unfold;
+  unfoldButton.disabled = !guideStep[nowStep].unfold;
 };
 
 const updateStep = step => {
@@ -24,63 +26,61 @@ const updateStep = step => {
   changeBorderVertices();
 };
 
+const Z_VALUES = {
+  STEP_4_5: { HIGH: 0.04, LOW: 0.02, THRESHOLD: 0.03 },
+  STEP_6: [
+    { CONDITION: z => z < 0.03, VALUE: 0.06 },
+    { CONDITION: z => z > 0.03 && z < 0.05, VALUE: 0.04 },
+    { CONDITION: () => true, VALUE: 0.02 },
+  ],
+  STEP_7: [
+    { CONDITION: z => z < 0.01, VALUE: -0.02 },
+    { CONDITION: z => z > 0.01 && z < 0.03, VALUE: -0.04 },
+    { CONDITION: z => z > 0.03 && z < 0.05, VALUE: -0.06 },
+    { CONDITION: z => z > 0.05 && z < 0.07, VALUE: -0.08 },
+    { CONDITION: () => true, VALUE: -0.1 },
+  ],
+  STEP_8: [
+    { CONDITION: z => z < 0.01, VALUE: 0.1 },
+    { CONDITION: z => z > 0.01 && z < 0.03, VALUE: 0.08 },
+    { CONDITION: z => z > 0.03 && z < 0.05, VALUE: 0.06 },
+    { CONDITION: z => z > 0.05 && z < 0.07, VALUE: 0.04 },
+    { CONDITION: z => z > 0.07 && z < 0.09, VALUE: -0.02 },
+  ],
+  STEP_9: [
+    { CONDITION: z => z < -0.01 && z > -0.03, VALUE: -0.1 },
+    { CONDITION: z => z < -0.03 && z > -0.05, VALUE: -0.08 },
+    { CONDITION: z => z < -0.05 && z > -0.07, VALUE: -0.06 },
+    { CONDITION: z => z < -0.07 && z > -0.09, VALUE: -0.04 },
+    { CONDITION: () => true, VALUE: -0.02 },
+  ],
+};
 const updateZPosition = vertex => {
+  const updateVertexZ = conditions => {
+    for (const { CONDITION, VALUE } of conditions) {
+      if (CONDITION(vertex.z)) {
+        vertex.z = VALUE;
+        return vertex;
+      }
+    }
+  };
   if (nowStep === 4 || nowStep === 5) {
-    if (vertex.z >= 0.03) {
-      vertex.z = 0.02;
-    } else {
-      vertex.z = 0.04;
-    }
+    vertex.z =
+      vertex.z >= Z_VALUES.STEP_4_5.THRESHOLD
+        ? Z_VALUES.STEP_4_5.HIGH
+        : Z_VALUES.STEP_4_5.LOW;
   } else if (nowStep === 6) {
-    if (vertex.z < 0.03) {
-      vertex.z = 0.06;
-    } else if (vertex.z > 0.03 && vertex.z < 0.05) {
-      vertex.z = 0.04;
-    } else {
-      vertex.z = 0.02;
-    }
+    updateVertexZ(Z_VALUES.STEP_6);
   } else if (nowStep === 7) {
-    if (vertex.z < 0.01) {
-      vertex.z = -0.02;
-    } else if (vertex.z > 0.01 && vertex.z < 0.03) {
-      vertex.z = -0.04;
-    } else if (vertex.z > 0.03 && vertex.z < 0.05) {
-      vertex.z = -0.06;
-    } else if (vertex.z > 0.05 && vertex.z < 0.07) {
-      vertex.z = -0.08;
-    } else {
-      vertex.z = -0.1;
-    }
-    stepVertex8.push(vertex);
+    updateVertexZ(Z_VALUES.STEP_7);
+    stepVertex.stepVertex8.push(vertex);
   } else if (nowStep === 8) {
-    if (vertex.z < 0.01) {
-      vertex.z = 0.1;
-    } else if (vertex.z > 0.01 && vertex.z < 0.03) {
-      vertex.z = 0.08;
-    } else if (vertex.z > 0.03 && vertex.z < 0.05) {
-      vertex.z = 0.06;
-    } else if (vertex.z > 0.05 && vertex.z < 0.07) {
-      vertex.z = 0.04;
-    } else if (vertex.z > 0.07 && vertex.z < 0.09) {
-      vertex.z = -0.02;
-    }
-
-    stepVertex9.push(vertex);
+    updateVertexZ(Z_VALUES.STEP_8);
+    stepVertex.stepVertex9.push(vertex);
   } else if (nowStep === 9) {
-    if (vertex.z < -0.01 && vertex.z > -0.03) {
-      vertex.z = -0.1;
-    } else if (vertex.z < -0.03 && vertex.z > -0.05) {
-      vertex.z = -0.08;
-    } else if (vertex.z < -0.05 && vertex.z > -0.07) {
-      vertex.z = -0.06;
-    } else if (vertex.z < -0.07 && vertex.z > -0.09) {
-      vertex.z = -0.04;
-    } else {
-      vertex.z = -0.02;
-    }
-    stepVertex10.push(vertex);
+    updateVertexZ(Z_VALUES.STEP_9);
+    stepVertex.stepVertex10.push(vertex);
   }
-
   return vertex;
 };
 
@@ -90,7 +90,5 @@ export {
   guideStep,
   updateStep,
   updateZPosition,
-  stepVertex8,
-  stepVertex9,
-  stepVertex10,
+  stepVertex,
 };

@@ -25,8 +25,7 @@ import {
   isGuideMode,
   guideStep,
   updateStep,
-  stepVertex9,
-  stepVertex10,
+  stepVertex,
 } from './guideModules';
 import {
   rotateSelectedVertices,
@@ -143,20 +142,20 @@ const updateClosestVertexHover = intersectionPoint => {
 
 const handleMouseDown = () => {
   selectedVerticesInitializeSet();
-  if (nowStep === 10) {
-    const positions = stepVertex9;
-    findAndSelectClosestVertices(positions, allVertex, selectedVertices);
-  } else if (nowStep === 11) {
-    const positions = stepVertex10;
-    findAndSelectClosestVertices(positions, allVertex, selectedVertices);
-  } else if (isGuideMode) {
-    if (guideStep[nowStep]?.unfold) {
+  if (nowStep === 1) {
+    if (guideStep[nowStep].unfold) {
       const positions = rotatedData.face;
 
       if (positions) {
         findAndSelectClosestVertices(positions, allVertex, selectedVertices);
       }
     }
+  } else if (nowStep === 10) {
+    const positions = stepVertex.stepVertex9;
+    findAndSelectClosestVertices(positions, allVertex, selectedVertices);
+  } else if (nowStep === 11) {
+    const positions = stepVertex.stepVertex10;
+    findAndSelectClosestVertices(positions, allVertex, selectedVertices);
   }
 
   if (pointsMarker.visible) {
@@ -245,7 +244,7 @@ const debouncedUpdateFoldOnMouseMove = debounce(updateFoldOnMouseMove, 10);
 
 const handleMouseUp = () => {
   if (isGuideMode) {
-    if (guideStep[nowStep].unfold || nowStep === 10 || nowStep === 11) {
+    if (guideStep[nowStep].unfold) {
       controls.enabled = true;
       let isClockwise = false;
 

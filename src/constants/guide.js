@@ -135,7 +135,7 @@ const GUIDE_STEPS = {
           y: 0,
         },
       },
-      unfold: false,
+      unfold: true,
       singleSide: true,
     },
     {
@@ -147,7 +147,7 @@ const GUIDE_STEPS = {
           y: 0,
         },
       },
-      unfold: false,
+      unfold: true,
       singleSide: true,
     },
   ],

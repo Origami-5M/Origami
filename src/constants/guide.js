@@ -49,7 +49,6 @@ const GUIDE_STEPS = {
       singleSide: false,
     },
     {
-      //5
       points: [
         { x: 0, y: 1.5, z: 0 },
         { x: 0.62, y: 0.00019991115391304604, z: 0 },
@@ -68,7 +67,6 @@ const GUIDE_STEPS = {
       singleSide: false,
     },
     {
-      //7
       points: [
         { x: -1.5, y: 0, z: 0 },
         { x: -1, y: 0, z: 0 },
@@ -78,7 +76,6 @@ const GUIDE_STEPS = {
       singleSide: false,
     },
     {
-      //8
       points: [
         {
           x: 0.6159830537825293,

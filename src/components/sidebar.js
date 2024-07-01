@@ -66,7 +66,7 @@ sidebarToggleButton.addEventListener('click', event => {
 });
 
 galleryButton.addEventListener('click', () => {
-  window.location.href = `/shareList`;
+  window.location.href = `/gallery`;
 });
 
 document.addEventListener('click', event => {

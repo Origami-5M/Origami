@@ -20,24 +20,30 @@ import {
 import { getFoldingDirection } from './getFoldingDirection';
 import { foldingVertexPosition, rotatedData } from './foldingVertexPosition';
 import { prevFoldingArea } from './prevFoldingArea';
-import { nowStep, isGuideMode, guideStep, updateStep } from './guideModules';
+import {
+  nowStep,
+  isGuideMode,
+  guideStep,
+  updateStep,
+  stepVertex8,
+  stepVertex9,
+  stepVertex10,
+} from './guideModules';
 import {
   rotateSelectedVertices,
   findAndSelectClosestVertices,
 } from './rotateSelectedVertices';
-import { showToastMessage } from './showToastMessage';
 
 import {
   checkActiveButtons,
   changeToPrevFold,
   changeToNextFold,
-  saveHistory,
+  saveFoldHistory,
   changeUnfoldVertex,
 } from './prevNextButtons';
 
 import {
   DIAMETER,
-  THRESHOLD,
   FRAMES,
   POINTS_MARKER_COLOR,
   RED_MARKER_COLOR,
@@ -49,6 +55,7 @@ const playCont = document.querySelector('.play-cont');
 const finishCont = document.querySelector('.complete-scene');
 const finishButton = document.querySelector('.finish-button');
 const completeCont = document.querySelector('.complete-cont');
+const foldFailToastMessage = document.querySelector('#foldFailToastMessage');
 
 const prevButton = document.querySelector('#prevButton');
 const nextButton = document.querySelector('#nextButton');
@@ -98,6 +105,15 @@ scene.add(pointsMarker);
 scene.add(clickedRedMarker);
 clickedRedMarker.visible = false;
 
+const showToastMessages = text => {
+  foldFailToastMessage.innerText = text;
+  foldFailToastMessage.classList.add('active');
+
+  setTimeout(() => {
+    foldFailToastMessage.classList.remove('active');
+  }, 2000);
+};
+
 const updateSizesAndCamera = cont => {
   const rect = cont.getBoundingClientRect();
   sizes.width = rect.width;
@@ -136,9 +152,23 @@ const updateClosestVertexHover = intersectionPoint => {
 
 const handleMouseDown = () => {
   selectedVerticesInitializeSet();
-  const positions = rotatedData.face;
-  if (positions) {
+  console.log(nowStep);
+  if (nowStep === 10) {
+    console.log(1);
+    const positions = stepVertex9;
     findAndSelectClosestVertices(positions, allVertex, selectedVertices);
+  } else if (nowStep === 11) {
+    const positions = stepVertex10;
+    findAndSelectClosestVertices(positions, allVertex, selectedVertices);
+  } else if (isGuideMode) {
+    if (guideStep[nowStep].unfold) {
+      const positions = rotatedData.face;
+
+      if (positions) {
+        console.log(selectedVertices);
+        findAndSelectClosestVertices(positions, allVertex, selectedVertices);
+      }
+    }
   }
 
   if (pointsMarker.visible) {
@@ -172,6 +202,7 @@ const handleMouseDown = () => {
       const { closestVertex } = findClosestVertex(startVertex, borderVertices);
       isAxisPoint = closestVertex.isAxisPoint;
     }
+    // console.log(clickedRedMarker.position, 111);
   }
 };
 
@@ -226,23 +257,35 @@ const updateFoldOnMouseMove = () => {
 const debouncedUpdateFoldOnMouseMove = debounce(updateFoldOnMouseMove, 10);
 
 const handleMouseUp = () => {
-  controls.enabled = true;
-  const isFolding = isGuideMode ? guideStep[nowStep].unfold : true;
-  const isClockwise = false;
+  if (isGuideMode) {
+    if (guideStep[nowStep].unfold || nowStep === 10 || nowStep === 11) {
+      controls.enabled = true;
+      const isFolding = isGuideMode ? guideStep[nowStep].unfold : true;
+      let isClockwise = false;
 
-  if (isFolding && !pointsMarker.visible) {
-    rotateSelectedVertices(
-      allVertex,
-      selectedVertices,
-      DIAMETER,
-      FRAMES,
-      isClockwise,
-      rotatedData
-    );
+      if (isFolding && !pointsMarker.visible) {
+        let degree = DIAMETER;
+        if (nowStep === 10 || nowStep === 11) {
+          degree = DIAMETER / 2;
+        }
+        if (nowStep === 11) {
+          isClockwise = true;
+        }
 
-    changeUnfoldVertex();
+        rotateSelectedVertices(
+          allVertex,
+          selectedVertices,
+          degree,
+          FRAMES,
+          isClockwise,
+          rotatedData
+        );
+
+        changeUnfoldVertex();
+        updateStep(1);
+      }
+    }
   }
-
   isDragging = false;
 
   const existingPrevArea = scene.getObjectByName('prevFoldingAreaLine');
@@ -256,13 +299,12 @@ const handleMouseUp = () => {
   }
 
   if (areMarkersAtSamePosition && clickedRedMarker.visible) {
-    showToastMessage(TOAST_MESSAGE.SAME_POSITION);
+    showToastMessages(TOAST_MESSAGE.SAME_POSITION);
   } else if (!pointsMarker.visible && clickedRedMarker.visible) {
-    showToastMessage(TOAST_MESSAGE.NO_POINTMARKER);
+    showToastMessages(TOAST_MESSAGE.NO_POINTMARKER);
   } else if (pointsMarker.visible && clickedRedMarker.visible) {
     raycaster.setFromCamera(mouse, camera);
     const intersects = raycaster.intersectObject(paper);
-
     if (intersects.length > 0) {
       const intersectPoint = intersects[0].point;
       const closestVertex = findClosestVertex(
@@ -278,7 +320,7 @@ const handleMouseUp = () => {
           allVertex
         );
 
-        saveHistory({
+        saveFoldHistory({
           paper: new Float32Array(allVertex.array.slice()),
           borderVertices: JSON.parse(JSON.stringify(borderVertices)),
         });
@@ -289,20 +331,24 @@ const handleMouseUp = () => {
           true,
           isAxisPoint
         );
+        addVertices();
         checkActiveButtons(prevButton, nextButton);
 
         if (isGuideMode) {
           updateStep(1);
-        } else {
-          addVertices();
+          console.log(stepVertex8, stepVertex9, stepVertex10);
         }
       }
     }
+  }
+  if (isGuideMode) {
+    changeBorderVertices(guideStep[nowStep].points);
   }
 
   startVertex = {};
   hoverVertex = {};
   clickedRedMarker.visible = false;
+  controls.enabled = true;
 };
 
 const updateClosestVertex = (intersectionPoint, thresholdDistance) => {
@@ -328,7 +374,8 @@ const markClosestVertexAnimate = () => {
   const intersect = raycaster.intersectObject(paper);
 
   if (intersect.length) {
-    updateClosestVertex(intersect[0].point, THRESHOLD);
+    const threshold = 0.6;
+    updateClosestVertex(intersect[0].point, threshold);
   } else {
     pointsMarker.visible = false;
   }

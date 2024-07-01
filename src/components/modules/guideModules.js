@@ -14,7 +14,7 @@ const stepVertex9 = [];
 const stepVertex10 = [];
 
 const checkUnfoldButtons = () => {
-  unfoldButton.disabled = !guideStep[nowStep].unfold;
+  unfoldButton.disabled = !guideStep[nowStep]?.unfold;
 };
 
 const updateStep = step => {
@@ -78,7 +78,6 @@ const updateZPosition = vertex => {
     } else {
       vertex.z = -0.02;
     }
-
     stepVertex10.push(vertex);
   }
 

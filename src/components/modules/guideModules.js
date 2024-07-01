@@ -16,7 +16,7 @@ const stepVertex = {
 };
 
 const checkUnfoldButtons = () => {
-  unfoldButton.disabled = !guideStep[nowStep]?.unfold;
+  unfoldButton.disabled = !guideStep[nowStep].unfold;
 };
 
 const updateStep = step => {

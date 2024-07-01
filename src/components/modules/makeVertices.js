@@ -51,7 +51,9 @@ const addVertices = () => {
 };
 
 const changeBorderVertices = newData => {
-  borderVertices = newData;
+  if (newData) {
+    borderVertices = newData;
+  }
 };
 
 const corners = findBorderVertices();

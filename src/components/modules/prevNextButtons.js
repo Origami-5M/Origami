@@ -28,6 +28,7 @@ const changeToPrevFold = () => {
       'position',
       new THREE.BufferAttribute(prevPositions, 3)
     );
+
     changeBorderVertices(prevVertices);
   }
 };

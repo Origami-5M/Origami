@@ -284,8 +284,7 @@ const handleMouseUp = () => {
           isClockwise,
           rotatedData
         );
-        selectedVerticesInitializeSet();
-        changeUnfoldVertex();
+
         updateStep(1);
       }
     }
@@ -366,18 +365,19 @@ const handleMouseUp = () => {
           true,
           isAxisPoint
         );
-        addVertices();
         checkActiveButtons(prevButton, nextButton);
 
         if (isGuideMode) {
           updateStep(1);
+          changeBorderVertices(guideStep[nowStep].points);
+        } else {
+          addVertices();
         }
       }
     }
   }
-  if (isGuideMode) {
-    changeBorderVertices(guideStep[nowStep].points);
-  }
+  // if (isGuideMode) {
+  // }
 
   startVertex = {};
   hoverVertex = {};

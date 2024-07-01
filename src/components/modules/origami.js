@@ -97,6 +97,7 @@ const createPointsMarker = color => {
   if (!isGuideMode) {
     marker.visible = false;
   }
+
   return marker;
 };
 
@@ -148,6 +149,7 @@ const updateClosestVertexHover = intersectionPoint => {
 
 const handleMouseDown = event => {
   selectedVerticesInitializeSet();
+
   if (mode === 'plane') {
     if (nowStep === 1) {
       if (guideStep[nowStep].unfold) {
@@ -183,8 +185,8 @@ const handleMouseDown = event => {
 
   if (pointsMarker.visible) {
     initialMousePosition.set(event.clientX, event.clientY);
-    clickedRedMarker.position.copy(pointsMarker.position);
     isDragging = true;
+    clickedRedMarker.position.copy(pointsMarker.position);
     clickedRedMarker.visible = true;
     pointsMarker.visible = false;
     controls.enabled = false;
@@ -229,6 +231,7 @@ const updateFoldOnMouseMove = () => {
       );
 
       const existingPolygon = scene.getObjectByName('foldedAreaPolygon');
+
       if (existingPolygon) {
         scene.remove(existingPolygon);
       }

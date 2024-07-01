@@ -29,4 +29,19 @@ async function fetchAllUserDocuments() {
   }
 }
 
-export { fetchAllUserDocuments, fetchUserDocument };
+const fetchUserPositions = async userId => {
+  try {
+    const usersCollectionRef = collection(db, 'users', userId, 'positions');
+    const usersCoordinatesRef = await getDocs(usersCollectionRef);
+    const positionsData = [];
+    usersCoordinatesRef.forEach(doc => {
+      positionsData.push(doc.data().positions);
+    });
+    return positionsData;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+export { fetchAllUserDocuments, fetchUserDocument, fetchUserPositions };

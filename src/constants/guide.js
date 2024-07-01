@@ -236,6 +236,6 @@ const GUIDE_STEPS = {
   ],
 };
 
-const CHUNK_SIZE = 1000;
+const CHUNK_SIZE = 999;
 
 export { GUIDE_IMAGES, GUIDE_STEPS, CHUNK_SIZE };

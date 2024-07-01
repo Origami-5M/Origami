@@ -16,7 +16,7 @@ const stepVertex = {
 };
 
 const checkUnfoldButtons = () => {
-  unfoldButton.disabled = !guideStep[nowStep].unfold;
+  unfoldButton.disabled = !guideStep[nowStep]?.unfold;
 };
 
 const updateStep = step => {
@@ -26,61 +26,56 @@ const updateStep = step => {
   changeBorderVertices();
 };
 
-const Z_VALUES = {
-  STEP_4_5: { HIGH: 0.04, LOW: 0.02, THRESHOLD: 0.03 },
-  STEP_6: [
-    { CONDITION: z => z < 0.03, VALUE: 0.06 },
-    { CONDITION: z => z > 0.03 && z < 0.05, VALUE: 0.04 },
-    { CONDITION: () => true, VALUE: 0.02 },
-  ],
-  STEP_7: [
-    { CONDITION: z => z < 0.01, VALUE: -0.02 },
-    { CONDITION: z => z > 0.01 && z < 0.03, VALUE: -0.04 },
-    { CONDITION: z => z > 0.03 && z < 0.05, VALUE: -0.06 },
-    { CONDITION: z => z > 0.05 && z < 0.07, VALUE: -0.08 },
-    { CONDITION: () => true, VALUE: -0.1 },
-  ],
-  STEP_8: [
-    { CONDITION: z => z < 0.01, VALUE: 0.1 },
-    { CONDITION: z => z > 0.01 && z < 0.03, VALUE: 0.08 },
-    { CONDITION: z => z > 0.03 && z < 0.05, VALUE: 0.06 },
-    { CONDITION: z => z > 0.05 && z < 0.07, VALUE: 0.04 },
-    { CONDITION: z => z > 0.07 && z < 0.09, VALUE: -0.02 },
-  ],
-  STEP_9: [
-    { CONDITION: z => z < -0.01 && z > -0.03, VALUE: -0.1 },
-    { CONDITION: z => z < -0.03 && z > -0.05, VALUE: -0.08 },
-    { CONDITION: z => z < -0.05 && z > -0.07, VALUE: -0.06 },
-    { CONDITION: z => z < -0.07 && z > -0.09, VALUE: -0.04 },
-    { CONDITION: () => true, VALUE: -0.02 },
-  ],
-};
 const updateZPosition = vertex => {
-  const updateVertexZ = conditions => {
-    for (const { CONDITION, VALUE } of conditions) {
-      if (CONDITION(vertex.z)) {
-        vertex.z = VALUE;
-        return vertex;
-      }
+  const { z } = vertex;
+
+  const updateVertexZ = (range, values) => {
+    const [min, max] = range;
+    const [newZ] = values;
+
+    if (z > min && z < max) {
+      vertex.z = newZ;
     }
   };
-  if (nowStep === 4 || nowStep === 5) {
-    vertex.z =
-      vertex.z >= Z_VALUES.STEP_4_5.THRESHOLD
-        ? Z_VALUES.STEP_4_5.HIGH
-        : Z_VALUES.STEP_4_5.LOW;
-  } else if (nowStep === 6) {
-    updateVertexZ(Z_VALUES.STEP_6);
-  } else if (nowStep === 7) {
-    updateVertexZ(Z_VALUES.STEP_7);
-    stepVertex.stepVertex8.push(vertex);
-  } else if (nowStep === 8) {
-    updateVertexZ(Z_VALUES.STEP_8);
-    stepVertex.stepVertex9.push(vertex);
-  } else if (nowStep === 9) {
-    updateVertexZ(Z_VALUES.STEP_9);
-    stepVertex.stepVertex10.push(vertex);
+
+  switch (nowStep) {
+    case 4:
+    case 5:
+      vertex.z = z >= 0.03 ? 0.02 : 0.04;
+      break;
+    case 6:
+      updateVertexZ([0, 0.03], [0.06]);
+      updateVertexZ([0.03, 0.05], [0.04]);
+      updateVertexZ([0.05, 1], [0.02]);
+      break;
+    case 7:
+      updateVertexZ([-Infinity, 0.01], [-0.02]);
+      updateVertexZ([0.01, 0.03], [-0.04]);
+      updateVertexZ([0.03, 0.05], [-0.06]);
+      updateVertexZ([0.05, 0.07], [-0.08]);
+      updateVertexZ([0.07, Infinity], [-0.1]);
+      stepVertex.stepVertex8.push(vertex);
+      break;
+    case 8:
+      updateVertexZ([-Infinity, 0.01], [0.1]);
+      updateVertexZ([0.01, 0.03], [0.08]);
+      updateVertexZ([0.03, 0.05], [0.06]);
+      updateVertexZ([0.05, 0.07], [0.04]);
+      updateVertexZ([0.07, 0.09], [0.01]);
+      stepVertex.stepVertex9.push(vertex);
+      break;
+    case 9:
+      updateVertexZ([-0.03, -0.01], [-0.1]);
+      updateVertexZ([-0.05, -0.03], [-0.08]);
+      updateVertexZ([-0.07, -0.05], [-0.06]);
+      updateVertexZ([-0.09, -0.07], [-0.04]);
+      updateVertexZ([-Infinity, -0.09], [-0.02]);
+      stepVertex.stepVertex10.push(vertex);
+      break;
+    default:
+      break;
   }
+
   return vertex;
 };
 

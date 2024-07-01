@@ -8,7 +8,6 @@ import { ambientLight, directionalLight } from '../../three/Lights';
 import { paper } from '../../three/Paper';
 import { renderer, finishRenderer } from '../../three/Renderer';
 
-import { debounce } from './debounce';
 import { findClosestVertex } from './findClosestVertex';
 import { calculateRotatedLine } from './axisCalculations';
 import { foldingAnimation } from './foldingAnimation';
@@ -135,8 +134,8 @@ const handleMouseMove = event => {
   mouse.x = ((event.clientX - rect.left) / sizes.width) * 2 - 1;
   mouse.y = -((event.clientY - rect.top) / sizes.height) * 2 + 1;
 
-  if (isDragging) {
-    debouncedUpdateFoldOnMouseMove(event);
+  if (pointsMarker.visible && clickedRedMarker.visible) {
+    updateFoldOnMouseMove(event);
   }
 };
 
@@ -148,7 +147,7 @@ const updateClosestVertexHover = intersectionPoint => {
   return closestVertex;
 };
 
-const handleMouseDown = () => {
+const handleMouseDown = event => {
   selectedVerticesInitializeSet();
   if (nowStep === 1) {
     if (guideStep[nowStep].unfold) {
@@ -168,13 +167,10 @@ const handleMouseDown = () => {
 
   if (pointsMarker.visible) {
     initialMousePosition.set(event.clientX, event.clientY);
-    isDragging = true;
-  }
-
-  if (pointsMarker.visible) {
     clickedRedMarker.position.copy(pointsMarker.position);
-    pointsMarker.visible = false;
+    isDragging = true;
     clickedRedMarker.visible = true;
+    pointsMarker.visible = false;
     controls.enabled = false;
   }
 
@@ -247,8 +243,6 @@ const updateFoldOnMouseMove = () => {
     }
   }
 };
-
-const debouncedUpdateFoldOnMouseMove = debounce(updateFoldOnMouseMove, 10);
 
 const handleMouseUp = () => {
   if (isGuideMode) {

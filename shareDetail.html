@@ -55,7 +55,18 @@
       </nav>
       <aside class="mode-sidebar">
         <ul class="mode-list">
-          <li data-guideMode="plane">
+          <li data-guideMode="puppy">
+            <div>
+              <h3>Puppy</h3>
+              <p>
+                <img
+                  src="/src/assets/img/rocket-img.png"
+                  alt="종이접기 로켓 이미지"
+                />
+              </p>
+            </div>
+          </li>
+          <li class="mode-list" data-guideMode="plane">
             <div>
               <h3>Plane</h3>
               <p>
@@ -68,17 +79,6 @@
           </li>
           <li class="mode-list" data-guideMode="heart">
             <div>
-              <h3>Boat</h3>
-              <p>
-                <img
-                  src="/src/assets/img/rocket-img.png"
-                  alt="종이접기 로켓 이미지"
-                />
-              </p>
-            </div>
-          </li>
-          <li class="mode-list" data-guideMode="bell">
-            <div>
               <h3>Heart</h3>
               <p>
                 <img
@@ -90,11 +90,13 @@
           </li>
         </ul>
         <div class="sidebar-footer">
-          <button class="button-red small-start-button">START</button>
+          <button class="button-red small-start-button mode-change-button">
+            START
+          </button>
         </div>
       </aside>
     </main>
-    <script type="module" src="/src/components/sidebar.js" defer></script>
-    <script type="module" src="/src/components/shareDetail.js" defer></script>
+    <script type="module" src="/src/components/sidebar.js"></script>
+    <script type="module" src="/src/components/shareDetail.js"></script>
   </body>
 </html>

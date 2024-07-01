@@ -1,3 +1,6 @@
+import { showToastMessage } from './modules/showToastMessage';
+import { TOAST_MESSAGE } from '../constants';
+
 const homeButton = document.querySelector('.home-button');
 const sidebarToggleButton = document.querySelector('.mode-button');
 const galleryButton = document.querySelector('.gallery-button');
@@ -6,6 +9,7 @@ const soundButton = document.querySelector('.sound-button');
 
 const modeSidebar = document.querySelector('.mode-sidebar');
 const modeLists = document.querySelectorAll('.mode-list li');
+const modeChangeButton = document.querySelector('.mode-change-button');
 
 const mainBgm = document.querySelector('.main-bgm');
 
@@ -78,4 +82,22 @@ const changeSoundButton = isMuted => {
 soundButton.addEventListener('click', () => {
   isMuted = !isMuted;
   changeSoundButton(isMuted);
+});
+
+modeChangeButton.addEventListener('click', () => {
+  const activeMode = document.querySelector('.mode-list li.active');
+
+  if (activeMode) {
+    const mode = activeMode.dataset.guidemode;
+
+    let url = new URL(`${window.location.origin}/play`);
+    let params = new URLSearchParams(url.search);
+
+    params.append('mode', mode);
+    url.search = params.toString();
+
+    window.location.href = url.toString();
+  } else {
+    showToastMessage(TOAST_MESSAGE.NO_SELECTED_MODE);
+  }
 });

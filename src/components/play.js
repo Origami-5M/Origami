@@ -9,6 +9,7 @@ import {
   updateSlideButtons,
 } from './modules/guideSlide';
 import { saveUserInfo } from './services/userService';
+import { isGuideMode } from './modules/guideModules';
 
 import { paper } from '../three/Paper';
 
@@ -50,8 +51,17 @@ if (guideMode) {
 }
 
 document.body.addEventListener('click', event => {
+  event.preventDefault();
   if (event.target.matches('.restart-button')) {
-    window.location.reload();
+    if (isGuideMode) {
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      const mode = urlParams.get('mode');
+
+      window.location.href = `/play?mode=${mode}`;
+    } else {
+      window.location.reload();
+    }
   }
 });
 

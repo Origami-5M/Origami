@@ -66,10 +66,21 @@ const checkActiveButtons = (prev, next) => {
   next.disabled = nextHistory.length === 0;
 };
 
+const onFoldChange = () => {
+  const currentPositions = paper.geometry.attributes.position.array.slice();
+  const currentBorderVertices = JSON.parse(JSON.stringify(borderVertices));
+
+  saveHistory({
+    paper: currentPositions,
+    borderVertices: currentBorderVertices,
+  });
+};
+
 export {
   checkActiveButtons,
   saveHistory,
   changeToPrevFold,
   changeToNextFold,
   changeUnfoldVertex,
+  onFoldChange,
 };

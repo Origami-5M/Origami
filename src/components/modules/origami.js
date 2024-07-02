@@ -38,14 +38,15 @@ import {
   checkActiveButtons,
   changeToPrevFold,
   changeToNextFold,
-  saveHistory,
   changeUnfoldVertex,
+  onFoldChange,
 } from './prevNextButtons';
 
 import {
   DIAMETER,
   THRESHOLD,
   FRAMES,
+  POINTS_MARKER_SIZE,
   POINTS_MARKER_COLOR,
   RED_MARKER_COLOR,
   TOAST_MESSAGE,
@@ -91,7 +92,7 @@ if (isGuideMode) {
 }
 
 const createPointsMarker = color => {
-  const geometry = new THREE.SphereGeometry(0.03, 16, 16);
+  const geometry = new THREE.SphereGeometry(POINTS_MARKER_SIZE, 16, 16);
   const material = new THREE.MeshBasicMaterial({ color });
   const marker = new THREE.Mesh(geometry, material);
 
@@ -148,6 +149,55 @@ const updateClosestVertexHover = intersectionPoint => {
   return closestVertex;
 };
 
+const updateFoldOnMouseMove = () => {
+  raycaster.setFromCamera(mouse, camera);
+  const intersects = raycaster.intersectObject(paper);
+
+  if (intersects.length > 0) {
+    const intersectPoint = intersects[0].point;
+    hoverVertex = updateClosestVertexHover(intersectPoint);
+
+    if (hoverVertex) {
+      const axisLines = calculateRotatedLine(
+        scene,
+        clickedRedMarker.position,
+        hoverVertex,
+        allVertex
+      );
+
+      const existingPolygon = scene.getObjectByName('foldedAreaPolygon');
+
+      if (existingPolygon) {
+        scene.remove(existingPolygon);
+      }
+
+      let startPoint = axisLines.axisPoints.startPoint;
+      let endPoint = axisLines.axisPoints.endPoint;
+
+      const direction = getFoldingDirection(
+        startPoint,
+        endPoint,
+        clickedRedMarker.position
+      );
+
+      const currentFoldedArea = foldingVertexPosition(
+        allVertex,
+        startPoint,
+        endPoint,
+        direction,
+        false
+      );
+
+      const foldedAreaPolygon = prevFoldingArea(currentFoldedArea);
+
+      if (foldedAreaPolygon) {
+        foldedAreaPolygon.name = 'foldedAreaPolygon';
+        scene.add(foldedAreaPolygon);
+      }
+    }
+  }
+};
+
 const handleMouseDown = event => {
   selectedVerticesInitializeSet();
 
@@ -198,55 +248,6 @@ const handleMouseDown = event => {
   }
 };
 
-const updateFoldOnMouseMove = () => {
-  raycaster.setFromCamera(mouse, camera);
-  const intersects = raycaster.intersectObject(paper);
-
-  if (intersects.length > 0) {
-    const intersectPoint = intersects[0].point;
-    hoverVertex = updateClosestVertexHover(intersectPoint);
-
-    if (hoverVertex) {
-      const axisLines = calculateRotatedLine(
-        scene,
-        clickedRedMarker.position,
-        hoverVertex,
-        allVertex
-      );
-
-      const existingPolygon = scene.getObjectByName('foldedAreaPolygon');
-
-      if (existingPolygon) {
-        scene.remove(existingPolygon);
-      }
-
-      let startPoint = axisLines.axisPoints.startPoint;
-      let endPoint = axisLines.axisPoints.endPoint;
-
-      const direction = getFoldingDirection(
-        startPoint,
-        endPoint,
-        clickedRedMarker.position
-      );
-
-      const currentFoldedArea = foldingVertexPosition(
-        allVertex,
-        startPoint,
-        endPoint,
-        direction,
-        false
-      );
-
-      const foldedAreaPolygon = prevFoldingArea(currentFoldedArea);
-
-      if (foldedAreaPolygon) {
-        foldedAreaPolygon.name = 'foldedAreaPolygon';
-        scene.add(foldedAreaPolygon);
-      }
-    }
-  }
-};
-
 const handleMouseUp = () => {
   if (isGuideMode) {
     if (guideStep[nowStep].unfold) {
@@ -262,6 +263,8 @@ const handleMouseUp = () => {
           isClockwise = true;
         }
 
+        onFoldChange();
+
         rotateSelectedVertices(
           allVertex,
           selectedVertices,
@@ -271,7 +274,7 @@ const handleMouseUp = () => {
           rotatedData
         );
 
-        // changeUnfoldVertex();
+        changeUnfoldVertex();
         updateStep(1);
       }
     }
@@ -311,10 +314,8 @@ const handleMouseUp = () => {
           allVertex
         );
 
-        saveHistory({
-          paper: new Float32Array(allVertex.array.slice()),
-          borderVertices: JSON.parse(JSON.stringify(borderVertices)),
-        });
+        onFoldChange();
+
         foldingAnimation(
           scene,
           axis.axisPoints,
@@ -333,8 +334,6 @@ const handleMouseUp = () => {
       }
     }
   }
-  // if (isGuideMode) {
-  // }
 
   startVertex = {};
   hoverVertex = {};

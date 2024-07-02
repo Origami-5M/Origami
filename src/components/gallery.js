@@ -8,8 +8,6 @@ import {
   fetchUserPositions,
 } from '../components/services/getUserService';
 import { sizes } from '../three/Sizes';
-// import { camera } from '../three/Camera';
-// import { controls } from '../three/Controls';
 
 document.addEventListener('DOMContentLoaded', async () => {
   const slideInner = document.querySelector('.slide-inner');
@@ -22,7 +20,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.search);
   const idValue = params.get('id');
-  console.log(idValue);
   const sceneCont = document.querySelector('.detail-scene');
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(

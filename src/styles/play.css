@@ -65,6 +65,7 @@
   padding: 16px 60px;
   border-radius: 30px;
   background-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .guide-wrap > .guide-slider {
@@ -181,4 +182,27 @@
 
 #confetti-canvas {
   position: absolute;
+}
+
+.play-guide {
+  position: absolute;
+  top: 39px;
+  right: 57px;
+  padding: 16px 20px;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.play-guide p {
+  margin-bottom: 8px;
+}
+
+.play-guide p:last-child {
+  margin-bottom: 0;
+}
+
+.play-guide p span {
+  font-weight: 600;
+  color: #343394;
 }

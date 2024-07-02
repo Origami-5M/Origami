@@ -7,8 +7,8 @@ let sizes = {
 };
 
 const modalSizes = {
-  width: 250,
-  height: 250,
+  width: 300,
+  height: 300,
 };
 
 if (playCont) {

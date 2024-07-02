@@ -31,6 +31,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   );
   const renderer = new THREE.WebGLRenderer();
 
+  renderer.setClearColor('#ffffff');
   renderer.setSize(sizes.width, sizes.height);
   sceneCont.appendChild(renderer.domElement);
   camera.position.z = 5;
@@ -153,6 +154,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const modalHeading = shareCont.querySelector('h3');
     modalHeading.textContent = nickname;
+
+    await handleUserPositions(id);
   };
 
   const closeModal = () => {
@@ -228,40 +231,28 @@ document.addEventListener('DOMContentLoaded', async () => {
   };
 
   const renderOrigami = positionsData => {
-    positionsData.forEach(positions => {
-      const geometry = new THREE.BufferGeometry();
-      const vertices = new Float32Array(positions.length);
+    while (scene.children.length > 0) {
+      scene.remove(scene.children[0]);
+    }
 
-      for (let i = 0; i < positions.length; i++) {
-        vertices[i] = positions[i];
-      }
+    const flattenedPositions = positionsData.flat();
+    const geometry = new THREE.PlaneGeometry();
+    const vertices = new Float32Array(flattenedPositions);
 
-      geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+    geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
 
-      const material = new THREE.MeshBasicMaterial({
-        color: 0xff0000,
-        wireframe: true,
-      });
-      const mesh = new THREE.Mesh(geometry, material);
-      scene.add(mesh);
+    const indices = [];
+    for (let i = 0; i < flattenedPositions.length / 3 - 2; i += 3) {
+      indices.push(i, i + 1, i + 2);
+    }
+    console.log(indices);
+    geometry.setIndex(indices);
+    geometry.computeVertexNormals();
+    const material = new THREE.MeshBasicMaterial({
+      color: 0x0077ff,
+      wireframe: true,
     });
+    const mesh = new THREE.Mesh(geometry, material);
+    scene.add(mesh);
   };
-
-  // 기존 positionsData 사용 예제
-  // const positionsData = [
-  //   // 첫 번째 데이터셋 (예: 삼각형)
-  //   [
-  //     new THREE.Vector3(1, 1, 0),
-  //     new THREE.Vector3(-1, 1, 0),
-  //     new THREE.Vector3(0, -1, 0)
-  //   ],
-  //   // 두 번째 데이터셋 (예: 또 다른 삼각형)
-  //   [
-  //     new THREE.Vector3(2, 2, 0),
-  //     new THREE.Vector3(-2, 2, 0),
-  //     new THREE.Vector3(0, -2, 0)
-  //   ]
-  // ];
-
-  // renderOrigami(positionsData);
 });

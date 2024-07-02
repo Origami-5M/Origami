@@ -38,7 +38,6 @@ import {
   checkActiveButtons,
   changeToPrevFold,
   changeToNextFold,
-  changeUnfoldVertex,
   onFoldChange,
 } from './prevNextButtons';
 
@@ -236,6 +235,7 @@ const handleMouseDown = event => {
   if (pointsMarker.visible) {
     initialMousePosition.set(event.clientX, event.clientY);
     isDragging = true;
+
     clickedRedMarker.position.copy(pointsMarker.position);
     clickedRedMarker.visible = true;
     pointsMarker.visible = false;
@@ -245,6 +245,57 @@ const handleMouseDown = event => {
   const intersects = raycaster.intersectObject(paper);
 
   if (intersects.length > 0) {
+    if (mode === 'plane') {
+      if (nowStep === 1) {
+        if (guideStep[nowStep].unfold) {
+          const positions = rotatedData.face;
+
+          if (positions) {
+            findAndSelectClosestVertices(
+              positions,
+              allVertex,
+              selectedVertices
+            );
+          }
+        }
+      } else if (nowStep === 10) {
+        const positions = stepPlaneVertex.stepVertex9;
+        findAndSelectClosestVertices(positions, allVertex, selectedVertices);
+      } else if (nowStep === 11) {
+        const positions = stepPlaneVertex.stepVertex10;
+        findAndSelectClosestVertices(positions, allVertex, selectedVertices);
+      } else if (!isGuideMode) {
+        const positions = rotatedData.face;
+        if (positions) {
+          findAndSelectClosestVertices(positions, allVertex, selectedVertices);
+        }
+      }
+    } else if (mode === 'puppy') {
+      if (nowStep === 2) {
+        if (guideStep[nowStep].unfold) {
+          const positions = rotatedData.face;
+
+          if (positions) {
+            findAndSelectClosestVertices(
+              positions,
+              allVertex,
+              selectedVertices
+            );
+          }
+        }
+      }
+    }
+
+    if (pointsMarker.visible) {
+      initialMousePosition.set(event.clientX, event.clientY);
+      isDragging = true;
+
+      clickedRedMarker.position.copy(pointsMarker.position);
+      clickedRedMarker.visible = true;
+      pointsMarker.visible = false;
+      controls.enabled = false;
+    }
+
     const intersectPoint = intersects[0].point;
     startVertex = findClosestVertex(
       intersectPoint,
@@ -265,7 +316,11 @@ const handleMouseDown = event => {
 };
 
 const handleMouseUp = () => {
+  raycaster.setFromCamera(mouse, camera);
+  const intersects = raycaster.intersectObject(paper);
+
   let isClockwise = false;
+
   if (mode === 'plane') {
     if (guideStep[nowStep].unfold) {
       if (isDragging && !pointsMarker.visible) {
@@ -288,29 +343,36 @@ const handleMouseUp = () => {
           rotatedData
         );
 
+        selectedVerticesInitializeSet();
         updateStep(1);
       }
     }
   } else if (mode === 'puppy') {
     if (guideStep[nowStep].unfold) {
-      isClockwise = true;
-      rotatedData.endPoint = { x: 0, y: -2.1, z: 0 };
-      rotatedData.startPoint = { x: 0, y: 2.1, z: 0 };
-      rotateSelectedVertices(
-        allVertex,
-        selectedVertices,
-        DIAMETER,
-        FRAMES,
-        isClockwise,
-        rotatedData
-      );
+      if (isDragging && !pointsMarker.visible) {
+        isClockwise = true;
+        rotatedData.endPoint = { x: 0, y: -2.1, z: 0 };
+        rotatedData.startPoint = { x: 0, y: 2.1, z: 0 };
 
-      selectedVerticesInitializeSet();
-      changeUnfoldVertex();
-      updateStep(1);
+        onFoldChange();
+
+        rotateSelectedVertices(
+          allVertex,
+          selectedVertices,
+          DIAMETER,
+          FRAMES,
+          isClockwise,
+          rotatedData
+        );
+        selectedVerticesInitializeSet();
+        updateStep(1);
+      }
     }
   } else {
     const isClockwise = false;
+
+    onFoldChange();
+
     rotateSelectedVertices(
       allVertex,
       selectedVertices,
@@ -320,7 +382,6 @@ const handleMouseUp = () => {
       rotatedData
     );
     selectedVerticesInitializeSet();
-    changeUnfoldVertex();
   }
   isDragging = false;
 
@@ -339,9 +400,6 @@ const handleMouseUp = () => {
   } else if (!pointsMarker.visible && clickedRedMarker.visible) {
     showToastMessage(TOAST_MESSAGE.NO_POINTMARKER);
   } else if (pointsMarker.visible && clickedRedMarker.visible) {
-    raycaster.setFromCamera(mouse, camera);
-    const intersects = raycaster.intersectObject(paper);
-
     if (intersects.length > 0) {
       const intersectPoint = intersects[0].point;
       const closestVertex = findClosestVertex(
@@ -370,7 +428,6 @@ const handleMouseUp = () => {
 
         if (isGuideMode) {
           updateStep(1);
-          changeBorderVertices(guideStep[nowStep].points);
         } else {
           addVertices();
         }

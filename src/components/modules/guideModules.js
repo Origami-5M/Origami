@@ -9,12 +9,14 @@ const mode = urlParams.get('mode');
 const isGuideMode = Boolean(mode);
 const guideStep = GUIDE_STEPS[mode];
 const unfoldButton = document.querySelector('#unfoldButton');
-const stepVertex = {
+const stepPlaneVertex = {
   stepVertex8: [],
   stepVertex9: [],
   stepVertex10: [],
 };
-
+const stepPuppyVertex = {
+  stepVertex1: [],
+};
 const checkUnfoldButtons = () => {
   unfoldButton.disabled = !guideStep[nowStep].unfold;
 };
@@ -28,54 +30,71 @@ const updateStep = step => {
 
 const updateZPosition = vertex => {
   const { z } = vertex;
-
-  const updateVertexZ = (range, values) => {
-    const [min, max] = range;
-    const [newZ] = values;
-
-    if (z > min && z < max) {
-      vertex.z = newZ;
-    }
-  };
-
-  switch (nowStep) {
-    case 4:
-    case 5:
+  if (mode === 'plane') {
+    if (nowStep === 4 || nowStep === 5) {
       vertex.z = z >= 0.03 ? 0.02 : 0.04;
-      break;
-    case 6:
-      updateVertexZ([0, 0.03], [0.06]);
-      updateVertexZ([0.03, 0.05], [0.04]);
-      updateVertexZ([0.05, 1], [0.02]);
-      break;
-    case 7:
-      updateVertexZ([-Infinity, 0.01], [-0.02]);
-      updateVertexZ([0.01, 0.03], [-0.04]);
-      updateVertexZ([0.03, 0.05], [-0.06]);
-      updateVertexZ([0.05, 0.07], [-0.08]);
-      updateVertexZ([0.07, Infinity], [-0.1]);
-      stepVertex.stepVertex8.push(vertex);
-      break;
-    case 8:
-      updateVertexZ([-Infinity, 0.01], [0.1]);
-      updateVertexZ([0.01, 0.03], [0.08]);
-      updateVertexZ([0.03, 0.05], [0.06]);
-      updateVertexZ([0.05, 0.07], [0.04]);
-      updateVertexZ([0.07, 0.09], [0.01]);
-      stepVertex.stepVertex9.push(vertex);
-      break;
-    case 9:
-      updateVertexZ([-0.03, -0.01], [-0.1]);
-      updateVertexZ([-0.05, -0.03], [-0.08]);
-      updateVertexZ([-0.07, -0.05], [-0.06]);
-      updateVertexZ([-0.09, -0.07], [-0.04]);
-      updateVertexZ([-Infinity, -0.09], [-0.02]);
-      stepVertex.stepVertex10.push(vertex);
-      break;
-    default:
-      break;
+    } else if (nowStep === 6) {
+      if (z >= 0.01 && z < 0.03) {
+        vertex.z = 0.08;
+      } else if (z >= 0.03 && z < 0.05) {
+        vertex.z = 0.06;
+      } else if (z >= 0.05 && z < 0.07) {
+        vertex.z = 0.04;
+      }
+    } else if (nowStep === 7) {
+      if (z > -Infinity && z < 0.01) {
+        vertex.z = -0.04;
+      } else if (z >= 0.01 && z < 0.03) {
+        vertex.z = -0.06;
+      } else if (z >= 0.03 && z < 0.05) {
+        vertex.z = -0.08;
+      }
+      stepPlaneVertex.stepVertex8.push(vertex);
+    } else if (nowStep === 8) {
+      if (z >= 0.01 && z < 0.03) {
+        vertex.z = 0.08;
+      } else if (z >= 0.03 && z < 0.05) {
+        vertex.z = 0.06;
+      } else if (z >= 0.05 && z < 0.07) {
+        vertex.z = 0.04;
+      }
+      stepPlaneVertex.stepVertex9.push(vertex);
+    } else if (nowStep === 9) {
+      if (z <= -0.01 && z > -0.03) {
+        vertex.z = -0.1;
+      } else if (z <= 0.03 && z > -0.05) {
+        vertex.z = -0.08;
+      } else if (z <= 0.05 && z > -0.07) {
+        vertex.z = -0.06;
+      } else if (z <= 0.07 && z > -0.09) {
+        vertex.z = -0.04;
+      } else if (z <= 0.09 && z > -0.11) {
+        vertex.z = -0.02;
+      }
+      stepPlaneVertex.stepVertex10.push(vertex);
+    }
+  } else if (mode === 'puppy') {
+    if (nowStep === 1) {
+      if (z >= 0.01 && z < 0.03) {
+        vertex.z = 0.04;
+      } else if (z >= 0.03 && z < 0.05) {
+        vertex.z = 0.02;
+      }
+      stepPuppyVertex.stepVertex1.push(vertex);
+    } else {
+      if (nowStep === 3 || nowStep === 4) {
+        if (z > -Infinity && z < 0.01) {
+          vertex.z = 0.06;
+        } else if (z >= 0.01 && z < 0.03) {
+          vertex.z = 0.04;
+        } else if (z >= 0.03 && z < 0.05) {
+          vertex.z = 0.02;
+        } else if (z >= 0.05 && z < 0.07) {
+          vertex.z = 0.02;
+        }
+      }
+    }
   }
-
   return vertex;
 };
 
@@ -86,5 +105,20 @@ export {
   guideStep,
   updateStep,
   updateZPosition,
-  stepVertex,
+  stepPlaneVertex,
 };
+// if (z > -Infinity && z < 0.01) {
+//   a++;
+// } else if (z >= 0.01 && z < 0.03) {
+//   b++;
+// } else if (z >= 0.03 && z < 0.05) {
+//   c++;
+// } else if (z >= 0.05 && z < 0.07) {
+//   d++;
+// } else if (z >= 0.07 && z < 0.09) {
+//   e++;
+// } else if (z >= 0.09 && z < 0.11) {
+//   f++;
+// } else {
+//   g++;
+// }

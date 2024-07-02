@@ -26,7 +26,7 @@ import {
   isGuideMode,
   guideStep,
   updateStep,
-  stepVertex,
+  stepPlaneVertex,
 } from './guideModules';
 import {
   rotateSelectedVertices,
@@ -84,7 +84,6 @@ scene.add(directionalLight);
 
 if (isGuideMode) {
   changeBorderVertices(guideStep[nowStep].points);
-
   if (mode === 'puppy') {
     const angle = DIAMETER / 4;
     makeDiamondPaper(angle);
@@ -150,20 +149,37 @@ const updateClosestVertexHover = intersectionPoint => {
 
 const handleMouseDown = () => {
   selectedVerticesInitializeSet();
-  if (nowStep === 1) {
-    if (guideStep[nowStep].unfold) {
-      const positions = rotatedData.face;
+  if (mode === 'plane') {
+    if (nowStep === 1) {
+      if (guideStep[nowStep].unfold) {
+        const positions = rotatedData.face;
 
+        if (positions) {
+          findAndSelectClosestVertices(positions, allVertex, selectedVertices);
+        }
+      }
+    } else if (nowStep === 10) {
+      const positions = stepPlaneVertex.stepVertex9;
+      findAndSelectClosestVertices(positions, allVertex, selectedVertices);
+    } else if (nowStep === 11) {
+      const positions = stepPlaneVertex.stepVertex10;
+      findAndSelectClosestVertices(positions, allVertex, selectedVertices);
+    } else if (!isGuideMode) {
+      const positions = rotatedData.face;
       if (positions) {
         findAndSelectClosestVertices(positions, allVertex, selectedVertices);
       }
     }
-  } else if (nowStep === 10) {
-    const positions = stepVertex.stepVertex9;
-    findAndSelectClosestVertices(positions, allVertex, selectedVertices);
-  } else if (nowStep === 11) {
-    const positions = stepVertex.stepVertex10;
-    findAndSelectClosestVertices(positions, allVertex, selectedVertices);
+  } else if (mode === 'puppy') {
+    if (nowStep === 2) {
+      if (guideStep[nowStep].unfold) {
+        const positions = rotatedData.face;
+
+        if (positions) {
+          findAndSelectClosestVertices(positions, allVertex, selectedVertices);
+        }
+      }
+    }
   }
 
   if (pointsMarker.visible) {
@@ -251,11 +267,9 @@ const updateFoldOnMouseMove = () => {
 const debouncedUpdateFoldOnMouseMove = debounce(updateFoldOnMouseMove, 10);
 
 const handleMouseUp = () => {
-  if (isGuideMode) {
+  let isClockwise = false;
+  if (mode === 'plane') {
     if (guideStep[nowStep].unfold) {
-      controls.enabled = true;
-      let isClockwise = false;
-
       if (isDragging && !pointsMarker.visible) {
         let degree = DIAMETER;
         if (nowStep === 10 || nowStep === 11) {
@@ -273,11 +287,41 @@ const handleMouseUp = () => {
           isClockwise,
           rotatedData
         );
-
+        selectedVerticesInitializeSet();
         changeUnfoldVertex();
         updateStep(1);
       }
     }
+  } else if (mode === 'puppy') {
+    if (guideStep[nowStep].unfold) {
+      isClockwise = true;
+      rotatedData.endPoint = { x: 0, y: -2.1, z: 0 };
+      rotatedData.startPoint = { x: 0, y: 2.1, z: 0 };
+      rotateSelectedVertices(
+        allVertex,
+        selectedVertices,
+        DIAMETER,
+        FRAMES,
+        isClockwise,
+        rotatedData
+      );
+
+      selectedVerticesInitializeSet();
+      changeUnfoldVertex();
+      updateStep(1);
+    }
+  } else {
+    const isClockwise = false;
+    rotateSelectedVertices(
+      allVertex,
+      selectedVertices,
+      DIAMETER,
+      FRAMES,
+      isClockwise,
+      rotatedData
+    );
+    selectedVerticesInitializeSet();
+    changeUnfoldVertex();
   }
   isDragging = false;
 

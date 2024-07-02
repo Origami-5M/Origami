@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { Z_GAP } from '../../constants';
+import { mode, nowStep } from './guideModules';
 
 const rotateSelectedVertices = (
   positionAttribute,
@@ -56,7 +57,11 @@ const rotateSelectedVertices = (
           const z = positionAttribute.getZ(i);
           if (z !== 0) {
             if (z < 0) {
-              positionAttribute.setZ(i, z + Z_GAP);
+              if ((mode === 'puppy' && nowStep === 3) || nowStep === 11) {
+                positionAttribute.setZ(i, z + Z_GAP * 2);
+              } else {
+                positionAttribute.setZ(i, z + Z_GAP);
+              }
             } else {
               positionAttribute.setZ(i, z - Z_GAP);
             }

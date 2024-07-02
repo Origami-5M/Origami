@@ -38,17 +38,59 @@ const GUIDE_STEPS = {
     },
     {
       points: [
-        { x: 0, y: 1.5, z: 0 },
-        { x: 0, y: -1.5, z: 0 },
+        { x: 2.1, y: 0, z: 0 },
+        { x: -2.1, y: 0, z: 0 },
       ],
+      axis: null,
+      unfold: false,
+      singleSide: false,
+    },
+    {
+      points: [],
       axis: null,
       unfold: true,
       singleSide: false,
     },
     {
       points: [
-        { x: 0, y: 1.5, z: 0 },
-        { x: 0, y: -1.5, z: 0 },
+        { x: -1.7, y: 0, z: 0 },
+        { x: -1.2, y: -0.85, z: 0 },
+      ],
+      axis: null,
+      unfold: false,
+      singleSide: false,
+    },
+    {
+      points: [
+        { x: 1.7, y: 0, z: 0 },
+        { x: 1.2, y: -0.85, z: 0 },
+      ],
+      axis: null,
+      unfold: false,
+      singleSide: false,
+    },
+    {
+      points: [
+        { x: 0, y: -2.1, z: 0 },
+        { x: 0, y: -1.4, z: 0 },
+      ],
+      axis: null,
+      unfold: false,
+      singleSide: false,
+    },
+    {
+      points: [
+        { x: 0, y: -2.1, z: 0 },
+        { x: 0, y: -1.4, z: 0 },
+      ],
+      axis: null,
+      unfold: false,
+      singleSide: false,
+    },
+    {
+      points: [
+        { x: -1.8, y: 0, z: 0 },
+        { x: 2.1, y: 0, z: 0 },
       ],
       axis: null,
       unfold: false,

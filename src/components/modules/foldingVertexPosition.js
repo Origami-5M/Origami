@@ -9,8 +9,9 @@ import { borderVertices } from './makeVertices';
 import { Z_GAP } from '../../constants';
 import {
   isGuideMode,
+  mode,
   nowStep,
-  stepVertex,
+  stepPlaneVertex,
   updateZPosition,
 } from './guideModules';
 
@@ -49,7 +50,7 @@ const foldingVertexPosition = (
   const c = y1 - m * x1;
 
   const isInStepVertex8 = vertex => {
-    return stepVertex.stepVertex8.some(
+    return stepPlaneVertex.stepVertex8.some(
       v =>
         Math.abs(v.x - vertex.x) < 1e-6 &&
         Math.abs(v.y - vertex.y) < 1e-6 &&
@@ -82,17 +83,37 @@ const foldingVertexPosition = (
 
       if (inequality(vertex.y, y1)) {
         vertex.y = 2 * y1 - vertex.y;
-        if (isBorderVertices) {
-          vertex.z += Z_GAP * -frontOrBack;
+
+        if (mode === 'puppy' && nowStep === 5) {
+          if (Math.abs(vertex.z) >= 0.01) {
+            if (isBorderVertices) {
+              vertex.z += Z_GAP * -frontOrBack;
+            } else {
+              vertex.z += Z_GAP * frontOrBack;
+            }
+
+            previewFace.push(new THREE.Vector3(vertex.x, vertex.y, vertex.z));
+
+            if (isFolding) {
+              const updateVertex = updateZPosition(vertex);
+              updateVertexPosition(allPositions, i, updateVertex, nowFace);
+            }
+          } else {
+            previewFace.push(new THREE.Vector3(vertex.x, vertex.y, vertex.z));
+          }
         } else {
-          vertex.z += Z_GAP * frontOrBack;
-        }
+          if (isBorderVertices) {
+            vertex.z += Z_GAP * -frontOrBack;
+          } else {
+            vertex.z += Z_GAP * frontOrBack;
+          }
 
-        previewFace.push(new THREE.Vector3(vertex.x, vertex.y, vertex.z));
+          previewFace.push(new THREE.Vector3(vertex.x, vertex.y, vertex.z));
 
-        if (isFolding) {
-          const updateVertex = isGuideMode ? updateZPosition(vertex) : vertex;
-          updateVertexPosition(allPositions, i, updateVertex, nowFace);
+          if (isFolding) {
+            const updateVertex = isGuideMode ? updateZPosition(vertex) : vertex;
+            updateVertexPosition(allPositions, i, updateVertex, nowFace);
+          }
         }
       }
     }

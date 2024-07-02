@@ -10,6 +10,10 @@ import {
 } from './modules/guideSlide';
 import { saveUserInfo } from './services/userService';
 import { isGuideMode } from './modules/guideModules';
+import {
+  showLoadingSpinner,
+  hideLoadingSpinner,
+} from './modules/loadingSpinner';
 
 import { paper } from '../three/Paper';
 
@@ -93,10 +97,12 @@ shareButton.addEventListener('click', async event => {
 
   if (!regex.test(userName)) {
     showToastMessage(TOAST_MESSAGE.NO_NICKNAME);
+    hideLoadingSpinner();
     return;
   }
 
   try {
+    showLoadingSpinner();
     const origamiPositions = Array.from(
       paper.geometry.attributes.position.array
     );
@@ -108,5 +114,7 @@ shareButton.addEventListener('click', async event => {
     window.location.href = `/gallery?id=${userId}`;
   } catch (error) {
     showToastMessage(TOAST_MESSAGE.ERROR_SAVE, error);
+  } finally {
+    hideLoadingSpinner();
   }
 });

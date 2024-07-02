@@ -8,6 +8,12 @@ import {
   fetchUserPositions,
 } from '../components/services/getUserService';
 import { sizes } from '../three/Sizes';
+import {
+  showLoadingSpinner,
+  hideLoadingSpinner,
+} from './modules/loadingSpinner';
+
+showLoadingSpinner();
 
 document.addEventListener('DOMContentLoaded', async () => {
   const slideInner = document.querySelector('.slide-inner');
@@ -98,6 +104,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           const newList = await makeShareList(allItems[itemIndex].id);
           if (newList) {
             newPage.appendChild(newList);
+            hideLoadingSpinner();
           }
         }
 
@@ -155,6 +162,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     modalHeading.textContent = nickname;
 
     await handleUserPositions(id);
+
+    hideLoadingSpinner();
   };
 
   const closeModal = () => {
@@ -205,7 +214,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   const checkUrlForModal = async idValue => {
     if (idValue) {
-      const activeShareList = document.querySelector(`#${idValue}`);
+      const escapedIdValue = CSS.escape(idValue);
+      const activeShareList = document.querySelector(`#${escapedIdValue}`);
       if (activeShareList) {
         shareModalOn(idValue);
       }

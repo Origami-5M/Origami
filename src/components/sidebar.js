@@ -2,6 +2,7 @@ const homeButton = document.querySelector('.home-button');
 const sidebarToggleButton = document.querySelector('.mode-button');
 const galleryButton = document.querySelector('.gallery-button');
 const infoButton = document.querySelector('.info-button');
+const infoWrap = document.querySelector('.info-wrap');
 const soundButton = document.querySelector('.sound-button');
 
 const modeSidebar = document.querySelector('.mode-sidebar');
@@ -15,7 +16,6 @@ const guideMode = urlParams.get('mode');
 let isMuted = false;
 
 const toggleInfo = () => {
-  const infoWrap = document.querySelector('.info-wrap');
   infoWrap.classList.toggle('visible');
   infoButton.classList.toggle('active');
 };
@@ -72,6 +72,14 @@ document.addEventListener('click', event => {
   ) {
     modeSidebar.classList.remove('visible');
     sidebarToggleButton.classList.remove('active');
+  }
+
+  if (
+    !event.target.closest('.info-wrap') &&
+    !event.target.closest('.info-button')
+  ) {
+    infoWrap.classList.remove('visible');
+    infoButton.classList.remove('active');
   }
 });
 

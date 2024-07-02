@@ -1,3 +1,11 @@
+#share-container {
+  display: none;
+}
+
+.main-container.share-container.block {
+  display: flex;
+}
+
 .main-container.share-container section {
   position: relative;
   display: flex;

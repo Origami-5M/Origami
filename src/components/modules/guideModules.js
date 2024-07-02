@@ -107,18 +107,3 @@ export {
   updateZPosition,
   stepPlaneVertex,
 };
-// if (z > -Infinity && z < 0.01) {
-//   a++;
-// } else if (z >= 0.01 && z < 0.03) {
-//   b++;
-// } else if (z >= 0.03 && z < 0.05) {
-//   c++;
-// } else if (z >= 0.05 && z < 0.07) {
-//   d++;
-// } else if (z >= 0.07 && z < 0.09) {
-//   e++;
-// } else if (z >= 0.09 && z < 0.11) {
-//   f++;
-// } else {
-//   g++;
-// }

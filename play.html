@@ -17,6 +17,10 @@
     <main class="main-container play-wrap">
       <section class="play-cont">
         <div id="toastMessage"></div>
+        <div class="play-guide">
+          <p><span>카메라 정면:</span> 빈 영역 더블클릭 하세요</p>
+          <p><span>카메라 회전: </span> 빈 영역 드래그 하세요</p>
+        </div>
         <canvas class="play-canvas"></canvas>
         <div class="guide-wrap none">
           <div class="guide-slider">
@@ -33,10 +37,16 @@
         <div class="bottom-layout">
           <ul>
             <li>
-              <button class="circle-button restart-button"></button>
+              <button
+                class="circle-button restart-button tooltip-button"
+                data-tooltip-key="RESTART_TOOLTIP"
+              ></button>
             </li>
             <li>
-              <button class="round-button button-red finish-button">
+              <button
+                class="round-button button-red finish-button tooltip-button"
+                data-tooltip-key="FINISH_TOOLTIP"
+              >
                 FINISH
               </button>
             </li>
@@ -46,8 +56,9 @@
           <ul>
             <li>
               <button
-                class="circle-button unfold-button"
+                class="circle-button unfold-button tooltip-button"
                 id="unfoldButton"
+                data-tooltip-key="UNFOLD_TOOLTIP"
                 disabled
               >
                 UNFOLD
@@ -55,15 +66,17 @@
             </li>
             <li>
               <button
-                class="circle-button rollback-button button-purple"
+                class="circle-button rollback-button button-purple tooltip-button"
                 id="prevButton"
+                data-tooltip-key="PRESTEP_TOOLTIP"
                 disabled
               ></button>
             </li>
             <li>
               <button
-                class="circle-button commit-button button-purple"
+                class="circle-button commit-button button-purple tooltip-button"
                 id="nextButton"
+                data-tooltip-key="NEXTSTEP_TOOLTIP"
                 disabled
               ></button>
             </li>
@@ -80,7 +93,10 @@
               placeholder="등록할 이름을 입력해주세요."
             />
             <div class="complete-button-container">
-              <button class="round-button button-purple restart-button">
+              <button
+                class="round-button button-purple restart-button"
+                data-tooltip-key="RESTART_TOOLTIP"
+              >
                 RESTART
               </button>
               <button
@@ -96,12 +112,24 @@
       </section>
       <nav class="side-nav">
         <div>
-          <button class="home-button nav-button"></button>
-          <button class="mode-button nav-button"></button>
-          <button class="gallery-button nav-button"></button>
+          <button
+            class="home-button nav-button tooltip-button"
+            data-tooltip-key="HOME_TOOLTIP"
+          ></button>
+          <button
+            class="mode-button nav-button tooltip-button"
+            data-tooltip-key="PLAYMODELIST_TOOLTIP"
+          ></button>
+          <button
+            class="gallery-button nav-button tooltip-button"
+            data-tooltip-key="GALLERY_TOOLTIP"
+          ></button>
         </div>
         <div>
-          <button class="sound-button nav-button">
+          <button
+            class="sound-button nav-button tooltip-button"
+            data-tooltip-key="SOUND_TOOLTIP"
+          >
             <audio
               class="main-bgm"
               src="/src/assets/sound/origami_main_music.mp3"
@@ -109,7 +137,10 @@
               autoplay
             ></audio>
           </button>
-          <button class="info-button nav-button"></button>
+          <button
+            class="info-button nav-button tooltip-button"
+            data-tooltip-key="PLAYGUIDE_TOOLTIP"
+          ></button>
           <div class="info-wrap">
             <p>
               안녕하세요! 드래그를 사용하여 종이를 접는 방법을
@@ -136,7 +167,11 @@
       </nav>
       <aside class="mode-sidebar">
         <ul class="mode-list">
-          <li data-guideMode="puppy">
+          <li
+            class="tooltip-button"
+            data-guideMode="puppy"
+            data-tooltip-key="MODESELECT_TOOLTIP"
+          >
             <div>
               <h3>Puppy</h3>
               <p>
@@ -147,7 +182,11 @@
               </p>
             </div>
           </li>
-          <li class="mode-list" data-guideMode="plane">
+          <li
+            class="tooltip-button"
+            data-guideMode="plane"
+            data-tooltip-key="MODESELECT_TOOLTIP"
+          >
             <div>
               <h3>Plane</h3>
               <p>
@@ -158,7 +197,11 @@
               </p>
             </div>
           </li>
-          <li class="mode-list" data-guideMode="heart">
+          <li
+            class="tooltip-button"
+            data-guideMode="heart"
+            data-tooltip-key="MODESELECT_TOOLTIP"
+          >
             <div>
               <h3>Heart</h3>
               <p>
@@ -170,15 +213,14 @@
             </div>
           </li>
         </ul>
-        <div class="sidebar-footer">
-          <button class="button-red small-start-button mode-change-button">
-            START
-          </button>
-        </div>
       </aside>
     </main>
     <script type="module" src="/src/components/play.js"></script>
     <script type="module" src="/src/components/sidebar.js"></script>
     <script type="module" src="src/components/modules/origami.js"></script>
+    <script
+      type="module"
+      src="src/components/modules/showTooltipMessage.js"
+    ></script>
   </body>
 </html>

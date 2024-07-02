@@ -32,6 +32,21 @@ const TOAST_MESSAGE = {
   ERROR_DEFAULT: '🚨 오류가 발생하였습니다',
 };
 
+const TOOLTIP_MESSAGES = {
+  HOME_TOOLTIP: '홈으로 이동합니다',
+  PLAYMODELIST_TOOLTIP: '플레이모드 리스트를 볼 수 있습니다',
+  GALLERY_TOOLTIP: '갤러리로 이동합니다',
+  SOUND_TOOLTIP: '음악을 음소거할 수 있습니다',
+  PLAYGUIDE_TOOLTIP: '플레이 가이드를 볼 수 있습니다',
+  RESTART_TOOLTIP: '현재 모드의 처음 단계로 이동합니다',
+  FINISH_TOOLTIP: '종이접기를 완료합니다',
+  UNFOLD_TOOLTIP: '종이를 펼칩니다',
+  PRESTEP_TOOLTIP: '전 단계로 돌아갑니다',
+  NEXTSTEP_TOOLTIP: '다음 단계로 돌아갑니다',
+  SHARE_TOOLTIP: '공유할 수 있습니다',
+  MODESELECT_TOOLTIP: '클릭하면 해당 모드로 이동합니다',
+};
+
 export {
   POINTS_MARKER_COLOR,
   POINTS_MARKER_SIZE,
@@ -45,4 +60,5 @@ export {
   DIAMETER,
   FRAMES,
   TOAST_MESSAGE,
+  TOOLTIP_MESSAGES,
 };

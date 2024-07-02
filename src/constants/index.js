@@ -1,8 +1,15 @@
-const POINTS_MARKER_COLOR = '#098cea';
+const POINTS_MARKER_COLOR = '#000';
+const POINTS_MARKER_SIZE = 0.07;
 const RED_MARKER_COLOR = '#ff0000';
 const PAPERCOLORS = [
-  0x1aa24d, 0xf2482e, 0x343394, 0xfed53d, 0x000000, 0xff9fd5, 0x9ddef4,
-  0xff8158,
+  '#D9F1CA',
+  '#FF9A9A',
+  '#D9C8FF',
+  '#FFF3C8',
+  '#FFD6E7',
+  '#959595',
+  '#FFDEB8',
+  '#BDFBFF',
 ];
 
 const SEGMENT_NUM = 150;
@@ -27,6 +34,7 @@ const TOAST_MESSAGE = {
 
 export {
   POINTS_MARKER_COLOR,
+  POINTS_MARKER_SIZE,
   RED_MARKER_COLOR,
   PAPERCOLORS,
   SEGMENT_NUM,

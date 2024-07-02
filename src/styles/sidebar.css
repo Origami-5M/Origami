@@ -25,9 +25,10 @@
 .info-wrap {
   position: absolute;
   z-index: 3;
-  bottom: 160px;
+  bottom: 140px;
   right: 120px;
   display: none;
+  font-size: 14px;
   border-radius: 30px;
   background-color: #fff;
   transition: all 0.2s ease-in-out;

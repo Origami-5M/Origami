@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { POINTS_MARKER_COLOR } from '../../constants';
+import { POINTS_LINE_COLOR } from '../../constants';
 
 const getBoundaryPoint = points => {
   if (!points) {
@@ -89,7 +89,7 @@ const drawThickLine = (points, color, thickness) => {
 
 const prevFoldingArea = (foldedVertices, thickness = 0.01) => {
   const hullVertices = getBoundaryPoint(foldedVertices);
-  const line = drawThickLine(hullVertices, POINTS_MARKER_COLOR, thickness);
+  const line = drawThickLine(hullVertices, POINTS_LINE_COLOR, thickness);
 
   if (!line) {
     return;

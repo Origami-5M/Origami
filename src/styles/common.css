@@ -133,12 +133,11 @@ p {
 }
 
 .button-purple {
-  background-color: #343394;
-  opacity: 50%;
+  background-color: #7877cb;
 }
 
 .button-purple:not(:disabled):hover {
-  opacity: 100%;
+  background-color: #343394;
 }
 
 .button-purple:disabled {

@@ -22,10 +22,14 @@ const checkUnfoldButtons = () => {
 };
 
 const updateStep = step => {
-  nowStep += step;
-  goToSlide(nowStep);
-  checkUnfoldButtons();
-  changeBorderVertices();
+  const newStep = nowStep + step;
+
+  if (newStep >= 0 && newStep < guideStep.length) {
+    nowStep = newStep;
+    goToSlide(nowStep);
+    checkUnfoldButtons();
+    changeBorderVertices(guideStep[nowStep].points);
+  }
 };
 
 const updateZPosition = vertex => {

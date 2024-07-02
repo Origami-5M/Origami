@@ -399,12 +399,10 @@ const handleMouseUp = () => {
     !guideStep[nowStep].unfold
   ) {
     showToastMessage(TOAST_MESSAGE.SAME_POSITION);
-  } else if (
-    !pointsMarker.visible &&
-    clickedRedMarker.visible &&
-    guideStep[nowStep].unfold
-  ) {
-    showToastMessage(TOAST_MESSAGE.NO_POINTMARKER);
+  } else if (!pointsMarker.visible && clickedRedMarker.visible) {
+    if (!isGuideMode) {
+      showToastMessage(TOAST_MESSAGE.NO_POINTMARKER);
+    }
   } else if (pointsMarker.visible && clickedRedMarker.visible) {
     if (intersects.length > 0) {
       const intersectPoint = intersects[0].point;

@@ -27,6 +27,7 @@ const generateBorderPoints = (corners, pointsPerEdge = 9) => {
     const start = corners[i];
     const end = corners[(i + 1) % corners.length];
     const interpolatedPoints = interpolatePoints(start, end, pointsPerEdge);
+
     borderPoints.push(...interpolatedPoints);
     borderVertices.push(...interpolatedPoints);
   }
@@ -51,9 +52,7 @@ const addVertices = () => {
 };
 
 const changeBorderVertices = newData => {
-  if (newData) {
-    borderVertices = newData;
-  }
+  borderVertices = newData;
 };
 
 const corners = findBorderVertices();

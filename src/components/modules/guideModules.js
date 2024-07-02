@@ -6,8 +6,13 @@ let nowStep = 0;
 
 const urlParams = new URLSearchParams(window.location.search);
 const mode = urlParams.get('mode');
+
 const isGuideMode = Boolean(mode);
 const guideStep = GUIDE_STEPS[mode];
+const initialGuideStep = isGuideMode
+  ? JSON.parse(JSON.stringify(guideStep))
+  : null;
+
 const unfoldButton = document.querySelector('#unfoldButton');
 const stepPlaneVertex = {
   stepVertex8: [],
@@ -17,6 +22,7 @@ const stepPlaneVertex = {
 const stepPuppyVertex = {
   stepVertex1: [],
 };
+
 const checkUnfoldButtons = () => {
   unfoldButton.disabled = !guideStep[nowStep].unfold;
 };
@@ -28,7 +34,8 @@ const updateStep = step => {
     nowStep = newStep;
     goToSlide(nowStep);
     checkUnfoldButtons();
-    changeBorderVertices(guideStep[nowStep].points);
+
+    changeBorderVertices(initialGuideStep[nowStep].points);
   }
 };
 

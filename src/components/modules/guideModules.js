@@ -30,9 +30,11 @@ const checkUnfoldButtons = () => {
 const updateStep = step => {
   const newStep = nowStep + step;
 
-  if (newStep >= 0 && newStep < guideStep.length) {
+  if (newStep >= 0 && newStep <= guideStep.length) {
     nowStep = newStep;
-    goToSlide(nowStep);
+    if (newStep < guideStep.length - 1) {
+      goToSlide(nowStep);
+    }
     checkUnfoldButtons();
 
     changeBorderVertices(initialGuideStep[nowStep].points);

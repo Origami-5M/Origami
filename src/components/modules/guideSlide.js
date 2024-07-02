@@ -48,7 +48,7 @@ const goToSlide = index => {
   translate = -listWidth * index;
   slider.style.transform = `translateX(${translate}px)`;
 
-  if (typeof index == 'number') {
+  if (typeof index === 'number') {
     currentIdx = index;
     paginationText.textContent = `${currentIdx + 1} / ${slideList.length}`;
   } else {

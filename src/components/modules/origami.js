@@ -49,6 +49,7 @@ import {
   POINTS_MARKER_COLOR,
   RED_MARKER_COLOR,
   TOAST_MESSAGE,
+  SETTIMEOUT_DEFAULT,
 } from '../../constants';
 
 const section = document.querySelector('section');
@@ -349,7 +350,7 @@ const handleMouseUp = () => {
           if (nowStep === 12) {
             setTimeout(() => {
               showFinishScreen();
-            }, 1500);
+            }, SETTIMEOUT_DEFAULT);
           }
         }
       }
@@ -443,7 +444,7 @@ const handleMouseUp = () => {
             if (nowStep === 7) {
               setTimeout(() => {
                 showFinishScreen();
-              }, 1500);
+              }, SETTIMEOUT_DEFAULT);
             }
           }
         }

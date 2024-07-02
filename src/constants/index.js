@@ -50,6 +50,8 @@ const TOOLTIP_MESSAGES = {
   PREV_TOOLTIP: '이전 스텝 가이드를 보여줍니다',
 };
 
+const SETTIMEOUT_DEFAULT = 1500;
+
 export {
   POINTS_MARKER_COLOR,
   POINTS_MARKER_SIZE,
@@ -65,4 +67,5 @@ export {
   FRAMES,
   TOAST_MESSAGE,
   TOOLTIP_MESSAGES,
+  SETTIMEOUT_DEFAULT,
 };

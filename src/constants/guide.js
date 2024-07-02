@@ -7,7 +7,6 @@ const GUIDE_IMAGES = {
     '/src/assets/img/guide/puppy-guide5.png',
     '/src/assets/img/guide/puppy-guide6.png',
     '/src/assets/img/guide/puppy-guide7.png',
-    '/src/assets/img/guide/puppy-guide8.png',
   ],
   plane: [
     '/src/assets/img/guide/plane-guide1.png',

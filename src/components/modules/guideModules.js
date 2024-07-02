@@ -42,12 +42,18 @@ const updateZPosition = vertex => {
         vertex.z = 0.04;
       }
     } else if (nowStep === 7) {
-      if (z > -Infinity && z < 0.01) {
-        vertex.z = -0.04;
+      if (z > -0.05 && z < -0.03) {
+        vertex.z = 0.01;
+      } else if (z >= -0.03 && z < -0.01) {
+        vertex.z = -0.01;
+      } else if (z >= -0.01 && z < 0.01) {
+        vertex.z = -0.03;
       } else if (z >= 0.01 && z < 0.03) {
-        vertex.z = -0.06;
+        vertex.z = -0.05;
       } else if (z >= 0.03 && z < 0.05) {
-        vertex.z = -0.08;
+        vertex.z = -0.07;
+      } else if (z >= 0.05 && z < 0.07) {
+        vertex.z = -0.09;
       }
       stepPlaneVertex.stepVertex8.push(vertex);
     } else if (nowStep === 8) {

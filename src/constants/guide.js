@@ -233,6 +233,18 @@ const GUIDE_STEPS = {
       unfold: true,
       singleSide: true,
     },
+    {
+      points: [],
+      axis: {
+        startPoint: { x: 0.3198644103773862, y: 0.7579457641509544 },
+        endPoint: {
+          x: 0.48,
+          y: 0,
+        },
+      },
+      unfold: false,
+      singleSide: true,
+    },
   ],
 };
 

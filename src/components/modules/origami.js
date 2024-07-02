@@ -345,6 +345,13 @@ const handleMouseUp = () => {
 
         selectedVerticesInitializeSet();
         updateStep(1);
+        if (mode === 'plane') {
+          if (nowStep === 12) {
+            setTimeout(() => {
+              showFinishScreen();
+            }, 1500);
+          }
+        }
       }
     }
   } else if (mode === 'puppy') {
@@ -432,8 +439,13 @@ const handleMouseUp = () => {
 
         if (isGuideMode) {
           updateStep(1);
-        } else {
-          addVertices();
+          if (mode === 'puppy') {
+            if (nowStep === 7) {
+              setTimeout(() => {
+                showFinishScreen();
+              }, 1500);
+            }
+          }
         }
       }
     }
@@ -499,18 +511,19 @@ const launchConfetti = () => {
   }
 };
 
-finishButton.addEventListener('click', () => {
+const showFinishScreen = () => {
   isFinished = true;
-
   completeCont.classList.remove('none');
   section.classList.add('active');
-
   launchConfetti();
   confettiIntervalId = setInterval(launchConfetti, 3500);
-
   renderer.clear();
   handleResize();
   initializeCamera();
+};
+
+finishButton.addEventListener('click', () => {
+  showFinishScreen();
 });
 
 prevButton.addEventListener('click', () => {

@@ -371,8 +371,6 @@ const handleMouseUp = () => {
   } else {
     const isClockwise = false;
 
-    onFoldChange();
-
     rotateSelectedVertices(
       allVertex,
       selectedVertices,
@@ -395,9 +393,17 @@ const handleMouseUp = () => {
     scene.remove(existingPolygon);
   }
 
-  if (areMarkersAtSamePosition && clickedRedMarker.visible) {
+  if (
+    areMarkersAtSamePosition &&
+    clickedRedMarker.visible &&
+    !guideStep[nowStep].unfold
+  ) {
     showToastMessage(TOAST_MESSAGE.SAME_POSITION);
-  } else if (!pointsMarker.visible && clickedRedMarker.visible) {
+  } else if (
+    !pointsMarker.visible &&
+    clickedRedMarker.visible &&
+    guideStep[nowStep].unfold
+  ) {
     showToastMessage(TOAST_MESSAGE.NO_POINTMARKER);
   } else if (pointsMarker.visible && clickedRedMarker.visible) {
     if (intersects.length > 0) {

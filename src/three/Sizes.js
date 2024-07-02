@@ -22,8 +22,6 @@ if (playCont) {
     width: modalSizes.width,
     height: modalSizes.height,
   };
-} else {
-  console.error('Neither .play-cont nor .detail-scene element found');
 }
 
 export { sizes };

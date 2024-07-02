@@ -1,8 +1,8 @@
 import { showToastMessage } from '../modules/showToastMessage';
 import { TOAST_MESSAGE } from '../../constants';
 import { frontColor, backColor } from '../../three/Paper';
-import { db } from '../../../firebase';
 import { collection, addDoc, doc, setDoc } from 'firebase/firestore';
+import { db } from '../../../firebase';
 
 const saveUserInfo = async (nickname, thumbnail, origamiChunks) => {
   try {

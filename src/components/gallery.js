@@ -8,6 +8,8 @@ import {
   fetchUserPositions,
 } from '../components/services/getUserService';
 import { sizes } from '../three/Sizes';
+// import { camera } from '../three/Camera';
+// import { controls } from '../three/Controls';
 
 document.addEventListener('DOMContentLoaded', async () => {
   const slideInner = document.querySelector('.slide-inner');
@@ -20,8 +22,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.search);
   const idValue = params.get('id');
+  console.log(idValue);
   const sceneCont = document.querySelector('.detail-scene');
-
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(
     75,
@@ -76,7 +78,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       return newList;
     } catch (error) {
-      console.error('Error fetching user document:', error);
+      showToastMessage(TOAST_MESSAGE.ERROR_DEFAULT);
     }
   };
 
@@ -109,7 +111,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       checkUrlForModal(idValue);
       await handleUserPositions(idValue);
     } catch (error) {
-      console.error('Error creating pages:', error);
+      showToastMessage(TOAST_MESSAGE.ERROR_DEFAULT);
     }
   };
 
@@ -197,8 +199,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       .then(() => {
         showToastMessage(TOAST_MESSAGE.URL_COPY);
       })
-      .catch(err => {
-        console.error('URL 복사 중 오류가 발생했습니다:', err);
+      .catch(() => {
+        showToastMessage(TOAST_MESSAGE.ERROR_COPY);
       });
   };
 
@@ -206,8 +208,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   const checkUrlForModal = async idValue => {
     if (idValue) {
-      const escapedIdValue = CSS.escape(idValue);
-      const activeShareList = document.querySelector(`#${escapedIdValue}`);
+      const activeShareList = document.querySelector(`#${idValue}`);
       if (activeShareList) {
         shareModalOn(idValue);
       }
@@ -218,15 +219,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (idValue) {
       try {
         const saveCoordinates = await fetchUserPositions(idValue);
-        console.log(saveCoordinates);
         if (saveCoordinates.length) {
           renderOrigami(saveCoordinates);
         }
       } catch (error) {
-        console.error('Error fetching user positions:', error);
+        showToastMessage(TOAST_MESSAGE.ERROR_DEFAULT);
       }
-    } else {
-      console.warn('idValue is null or undefined');
     }
   };
 
@@ -245,7 +243,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     for (let i = 0; i < flattenedPositions.length / 3 - 2; i += 3) {
       indices.push(i, i + 1, i + 2);
     }
-    console.log(indices);
     geometry.setIndex(indices);
     geometry.computeVertexNormals();
     const material = new THREE.MeshBasicMaterial({

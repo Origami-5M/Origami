@@ -6,12 +6,6 @@
   -ms-use-select: none;
 }
 
-body {
-  margin: 0;
-  padding: 20px;
-  background-color: #343394;
-}
-
 .main-container {
   position: relative;
   display: flex;

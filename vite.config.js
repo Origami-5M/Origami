@@ -14,6 +14,7 @@ export default defineConfig({
         gallery: resolve(__dirname, 'gallery.html'),
         shareDetail: resolve(__dirname, 'shareDetail.html'),
         completePage: resolve(__dirname, 'completePage.html'),
+        accessDenied: resolve(__dirname, 'accessDenied.html'),
       },
     },
   },

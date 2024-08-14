@@ -437,6 +437,7 @@ const handleMouseUp = () => {
           isAxisPoint
         );
         checkActiveButtons(prevButton, nextButton);
+        addVertices();
 
         if (isGuideMode) {
           updateStep(1);

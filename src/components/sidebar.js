@@ -20,23 +20,27 @@ const toggleInfo = () => {
   infoButton.classList.toggle('active');
 };
 
-const checkList = event => {
+export const navigateToPlayPage = mode => {
+  let url = new URL(`${window.location.origin}/play`);
+  let params = new URLSearchParams(url.search);
+  params.append('mode', mode);
+  url.search = params.toString();
+  window.location.assign(url.toString());
+};
+
+export const checkList = event => {
+  const modeLists = document.querySelectorAll('.mode-list li');
   modeLists.forEach(item => {
     if (item !== event.currentTarget) {
       item.classList.remove('active');
     } else {
       if (event.currentTarget.hasAttribute('data-guideMode')) {
-        let url = new URL(`${window.location.origin}/play`);
-        let params = new URLSearchParams(url.search);
         const selectGuideMode =
           event.currentTarget.getAttribute('data-guideMode');
-        params.append('mode', selectGuideMode);
-        url.search = params.toString();
-        window.location.href = url.toString();
+        navigateToPlayPage(selectGuideMode);
       }
     }
   });
-
   event.currentTarget.classList.toggle('active');
 };
 
@@ -46,44 +50,7 @@ modeLists.forEach(item => {
   }
 });
 
-infoButton.addEventListener('click', toggleInfo);
-modeLists.forEach(item => {
-  item.addEventListener('click', checkList);
-});
-
-homeButton.addEventListener('click', () => {
-  window.location.href = `/`;
-});
-
-sidebarToggleButton.addEventListener('click', event => {
-  sidebarToggleButton.classList.toggle('active');
-  modeSidebar.classList.toggle('visible');
-  event.stopPropagation();
-});
-
-galleryButton.addEventListener('click', () => {
-  window.location.href = `/gallery`;
-});
-
-document.addEventListener('click', event => {
-  if (
-    !event.target.closest('.mode-sidebar') &&
-    !event.target.closest('.mode-button')
-  ) {
-    modeSidebar.classList.remove('visible');
-    sidebarToggleButton.classList.remove('active');
-  }
-
-  if (
-    !event.target.closest('.info-wrap') &&
-    !event.target.closest('.info-button')
-  ) {
-    infoWrap.classList.remove('visible');
-    infoButton.classList.remove('active');
-  }
-});
-
-const changeSoundButton = isMuted => {
+export const changeSoundButton = (soundButton, mainBgm, isMuted) => {
   if (isMuted) {
     soundButton.style.backgroundPosition = '-100px -137px';
     mainBgm.pause();
@@ -93,7 +60,63 @@ const changeSoundButton = isMuted => {
   }
 };
 
-soundButton.addEventListener('click', () => {
-  isMuted = !isMuted;
-  changeSoundButton(isMuted);
-});
+export const setupEventListeners = () => {
+  if (infoButton) {
+    infoButton.addEventListener('click', toggleInfo);
+  }
+  if (modeLists.length) {
+    modeLists.forEach(item => {
+      item.addEventListener('click', checkList);
+    });
+  }
+  if (homeButton) {
+    homeButton.addEventListener('click', () => {
+      window.location.href = `/`;
+    });
+  }
+  if (sidebarToggleButton && modeSidebar) {
+    sidebarToggleButton.addEventListener('click', event => {
+      sidebarToggleButton.classList.toggle('active');
+      modeSidebar.classList.toggle('visible');
+      event.stopPropagation();
+    });
+  }
+  if (galleryButton) {
+    galleryButton.addEventListener('click', () => {
+      window.location.href = `/gallery`;
+    });
+  }
+  if (soundButton) {
+    soundButton.addEventListener('click', () => {
+      isMuted = !isMuted;
+      changeSoundButton(soundButton, mainBgm, isMuted);
+    });
+  }
+  document.addEventListener('click', event => {
+    if (
+      !event.target.closest('.mode-sidebar') &&
+      !event.target.closest('.mode-button')
+    ) {
+      if (modeSidebar) {
+        modeSidebar.classList.remove('visible');
+      }
+      if (sidebarToggleButton) {
+        sidebarToggleButton.classList.remove('active');
+      }
+    }
+
+    if (
+      !event.target.closest('.info-wrap') &&
+      !event.target.closest('.info-button')
+    ) {
+      if (infoWrap) {
+        infoWrap.classList.remove('visible');
+      }
+      if (infoButton) {
+        infoButton.classList.remove('active');
+      }
+    }
+  });
+};
+
+document.addEventListener('DOMContentLoaded', setupEventListeners);

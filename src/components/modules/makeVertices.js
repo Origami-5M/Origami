@@ -58,4 +58,9 @@ const changeBorderVertices = newData => {
 const corners = findBorderVertices();
 borderVertices = generateBorderPoints(corners);
 
-export { borderVertices, addVertices, changeBorderVertices };
+export {
+  borderVertices,
+  addVertices,
+  changeBorderVertices,
+  findBorderVertices,
+};

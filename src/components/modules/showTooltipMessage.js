@@ -1,5 +1,24 @@
 import { TOOLTIP_MESSAGES } from '../../constants/index';
 
+export function moveTooltip(event, tooltipText) {
+  const tooltipRect = tooltipText.getBoundingClientRect();
+  const offsetX = 10;
+  const offsetY = 20;
+
+  let tooltipX = event.clientX + offsetX;
+  let tooltipY = event.clientY + offsetY;
+
+  if (tooltipX + tooltipRect.width > window.innerWidth) {
+    tooltipX = event.clientX - tooltipRect.width - offsetX;
+  }
+  if (tooltipY + tooltipRect.height > window.innerHeight) {
+    tooltipY = event.clientY - tooltipRect.height - offsetY;
+  }
+
+  tooltipText.style.left = `${tooltipX}px`;
+  tooltipText.style.top = `${tooltipY}px`;
+}
+
 document.querySelectorAll('.tooltip-button').forEach(button => {
   let tooltipText;
 
@@ -15,11 +34,13 @@ document.querySelectorAll('.tooltip-button').forEach(button => {
       tooltipText.style.visibility = 'visible';
       tooltipText.style.opacity = '1';
       document.body.appendChild(tooltipText);
-      moveTooltip(event);
+      moveTooltip(event, tooltipText);
     }
   });
 
-  button.addEventListener('mousemove', moveTooltip);
+  button.addEventListener('mousemove', event =>
+    moveTooltip(event, tooltipText)
+  );
 
   button.addEventListener('mouseout', function () {
     if (tooltipText) {
@@ -29,23 +50,4 @@ document.querySelectorAll('.tooltip-button').forEach(button => {
       tooltipText = null;
     }
   });
-
-  function moveTooltip(event) {
-    const tooltipRect = tooltipText.getBoundingClientRect();
-    const offsetX = 10;
-    const offsetY = 20;
-
-    let tooltipX = event.clientX + offsetX;
-    let tooltipY = event.clientY + offsetY;
-
-    if (tooltipX + tooltipRect.width > window.innerWidth) {
-      tooltipX = event.clientX - tooltipRect.width - offsetX;
-    }
-    if (tooltipY + tooltipRect.height > window.innerHeight) {
-      tooltipY = event.clientY - tooltipRect.height - offsetY;
-    }
-
-    tooltipText.style.left = `${tooltipX}px`;
-    tooltipText.style.top = `${tooltipY}px`;
-  }
 });

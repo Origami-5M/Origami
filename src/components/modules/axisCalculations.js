@@ -5,7 +5,7 @@ let axisPoints = {};
 
 const getAxisPoints = () => axisPoints;
 
-const computeBoundaryPoints = points => {
+export const computeBoundaryPoints = points => {
   points.sort((a, b) => a.x - b.x || a.y - b.y);
 
   const lowerPoints = [];
@@ -44,7 +44,7 @@ const computeBoundaryPoints = points => {
   return lowerPoints.concat(upperPoints);
 };
 
-const isLeftTurn = (referencePoint, currentPoint, nextPoint) => {
+export const isLeftTurn = (referencePoint, currentPoint, nextPoint) => {
   return (
     (currentPoint.x - referencePoint.x) * (nextPoint.y - referencePoint.y) -
       (currentPoint.y - referencePoint.y) * (nextPoint.x - referencePoint.x) >
@@ -118,7 +118,7 @@ const calculateRotatedLine = (
   return { rotatedLine, axisPoints };
 };
 
-const extendToBoundary = (midpoint, direction, boundaryPoint, scale) => {
+export const extendToBoundary = (midpoint, direction, boundaryPoint, scale) => {
   let closestIntersection = null;
   let minDistance = Infinity;
 
@@ -152,7 +152,7 @@ const extendToBoundary = (midpoint, direction, boundaryPoint, scale) => {
   );
 };
 
-const getIntersection = (midpoint, direction, pointA, pointB, scale) => {
+export const getIntersection = (midpoint, direction, pointA, pointB, scale) => {
   const scaledDirection = new THREE.Vector3()
     .copy(direction)
     .multiplyScalar(scale);

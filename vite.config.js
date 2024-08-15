@@ -18,4 +18,22 @@ export default defineConfig({
       },
     },
   },
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'json', 'html'],
+      exclude: [
+        'node_modules/',
+        './firebase.js',
+        './vite.config.js',
+        './eslint.config.js',
+        './src/constants/guide.js',
+        './src/constants/index.js',
+        './src/utils/helper.js',
+        '**/components/tests/**',
+      ],
+    },
+  },
 });

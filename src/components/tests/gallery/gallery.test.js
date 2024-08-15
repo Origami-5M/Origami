@@ -57,7 +57,7 @@ describe('Gallery Component', () => {
     gallery.setScene(mockScene);
   });
 
-  it('should create share list item correctly', async () => {
+  it('공유 리스트 아이템을 올바르게 생성해야 함', async () => {
     const mockUserDocument = {
       id: '123',
       nickname: 'Test User',
@@ -79,7 +79,7 @@ describe('Gallery Component', () => {
     expect(titleElement.textContent).toBe('Test User');
   });
 
-  it('should create correct number of pages', async () => {
+  it('올바른 수의 페이지를 생성해야 함', async () => {
     const mockAllDocuments = Array(9)
       .fill()
       .map((_, i) => ({ id: `${i + 1}` }));
@@ -96,7 +96,7 @@ describe('Gallery Component', () => {
     expect(slideInner.children.length).toBe(2);
   });
 
-  it('should handle modal opening and closing', async () => {
+  it('모달 열기와 닫기를 처리해야 함', async () => {
     getUserService.fetchUserDocument.mockResolvedValue({
       nickname: 'Test User',
     });
@@ -122,7 +122,7 @@ describe('Gallery Component', () => {
     ).toBe(true);
   });
 
-  it('should copy URL when share button is clicked', async () => {
+  it('공유 버튼 클릭 시 URL을 복사해야 함', async () => {
     Object.assign(navigator, {
       clipboard: {
         writeText: vi.fn().mockResolvedValue(undefined),
@@ -137,7 +137,7 @@ describe('Gallery Component', () => {
     expect(showToastMessage).toHaveBeenCalled();
   });
 
-  it('should update slide position correctly', () => {
+  it('슬라이드 위치를 올바르게 업데이트해야 함', () => {
     gallery.updateSlidePosition();
     const slideInner = document.querySelector('.slide-inner');
     expect(slideInner.style.transform).toBe('translateX(-0%)');
@@ -148,7 +148,7 @@ describe('Gallery Component', () => {
     expect(nextButton.style.display).toBe('block');
   });
 
-  it('should render origami correctly', () => {
+  it('종이접기를 올바르게 렌더링해야 함', () => {
     const mockScene = { children: [], add: vi.fn() };
     gallery.setScene(mockScene);
 
@@ -162,7 +162,7 @@ describe('Gallery Component', () => {
     expect(mockScene.add).toHaveBeenCalled();
   });
 
-  it('should render origami without errors', () => {
+  it('오류 없이 종이접기를 렌더링해야 함', () => {
     const mockPositionsData = [
       [0, 0, 0],
       [1, 0, 0],

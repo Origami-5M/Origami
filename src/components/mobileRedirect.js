@@ -1,6 +1,6 @@
-function isMobileDevice() {
+export const isMobileDevice = () => {
   return /Mobi|Android/i.test(navigator.userAgent);
-}
+};
 
 document.addEventListener('DOMContentLoaded', () => {
   if (isMobileDevice()) {

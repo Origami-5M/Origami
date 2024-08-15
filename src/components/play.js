@@ -1,5 +1,4 @@
 import html2canvas from 'html2canvas';
-
 import { showToastMessage } from './modules/showToastMessage';
 import { TOAST_MESSAGE } from '../constants';
 import { GUIDE_IMAGES, CHUNK_SIZE } from '../constants/guide';
@@ -14,47 +13,62 @@ import {
   showLoadingSpinner,
   hideLoadingSpinner,
 } from './modules/loadingSpinner';
-
 import { paper } from '../three/Paper';
 
-const finishCanvas = document.querySelector('.finish-canvas');
-const userNameInput = document.querySelector('.complete-input');
-const shareButton = document.querySelector('.share-button');
+let finishCanvas,
+  userNameInput,
+  shareButton,
+  guideWrap,
+  slider,
+  prevButton,
+  nextButton,
+  paginationText;
+let slideList = 0;
+let sliderWidth = 160;
 
 const urlParams = new URLSearchParams(window.location.search);
 const guideMode = urlParams.get('mode');
 
-const guideWrap = document.querySelector('.guide-wrap');
-const slider = guideWrap.querySelector('.slider');
-const prevButton = guideWrap.querySelector('.prev');
-const nextButton = guideWrap.querySelector('.next');
-const paginationText = guideWrap.querySelector('.pagination-text');
+const initializeDOMElements = () => {
+  finishCanvas = document.querySelector('.finish-canvas');
+  userNameInput = document.querySelector('.complete-input');
+  shareButton = document.querySelector('.share-button');
+  guideWrap = document.querySelector('.guide-wrap');
 
-let slideList = 0;
-let sliderWidth = 160;
+  if (guideWrap) {
+    slider = guideWrap.querySelector('.slider');
+    prevButton = guideWrap.querySelector('.prev');
+    nextButton = guideWrap.querySelector('.next');
+    paginationText = guideWrap.querySelector('.pagination-text');
+  }
+};
 
-if (guideMode) {
-  guideWrap.classList.remove('none');
+const initializeGuideMode = () => {
+  if (guideMode && guideWrap && slider) {
+    guideWrap.classList.remove('none');
 
-  GUIDE_IMAGES[guideMode].forEach((src, i) => {
-    const li = document.createElement('li');
-    const img = document.createElement('img');
-    img.src = src;
-    img.alt = `가이드 순서 ${i}`;
-    li.appendChild(img);
-    slider.appendChild(li);
-  });
+    GUIDE_IMAGES[guideMode].forEach((src, i) => {
+      const li = document.createElement('li');
+      const img = document.createElement('img');
+      img.src = src;
+      img.alt = `가이드 순서 ${i}`;
+      li.appendChild(img);
+      slider.appendChild(li);
+    });
 
-  slideList = slider.querySelectorAll('li');
-  sliderWidth = 160 * slideList.length;
+    slideList = slider.querySelectorAll('li');
+    sliderWidth = 160 * slideList.length;
 
-  slider.style.width = `${sliderWidth}px`;
+    slider.style.width = `${sliderWidth}px`;
 
-  paginationText.textContent = `${currentIdx + 1} / ${slideList.length}`;
-  updateSlideButtons();
-}
+    if (paginationText) {
+      paginationText.textContent = `${currentIdx + 1} / ${slideList.length}`;
+    }
+    updateSlideButtons();
+  }
+};
 
-document.body.addEventListener('click', event => {
+const handleRestartButton = event => {
   event.preventDefault();
   if (event.target.matches('.restart-button')) {
     if (isGuideMode) {
@@ -67,10 +81,7 @@ document.body.addEventListener('click', event => {
       window.location.reload();
     }
   }
-});
-
-prevButton.addEventListener('click', moveSlide);
-nextButton.addEventListener('click', moveSlide);
+};
 
 const captureThumbnail = async element => {
   const canvas = await html2canvas(element, {
@@ -90,7 +101,7 @@ const chunkArray = (array, chunkSize) => {
   return chunks;
 };
 
-shareButton.addEventListener('click', async event => {
+const handleShareButton = async event => {
   event.preventDefault();
   const regex = /\S/;
   const userName = userNameInput.value;
@@ -117,4 +128,52 @@ shareButton.addEventListener('click', async event => {
   } finally {
     hideLoadingSpinner();
   }
-});
+};
+
+const initializeEventListeners = () => {
+  if (document.body) {
+    document.body.addEventListener('click', handleRestartButton);
+  }
+  if (prevButton) {
+    prevButton.addEventListener('click', moveSlide);
+  }
+  if (nextButton) {
+    nextButton.addEventListener('click', moveSlide);
+  }
+  if (shareButton) {
+    shareButton.addEventListener('click', handleShareButton);
+  }
+};
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    initializeDOMElements();
+    initializeGuideMode();
+    initializeEventListeners();
+  });
+} else {
+  initializeDOMElements();
+  initializeGuideMode();
+  initializeEventListeners();
+}
+
+export {
+  initializeDOMElements,
+  initializeGuideMode,
+  handleRestartButton,
+  captureThumbnail,
+  chunkArray,
+  handleShareButton,
+  initializeEventListeners,
+  finishCanvas,
+  userNameInput,
+  shareButton,
+  guideMode,
+  guideWrap,
+  slider,
+  prevButton,
+  nextButton,
+  paginationText,
+  slideList,
+  sliderWidth,
+};

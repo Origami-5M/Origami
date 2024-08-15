@@ -3,18 +3,26 @@ import { GUIDE_IMAGES } from '../../constants/guide';
 const urlParams = new URLSearchParams(window.location.search);
 const guideMode = urlParams.get('mode');
 
-const guideWrap = document.querySelector('.guide-wrap');
-const prevButton = guideWrap.querySelector('.prev');
-const nextButton = guideWrap.querySelector('.next');
-const slider = guideWrap.querySelector('.slider');
-const paginationText = guideWrap.querySelector('.pagination-text');
+let guideWrap, prevButton, nextButton, slider, paginationText;
 
 const listWidth = 160;
 let slideList = GUIDE_IMAGES[guideMode];
 let translate = 0;
 let currentIdx = 0;
 
+const initializeDOMElements = () => {
+  guideWrap = document.querySelector('.guide-wrap');
+  if (guideWrap) {
+    prevButton = guideWrap.querySelector('.prev');
+    nextButton = guideWrap.querySelector('.next');
+    slider = guideWrap.querySelector('.slider');
+    paginationText = guideWrap.querySelector('.pagination-text');
+  }
+};
+
 const updateSlideButtons = () => {
+  if (!prevButton || !nextButton) return;
+
   if (currentIdx === 0) {
     prevButton.classList.add('hidden');
   } else {
@@ -45,6 +53,8 @@ const moveSlide = event => {
 };
 
 const goToSlide = index => {
+  if (!slider || !paginationText) return;
+
   translate = -listWidth * index;
   slider.style.transform = `translateX(${translate}px)`;
 
@@ -58,4 +68,24 @@ const goToSlide = index => {
   updateSlideButtons();
 };
 
-export { currentIdx, goToSlide, moveSlide, updateSlideButtons };
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initializeDOMElements);
+} else {
+  initializeDOMElements();
+}
+
+export {
+  initializeDOMElements,
+  updateSlideButtons,
+  moveSlide,
+  goToSlide,
+  currentIdx,
+  guideWrap,
+  prevButton,
+  nextButton,
+  slider,
+  paginationText,
+  listWidth,
+  slideList,
+  translate,
+};

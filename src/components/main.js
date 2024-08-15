@@ -20,11 +20,6 @@ const toggleSoundButton = isMuted => {
   }
 };
 
-soundButton.addEventListener('click', () => {
-  isMuted = !isMuted;
-  toggleSoundButton(isMuted);
-});
-
 const handleModeButtonClick = (clickedButton, otherButton) => {
   clickedButton.classList.add('active');
   otherButton.classList.remove('active');
@@ -65,22 +60,48 @@ const navigateToPlay = () => {
   }
 };
 
-sandboxModeButton.addEventListener('click', () => {
-  handleModeButtonClick(sandboxModeButton, guideModeButton);
-  modeModal.classList.add('hidden');
-});
+const setupEventListeners = () => {
+  if (soundButton) {
+    soundButton.addEventListener('click', () => {
+      isMuted = !isMuted;
+      toggleSoundButton(isMuted);
+    });
+  }
 
-guideModeButton.addEventListener('click', () => {
-  handleModeButtonClick(guideModeButton, sandboxModeButton);
-  modeModal.classList.remove('hidden');
-});
+  if (sandboxModeButton) {
+    sandboxModeButton.addEventListener('click', () => {
+      handleModeButtonClick(sandboxModeButton, guideModeButton);
+      modeModal.classList.add('hidden');
+    });
+  }
 
-guideModeBox.addEventListener('click', event => {
-  const guideModeButtons = document.querySelectorAll('.guide-mode');
-  const guideModeButton = event.target.closest('.guide-mode');
+  if (guideModeButton) {
+    guideModeButton.addEventListener('click', () => {
+      handleModeButtonClick(guideModeButton, sandboxModeButton);
+      modeModal.classList.remove('hidden');
+    });
+  }
 
-  removeCheckIcon(guideModeButtons);
-  addCheckIcon(guideModeButton);
-});
+  if (guideModeBox) {
+    guideModeBox.addEventListener('click', event => {
+      const guideModeButtons = document.querySelectorAll('.guide-mode');
+      const guideModeButton = event.target.closest('.guide-mode');
 
-startButton.addEventListener('click', navigateToPlay);
+      removeCheckIcon(guideModeButtons);
+      addCheckIcon(guideModeButton);
+    });
+  }
+
+  if (startButton) {
+    startButton.addEventListener('click', navigateToPlay);
+  }
+};
+
+document.addEventListener('DOMContentLoaded', setupEventListeners);
+
+export {
+  toggleSoundButton,
+  handleModeButtonClick,
+  addCheckIcon,
+  removeCheckIcon,
+};

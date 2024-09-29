@@ -125,7 +125,7 @@ const ButtonUl = styled.ul`
   list-style: none;
 `;
 
-const Play = () => {
+function Play() {
   return (
     <MainContainer>
       <SectionContainer>
@@ -166,6 +166,6 @@ const Play = () => {
       <Sidebar />
     </MainContainer>
   );
-};
+}
 
 export default Play;

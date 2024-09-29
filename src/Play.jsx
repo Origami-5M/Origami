@@ -2,6 +2,7 @@ import styled, { css } from 'styled-components';
 import Sidebar from './Sidebar';
 import { useTooltip, TOOLTIP_MESSAGES, TooltipText } from './utils/tooltip';
 import GuideSlide from './GuideSlide';
+import { useSearchParams } from 'react-router-dom';
 
 const commonButtonStyle = css`
   background-color: #888;
@@ -126,8 +127,10 @@ const ButtonUl = styled.ul`
   gap: 20px;
   list-style: none;
 `;
-
 const Play = () => {
+  const [searchParams] = useSearchParams();
+  const mode = searchParams.get('mode');
+
   const {
     tooltipVisible,
     tooltipMessage,
@@ -140,7 +143,7 @@ const Play = () => {
   return (
     <MainContainer>
       <SectionContainer>
-        <GuideSlide />
+        {mode && <GuideSlide />}
         <PlayGuide>
           <PlayGuideP>
             <PlayGuideSpan>카메라 정면:</PlayGuideSpan> 빈 영역 더블클릭 하세요

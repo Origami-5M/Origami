@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 
-export function useTooltip(TOOLTIP_MESSAGES) {
+export const useTooltip = TOOLTIP_MESSAGES => {
   const [tooltipVisible, setTooltipVisible] = useState(false);
   const [tooltipMessage, setTooltipMessage] = useState('');
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
 
-  function handleMouseOver(event) {
+  const handleMouseOver = event => {
     const tooltipKey = event.currentTarget.getAttribute('data-tooltip-key');
     const message = TOOLTIP_MESSAGES[tooltipKey];
     if (message) {
@@ -14,19 +14,19 @@ export function useTooltip(TOOLTIP_MESSAGES) {
       setTooltipVisible(true);
       updateTooltipPosition(event);
     }
-  }
+  };
 
-  function handleMouseMove(event) {
+  const handleMouseMove = event => {
     if (tooltipVisible) {
       updateTooltipPosition(event);
     }
-  }
+  };
 
-  function handleMouseOut() {
+  const handleMouseOut = () => {
     setTooltipVisible(false);
-  }
+  };
 
-  function updateTooltipPosition(event) {
+  const updateTooltipPosition = event => {
     const offsetX = 10;
     const offsetY = 20;
     let tooltipX = event.clientX + offsetX;
@@ -43,7 +43,7 @@ export function useTooltip(TOOLTIP_MESSAGES) {
     }
 
     setTooltipPosition({ x: tooltipX, y: tooltipY });
-  }
+  };
 
   return {
     tooltipVisible,
@@ -53,7 +53,7 @@ export function useTooltip(TOOLTIP_MESSAGES) {
     handleMouseMove,
     handleMouseOut,
   };
-}
+};
 
 export const TooltipText = styled.span`
   position: fixed;

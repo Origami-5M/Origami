@@ -126,7 +126,7 @@ const ButtonUl = styled.ul`
   list-style: none;
 `;
 
-function Play() {
+const Play = () => {
   const {
     tooltipVisible,
     tooltipMessage,
@@ -215,6 +215,6 @@ function Play() {
       )}
     </MainContainer>
   );
-}
+};
 
 export default Play;

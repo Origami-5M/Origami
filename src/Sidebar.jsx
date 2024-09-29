@@ -94,7 +94,7 @@ const modes = [
   },
 ];
 
-function Sidebar() {
+const Sidebar = () => {
   const [isMuted, setIsMuted] = useState(true);
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
   const [isTooltipVisible, setIsTooltipVisible] = useState(false);
@@ -262,6 +262,6 @@ function Sidebar() {
       )}
     </>
   );
-}
+};
 
 export default Sidebar;

@@ -193,7 +193,7 @@ const BigStartButton = styled.button`
   }
 `;
 
-function MainPage() {
+const MainPage = () => {
   const [activeGuideMode, setActiveGuideMode] = useState('puppy');
   const [activeMode, setActiveMode] = useState('sandbox');
   const [isMuted, setIsMuted] = useState(true);
@@ -300,6 +300,6 @@ function MainPage() {
       </SidebarContainer>
     </Main>
   );
-}
+};
 
 export default MainPage;

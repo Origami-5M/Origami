@@ -111,6 +111,8 @@ function Sidebar() {
   const audioRef = useRef(null);
   const tooltipRef = useRef(null);
   const tooltipButtonRef = useRef(null);
+  const sidebarRef = useRef(null);
+  const tooltipListRef = useRef(null);
 
   useEffect(() => {
     if (audioRef.current) {
@@ -125,6 +127,14 @@ function Sidebar() {
   useEffect(() => {
     const handleClickOutside = event => {
       if (
+        sidebarRef.current &&
+        tooltipListRef.current &&
+        !sidebarRef.current.contains(event.target) &&
+        !tooltipListRef.current.contains(event.target)
+      ) {
+        setIsSidebarVisible(false);
+      }
+      if (
         tooltipRef.current &&
         tooltipButtonRef.current &&
         !tooltipRef.current.contains(event.target) &&
@@ -134,24 +144,24 @@ function Sidebar() {
       }
     };
 
-    if (isTooltipVisible) {
-      document.addEventListener('mousedown', handleClickOutside);
-    } else {
-      document.removeEventListener('mousedown', handleClickOutside);
-    }
+    document.addEventListener('mouseup', handleClickOutside);
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('mouseup', handleClickOutside);
     };
-  }, [isTooltipVisible]);
+  }, [isSidebarVisible, isTooltipVisible]);
 
   const handleHomeClick = () => {
     window.location.href = '/';
   };
 
   const handleModeButtonClick = () => {
-    setIsTooltipVisible(false);
-    setIsSidebarVisible(!isSidebarVisible);
+    if (isSidebarVisible) {
+      setIsSidebarVisible(false);
+    } else {
+      setIsTooltipVisible(false);
+      setIsSidebarVisible(true);
+    }
   };
 
   const handleGalleryClick = () => {
@@ -186,6 +196,7 @@ function Sidebar() {
           />
           <TooltipListButton
             onClick={handleModeButtonClick}
+            ref={tooltipListRef}
             $isSidebarVisible={isSidebarVisible}
             data-tooltip-key="PLAYMODELIST_TOOLTIP"
             onMouseOver={handleMouseOver}
@@ -218,18 +229,20 @@ function Sidebar() {
             onMouseOut={handleMouseOut}
           />
           {isTooltipVisible && (
-            <div ref={tooltipRef}>
+            <SideDiv ref={tooltipRef}>
               <InfoTooltip />
-            </div>
+            </SideDiv>
           )}
         </SideDiv>
       </SideNav>
 
-      <ModeSidebar
-        modes={modes}
-        onSelectMode={handleSelectMode}
-        isVisible={isSidebarVisible}
-      />
+      <SideDiv ref={sidebarRef}>
+        <ModeSidebar
+          modes={modes}
+          onSelectMode={handleSelectMode}
+          isVisible={isSidebarVisible}
+        />
+      </SideDiv>
 
       <audio
         ref={audioRef}

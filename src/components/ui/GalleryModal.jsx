@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { fetchUserPositions } from '../../utils/getUserService';
+import OrigamiCanvas from '../../components/three/OrigamiCanvas';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import closeIcon from '../../assets/img/close.png';
@@ -28,17 +29,6 @@ const Modal = styled.div`
   background-color: #fff;
   padding: 80px;
   border-radius: 50px;
-`;
-
-const ModalImg = styled.div`
-  width: 300px;
-  height: 300px;
-  background-color: #e8e8e8;
-
-  img {
-    width: 100%;
-    height: auto;
-  }
 `;
 
 const ModalText = styled.h3`
@@ -108,9 +98,7 @@ const GalleryModal = ({ onClick, data }) => {
           <CloseButton onClick={onClick}>
             <img src={closeIcon} alt="닫는버튼" />
           </CloseButton>
-          <ModalImg>
-            <img src={selectedItem.thumbnail} alt="종이접기 이미지" />
-          </ModalImg>
+          <OrigamiCanvas positions={positions} />
           <ModalText>{selectedItem.nickname}</ModalText>
           <ShareButton>
             <img src={shareIcon} alt="공유버튼" />

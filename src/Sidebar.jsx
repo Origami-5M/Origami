@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import ModeSidebar from './ModeSidebar';
+import Tooltip from './Tooltip';
 
 const commonButtonStyle = css`
   display: block;
@@ -40,7 +41,21 @@ const TooltipHomeButton = styled.button`
 
 const TooltipListButton = styled.button`
   ${commonButtonStyle};
-  background: url('/src/assets/img/nav_sprites.png') no-repeat -184px -80px;
+
+  background: ${({ $isSidebarVisible }) =>
+    $isSidebarVisible
+      ? "url('/src/assets/img/checked_sprites.png') -8px -3px no-repeat"
+      : "url('/src/assets/img/nav_sprites.png') -184px -80px no-repeat"};
+
+  opacity: ${({ $isSidebarVisible }) => ($isSidebarVisible ? 1 : 0.5)};
+
+  background-color: ${({ $isSidebarVisible }) =>
+    $isSidebarVisible ? 'rgb(255, 255, 255)' : ''};
+
+  &:hover {
+    background-color: ${({ $isSidebarVisible }) =>
+      $isSidebarVisible ? 'rgb(255, 255, 255)' : 'rgb(51, 50, 173)'};
+  }
 `;
 
 const TooltipGalleryButton = styled.button`
@@ -80,11 +95,9 @@ const modes = [
 
 function Sidebar() {
   const [isMuted, setIsMuted] = useState(true);
-  const [isInfoVisible, setIsInfoVisible] = useState(false);
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
+  const [isTooltipVisible, setIsTooltipVisible] = useState(false);
 
-  const infoWrapRef = useRef(null);
-  const modeSidebarRef = useRef(null);
   const audioRef = useRef(null);
 
   const handleHomeClick = () => {
@@ -92,6 +105,7 @@ function Sidebar() {
   };
 
   const handleModeButtonClick = () => {
+    setIsTooltipVisible(false);
     setIsSidebarVisible(!isSidebarVisible);
   };
 
@@ -103,23 +117,16 @@ function Sidebar() {
     setIsMuted(!isMuted);
   };
 
-  const handleInfoClick = () => {
-    setIsInfoVisible(!isInfoVisible);
-  };
-
   const handleSelectMode = mode => {
     const url = new URL(`${window.location.origin}/play`);
     url.searchParams.append('mode', mode);
     window.location.assign(url.toString());
   };
 
-  useClickOutside(infoWrapRef, () => {
-    setIsInfoVisible(false);
-  });
-
-  useClickOutside(modeSidebarRef, () => {
+  const handleTooltipClick = () => {
     setIsSidebarVisible(false);
-  });
+    setIsTooltipVisible(!isTooltipVisible);
+  };
 
   useEffect(() => {
     if (audioRef.current) {
@@ -136,12 +143,16 @@ function Sidebar() {
       <SideNav>
         <SideDiv>
           <TooltipHomeButton onClick={handleHomeClick} />
-          <TooltipListButton onClick={handleModeButtonClick} />
+          <TooltipListButton
+            onClick={handleModeButtonClick}
+            $isSidebarVisible={isSidebarVisible}
+          />
           <TooltipGalleryButton onClick={handleGalleryClick} />
         </SideDiv>
         <SideDiv>
           <TooltipSoundButton onClick={handleSoundClick} $isMuted={isMuted} />
-          <TooltipGuideButton onClick={handleInfoClick} />
+          <TooltipGuideButton onClick={handleTooltipClick} />
+          {isTooltipVisible && <Tooltip />}
         </SideDiv>
       </SideNav>
 
@@ -159,21 +170,6 @@ function Sidebar() {
       />
     </>
   );
-}
-
-function useClickOutside(ref, handler) {
-  useEffect(() => {
-    const listener = event => {
-      if (!ref.current || ref.current.contains(event.target)) {
-        return;
-      }
-      handler();
-    };
-    document.addEventListener('mousedown', listener);
-    return () => {
-      document.removeEventListener('mousedown', listener);
-    };
-  }, [ref, handler]);
 }
 
 export default Sidebar;

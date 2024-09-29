@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import styled, { css } from 'styled-components';
+import ModeSidebar from './ModeSidebar';
 
 const commonButtonStyle = css`
   display: block;
@@ -59,20 +60,23 @@ const TooltipGuideButton = styled.button`
   background: url('/src/assets/img/nav_sprites.png') no-repeat -4px -81px;
 `;
 
-function useClickOutside(ref, handler) {
-  useEffect(() => {
-    const listener = event => {
-      if (!ref.current || ref.current.contains(event.target)) {
-        return;
-      }
-      handler();
-    };
-    document.addEventListener('mousedown', listener);
-    return () => {
-      document.removeEventListener('mousedown', listener);
-    };
-  }, [ref, handler]);
-}
+const modes = [
+  {
+    id: 'puppy',
+    name: 'Puppy',
+    image: '/src/assets/img/rocket-img.png',
+  },
+  {
+    id: 'plane',
+    name: 'Plane',
+    image: '/src/assets/img/rocket-img.png',
+  },
+  {
+    id: 'heart',
+    name: 'Heart',
+    image: '/src/assets/img/rocket-img.png',
+  },
+];
 
 function Sidebar() {
   const [isMuted, setIsMuted] = useState(true);
@@ -101,6 +105,12 @@ function Sidebar() {
 
   const handleInfoClick = () => {
     setIsInfoVisible(!isInfoVisible);
+  };
+
+  const handleSelectMode = mode => {
+    const url = new URL(`${window.location.origin}/play`);
+    url.searchParams.append('mode', mode);
+    window.location.assign(url.toString());
   };
 
   useClickOutside(infoWrapRef, () => {
@@ -135,6 +145,12 @@ function Sidebar() {
         </SideDiv>
       </SideNav>
 
+      <ModeSidebar
+        modes={modes}
+        onSelectMode={handleSelectMode}
+        isVisible={isSidebarVisible}
+      />
+
       <audio
         ref={audioRef}
         src="/src/assets/sound/origami_main_music.mp3"
@@ -143,6 +159,21 @@ function Sidebar() {
       />
     </>
   );
+}
+
+function useClickOutside(ref, handler) {
+  useEffect(() => {
+    const listener = event => {
+      if (!ref.current || ref.current.contains(event.target)) {
+        return;
+      }
+      handler();
+    };
+    document.addEventListener('mousedown', listener);
+    return () => {
+      document.removeEventListener('mousedown', listener);
+    };
+  }, [ref, handler]);
 }
 
 export default Sidebar;

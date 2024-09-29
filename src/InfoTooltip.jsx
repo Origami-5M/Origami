@@ -40,7 +40,7 @@ const InfoSpan = styled.span`
   font-weight: 900;
 `;
 
-const Tooltip = () => {
+const InfoTooltip = () => {
   return (
     <InfoWrap className="visible">
       <InfoP>
@@ -73,4 +73,4 @@ const Tooltip = () => {
   );
 };
 
-export default Tooltip;
+export default InfoTooltip;

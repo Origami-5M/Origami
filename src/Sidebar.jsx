@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import ModeSidebar from './ModeSidebar';
 import { useTooltip, TOOLTIP_MESSAGES, TooltipText } from './utils/tooltip';
-import Tooltip from './Tooltip';
+import InfoTooltip from './InfoTooltip';
 
 const commonButtonStyle = css`
   display: block;
@@ -219,7 +219,7 @@ function Sidebar() {
           />
           {isTooltipVisible && (
             <div ref={tooltipRef}>
-              <Tooltip />
+              <InfoTooltip />
             </div>
           )}
         </SideDiv>

@@ -99,6 +99,41 @@ function Sidebar() {
   const [isTooltipVisible, setIsTooltipVisible] = useState(false);
 
   const audioRef = useRef(null);
+  const tooltipRef = useRef(null);
+  const tooltipButtonRef = useRef(null);
+
+  useEffect(() => {
+    if (audioRef.current) {
+      if (isMuted) {
+        audioRef.current.pause();
+      } else {
+        audioRef.current.play();
+      }
+    }
+  }, [isMuted]);
+
+  useEffect(() => {
+    const handleClickOutside = event => {
+      if (
+        tooltipRef.current &&
+        tooltipButtonRef.current &&
+        !tooltipRef.current.contains(event.target) &&
+        !tooltipButtonRef.current.contains(event.target)
+      ) {
+        setIsTooltipVisible(false);
+      }
+    };
+
+    if (isTooltipVisible) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isTooltipVisible]);
 
   const handleHomeClick = () => {
     window.location.href = '/';
@@ -128,16 +163,6 @@ function Sidebar() {
     setIsTooltipVisible(!isTooltipVisible);
   };
 
-  useEffect(() => {
-    if (audioRef.current) {
-      if (isMuted) {
-        audioRef.current.pause();
-      } else {
-        audioRef.current.play();
-      }
-    }
-  }, [isMuted]);
-
   return (
     <>
       <SideNav>
@@ -151,8 +176,15 @@ function Sidebar() {
         </SideDiv>
         <SideDiv>
           <TooltipSoundButton onClick={handleSoundClick} $isMuted={isMuted} />
-          <TooltipGuideButton onClick={handleTooltipClick} />
-          {isTooltipVisible && <Tooltip />}
+          <TooltipGuideButton
+            onClick={handleTooltipClick}
+            ref={tooltipButtonRef}
+          />
+          {isTooltipVisible && (
+            <div ref={tooltipRef}>
+              <Tooltip />
+            </div>
+          )}
         </SideDiv>
       </SideNav>
 

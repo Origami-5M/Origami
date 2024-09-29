@@ -1,7 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { fetchUserPositions } from '../../utils/getUserService';
+import copyURL from '../../utils/copyURL';
 import OrigamiCanvas from '../../components/three/OrigamiCanvas';
+import ToastMessage from './ToastMessage';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import closeIcon from '../../assets/img/close.png';
@@ -80,6 +82,7 @@ const GalleryModal = ({ onClick, data }) => {
   const [searchParams] = useSearchParams();
   const id = searchParams.get('id');
   const [positions, setPositions] = useState([]);
+  const [toastMessage, setToastMessage] = useState('');
 
   const selectedItem = data.find(item => item.id === id);
 
@@ -91,6 +94,11 @@ const GalleryModal = ({ onClick, data }) => {
     getUserpositions();
   }, [id]);
 
+  const handleCopyURL = async () => {
+    const message = await copyURL();
+    setToastMessage(message);
+  };
+
   return (
     <div>
       <ModalWrap>
@@ -100,11 +108,17 @@ const GalleryModal = ({ onClick, data }) => {
           </CloseButton>
           <OrigamiCanvas positions={positions} />
           <ModalText>{selectedItem.nickname}</ModalText>
-          <ShareButton>
+          <ShareButton onClick={handleCopyURL}>
             <img src={shareIcon} alt="공유버튼" />
           </ShareButton>
         </Modal>
       </ModalWrap>
+      {toastMessage && (
+        <ToastMessage
+          message={toastMessage}
+          onClose={() => setToastMessage('')}
+        />
+      )}
     </div>
   );
 };

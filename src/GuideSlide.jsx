@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
+import { useTooltip, TOOLTIP_MESSAGES, TooltipText } from './utils/tooltip';
 
 const GUIDE_IMAGES = {
   puppy: [
@@ -110,6 +111,14 @@ const GuideSlide = () => {
   const [slideList, setSlideList] = useState(GUIDE_IMAGES['puppy']);
   const [currentIdx, setCurrentIdx] = useState(0);
   const listWidth = 160;
+  const {
+    tooltipVisible,
+    tooltipMessage,
+    tooltipPosition,
+    handleMouseOver,
+    handleMouseMove,
+    handleMouseOut,
+  } = useTooltip(TOOLTIP_MESSAGES);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -142,6 +151,9 @@ const GuideSlide = () => {
         {currentIdx > 0 && (
           <PrevButton
             onClick={() => moveSlide('prev')}
+            onMouseOver={handleMouseOver}
+            onMouseMove={handleMouseMove}
+            onMouseOut={handleMouseOut}
             className="tooltip-button"
             data-tooltip-key="PREV_TOOLTIP"
           />
@@ -149,6 +161,9 @@ const GuideSlide = () => {
         {currentIdx < slideList.length - 1 && (
           <NextButton
             onClick={() => moveSlide('next')}
+            onMouseOver={handleMouseOver}
+            onMouseMove={handleMouseMove}
+            onMouseOut={handleMouseOut}
             className="tooltip-button"
             data-tooltip-key="NEXT_TOOLTIP"
           />
@@ -159,6 +174,16 @@ const GuideSlide = () => {
           {currentIdx + 1} / {slideList.length}
         </PaginationText>
       </Pagination>
+      {tooltipVisible && (
+        <TooltipText
+          style={{
+            left: tooltipPosition.x,
+            top: tooltipPosition.y,
+          }}
+        >
+          {tooltipMessage}
+        </TooltipText>
+      )}
     </GuideWrap>
   );
 };

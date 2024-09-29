@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import ModeSidebar from './ModeSidebar';
 import { useTooltip, TOOLTIP_MESSAGES, TooltipText } from './utils/tooltip';
@@ -95,6 +96,7 @@ const modes = [
 ];
 
 const Sidebar = () => {
+  const navigate = useNavigate();
   const [isMuted, setIsMuted] = useState(true);
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
   const [isTooltipVisible, setIsTooltipVisible] = useState(false);
@@ -152,7 +154,7 @@ const Sidebar = () => {
   }, [isSidebarVisible, isTooltipVisible]);
 
   const handleHomeClick = () => {
-    window.location.href = '/';
+    navigate('/');
   };
 
   const handleModeButtonClick = () => {
@@ -165,7 +167,7 @@ const Sidebar = () => {
   };
 
   const handleGalleryClick = () => {
-    window.location.href = '/gallery';
+    navigate('/gallery');
   };
 
   const handleSoundClick = () => {
@@ -173,9 +175,10 @@ const Sidebar = () => {
   };
 
   const handleSelectMode = mode => {
-    const url = new URL(`${window.location.origin}/play`);
-    url.searchParams.append('mode', mode);
-    window.location.assign(url.toString());
+    navigate({
+      pathname: '/play',
+      search: `?mode=${mode}`,
+    });
   };
 
   const handleTooltipClick = () => {

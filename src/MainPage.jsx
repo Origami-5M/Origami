@@ -220,7 +220,11 @@ const MainPage = () => {
   }, [isMuted]);
 
   const handleStartClick = () => {
-    navigate('/play');
+    if (activeMode === 'sandbox') {
+      navigate('/play');
+    } else if (activeMode === 'guide') {
+      navigate(`/play?mode=${activeGuideMode}`);
+    }
   };
 
   return (

@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useTooltip, TOOLTIP_MESSAGES, TooltipText } from './utils/tooltip';
 
 const GUIDE_IMAGES = {
@@ -108,6 +109,8 @@ const Pagination = styled.div`
 const PaginationText = styled.span``;
 
 const GuideSlide = () => {
+  const [searchParams] = useSearchParams();
+  const mode = searchParams.get('mode');
   const [slideList, setSlideList] = useState(GUIDE_IMAGES['puppy']);
   const [currentIdx, setCurrentIdx] = useState(0);
   const listWidth = 160;
@@ -121,10 +124,8 @@ const GuideSlide = () => {
   } = useTooltip(TOOLTIP_MESSAGES);
 
   useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const guideMode = urlParams.get('mode');
-    setSlideList(GUIDE_IMAGES[guideMode] || []);
-  }, []);
+    setSlideList(GUIDE_IMAGES[mode] || []);
+  }, [mode]);
 
   const moveSlide = direction => {
     if (direction === 'next' && currentIdx < slideList.length - 1) {

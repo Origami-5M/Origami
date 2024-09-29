@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components';
 import Sidebar from './Sidebar';
+import { useTooltip, TOOLTIP_MESSAGES, TooltipText } from './utils/tooltip';
 
 const commonButtonStyle = css`
   background-color: #888;
@@ -126,6 +127,15 @@ const ButtonUl = styled.ul`
 `;
 
 function Play() {
+  const {
+    tooltipVisible,
+    tooltipMessage,
+    tooltipPosition,
+    handleMouseOver,
+    handleMouseMove,
+    handleMouseOut,
+  } = useTooltip(TOOLTIP_MESSAGES);
+
   return (
     <MainContainer>
       <SectionContainer>
@@ -141,10 +151,22 @@ function Play() {
         <BottomLayout>
           <ButtonUl>
             <BottomLayoutLi>
-              <RestartButton />
+              <RestartButton
+                data-tooltip-key="RESTART_TOOLTIP"
+                onMouseOver={handleMouseOver}
+                onMouseMove={handleMouseMove}
+                onMouseOut={handleMouseOut}
+              />
             </BottomLayoutLi>
             <BottomLayoutLi>
-              <FinishButton>FINISH</FinishButton>
+              <FinishButton
+                data-tooltip-key="FINISH_TOOLTIP"
+                onMouseOver={handleMouseOver}
+                onMouseMove={handleMouseMove}
+                onMouseOut={handleMouseOut}
+              >
+                FINISH
+              </FinishButton>
             </BottomLayoutLi>
           </ButtonUl>
         </BottomLayout>
@@ -152,18 +174,45 @@ function Play() {
         <ArrowButtonBox>
           <ButtonUl>
             <BottomLayoutLi>
-              <UnFoldButton disabled>UNFOLD</UnFoldButton>
+              <UnFoldButton
+                data-tooltip-key="UNFOLD_TOOLTIP"
+                onMouseOver={handleMouseOver}
+                onMouseMove={handleMouseMove}
+                onMouseOut={handleMouseOut}
+              >
+                UNFOLD
+              </UnFoldButton>
             </BottomLayoutLi>
             <BottomLayoutLi>
-              <RollBackButton disabled />
+              <RollBackButton
+                data-tooltip-key="PRESTEP_TOOLTIP"
+                onMouseOver={handleMouseOver}
+                onMouseMove={handleMouseMove}
+                onMouseOut={handleMouseOut}
+              />
             </BottomLayoutLi>
             <BottomLayoutLi>
-              <CommitButton disabled />
+              <CommitButton
+                data-tooltip-key="NEXTSTEP_TOOLTIP"
+                onMouseOver={handleMouseOver}
+                onMouseMove={handleMouseMove}
+                onMouseOut={handleMouseOut}
+              />
             </BottomLayoutLi>
           </ButtonUl>
         </ArrowButtonBox>
       </SectionContainer>
       <Sidebar />
+      {tooltipVisible && (
+        <TooltipText
+          style={{
+            left: tooltipPosition.x,
+            top: tooltipPosition.y,
+          }}
+        >
+          {tooltipMessage}
+        </TooltipText>
+      )}
     </MainContainer>
   );
 }

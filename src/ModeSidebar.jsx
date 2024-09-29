@@ -1,196 +1,134 @@
-import { useState, useRef, useEffect } from 'react';
-import styled, { css } from 'styled-components';
-import ModeSidebar from './ModeSidebar';
+import styled from 'styled-components';
+import PropTypes from 'prop-types';
+import { useTooltip, TOOLTIP_MESSAGES, TooltipText } from './utils/tooltip';
 
-const commonButtonStyle = css`
+const SidebarContainer = styled.aside`
+  position: absolute;
+  right: ${({ $isVisible }) => ($isVisible ? '102px' : '-250px')};
+  top: 2%;
+  width: ${({ $isVisible }) => ($isVisible ? '269px' : '0px')};
+  height: 96%;
+  opacity: ${({ $isVisible }) => ($isVisible ? '1' : '0')};
+  z-index: 10;
+  overflow: hidden;
+  box-sizing: border-box;
+  padding: 30px 0 0 0;
+  border-radius: 30px;
+  background-color: #fff;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.25));
+  transition: all 0.2s ease-in-out;
   display: block;
-  margin-bottom: 15px;
-  text-align: center;
-  border-radius: 999px;
-  width: 60px;
-  height: 60px;
-  opacity: 0.5;
-  background-size: cover;
+`;
+
+const ModeList = styled.ul`
+  list-style: none;
+`;
+
+const ModeItem = styled.li`
+  margin-bottom: 35px;
+  padding: 0 30px;
+  transition: all 0.2s ease-in-out;
   cursor: pointer;
 
   &:hover {
-    opacity: 1;
+    padding: 30px 30px;
+    background-color: rgba(52, 51, 148, 0.1);
   }
 `;
-
-const SideNav = styled.nav`
+const ModeDiv = styled.div`
   position: relative;
-  z-index: 10;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  width: 110px;
+  width: 209px;
+  height: 155px;
+  background-image: url(/src/assets/img/green-gamebg.png);
+  background-size: contain;
+  border-radius: 30px;
+`;
+const ModeH3 = styled.h3`
+  position: absolute;
+  bottom: 30px;
+  left: 20px;
+  color: rgb(255, 255, 255);
+  font-size: 24px;
+  font-weight: 900;
+`;
+
+const ModeP = styled.p`
+  position: absolute;
+  z-index: 1;
+  top: -20px;
+  right: -15px;
+  width: 120px;
+  height: 120px;
+`;
+
+const ModeImg = styled.img`
+  width: 100%;
   height: 100%;
-  padding: 60px 0;
-  background-color: #343394;
 `;
 
-const SideDiv = styled.div``;
-
-const TooltipHomeButton = styled.button`
-  ${commonButtonStyle};
-  background: url('/src/assets/img/nav_sprites.png') no-repeat -5px -8px;
-`;
-
-const TooltipListButton = styled.button`
-  ${commonButtonStyle};
-
-  background: ${({ $isSidebarVisible }) =>
-    $isSidebarVisible
-      ? "url('/src/assets/img/checked_sprites.png') -8px -3px no-repeat"
-      : "url('/src/assets/img/nav_sprites.png') -184px -80px no-repeat"};
-
-  opacity: ${({ $isSidebarVisible }) => ($isSidebarVisible ? 1 : 0.5)};
-
-  background-color: ${({ $isSidebarVisible }) =>
-    $isSidebarVisible ? 'rgb(255, 255, 255)' : ''};
-
-  &:hover {
-    background-color: ${({ $isSidebarVisible }) =>
-      $isSidebarVisible ? 'rgb(255, 255, 255)' : 'rgb(51, 50, 173)'};
-  }
-`;
-
-const TooltipGalleryButton = styled.button`
-  ${commonButtonStyle};
-  background: url('/src/assets/img/nav_sprites.png') no-repeat -97px -8px;
-`;
-
-const TooltipSoundButton = styled.button`
-  ${commonButtonStyle};
-  background: url('/src/assets/img/nav_sprites.png') no-repeat;
-  background-position: ${({ $isMuted }) =>
-    $isMuted ? '-100px -137px' : '-100px -80px'};
-`;
-
-const TooltipGuideButton = styled.button`
-  ${commonButtonStyle};
-  background: url('/src/assets/img/nav_sprites.png') no-repeat -4px -81px;
-`;
-
-const modes = [
-  {
-    id: 'puppy',
-    name: 'Puppy',
-    image: '/src/assets/img/rocket-img.png',
-  },
-  {
-    id: 'plane',
-    name: 'Plane',
-    image: '/src/assets/img/rocket-img.png',
-  },
-  {
-    id: 'heart',
-    name: 'Heart',
-    image: '/src/assets/img/rocket-img.png',
-  },
-];
-
-function Sidebar() {
-  const [isMuted, setIsMuted] = useState(true);
-  const [isInfoVisible, setIsInfoVisible] = useState(false);
-  const [isSidebarVisible, setIsSidebarVisible] = useState(false);
-
-  const infoWrapRef = useRef(null);
-  const modeSidebarRef = useRef(null);
-  const audioRef = useRef(null);
-
-  const handleHomeClick = () => {
-    window.location.href = '/';
-  };
-
-  const handleModeButtonClick = () => {
-    setIsSidebarVisible(!isSidebarVisible);
-  };
-
-  const handleGalleryClick = () => {
-    window.location.href = '/gallery';
-  };
-
-  const handleSoundClick = () => {
-    setIsMuted(!isMuted);
-  };
-
-  const handleInfoClick = () => {
-    setIsInfoVisible(!isInfoVisible);
-  };
-
-  const handleSelectMode = mode => {
-    const url = new URL(`${window.location.origin}/play`);
-    url.searchParams.append('mode', mode);
-    window.location.assign(url.toString());
-  };
-
-  useClickOutside(infoWrapRef, () => {
-    setIsInfoVisible(false);
-  });
-
-  useClickOutside(modeSidebarRef, () => {
-    setIsSidebarVisible(false);
-  });
-
-  useEffect(() => {
-    if (audioRef.current) {
-      if (isMuted) {
-        audioRef.current.pause();
-      } else {
-        audioRef.current.play();
-      }
-    }
-  }, [isMuted]);
+const ModeSidebar = ({ modes, onSelectMode, isVisible }) => {
+  const {
+    tooltipVisible,
+    tooltipMessage,
+    tooltipPosition,
+    handleMouseOver,
+    handleMouseMove,
+    handleMouseOut,
+  } = useTooltip(TOOLTIP_MESSAGES);
 
   return (
     <>
-      <SideNav>
-        <SideDiv>
-          <TooltipHomeButton onClick={handleHomeClick} />
-          <TooltipListButton
-            onClick={handleModeButtonClick}
-            $isSidebarVisible={isSidebarVisible}
-          />
-          <TooltipGalleryButton onClick={handleGalleryClick} />
-        </SideDiv>
-        <SideDiv>
-          <TooltipSoundButton onClick={handleSoundClick} $isMuted={isMuted} />
-          <TooltipGuideButton onClick={handleInfoClick} />
-        </SideDiv>
-      </SideNav>
-
-      <ModeSidebar
-        modes={modes}
-        onSelectMode={handleSelectMode}
-        isVisible={isSidebarVisible}
-      />
-
-      <audio
-        ref={audioRef}
-        src="/src/assets/sound/origami_main_music.mp3"
-        loop
-        autoPlay
-      />
+      <SidebarContainer $isVisible={isVisible}>
+        <ModeList>
+          {modes.map(mode => (
+            <ModeItem
+              key={mode.id}
+              onClick={() => onSelectMode(mode.id)}
+              $data-guideMode={mode.id}
+              data-tooltip-key="MODESELECT_TOOLTIP"
+              onMouseOver={handleMouseOver}
+              onMouseMove={handleMouseMove}
+              onMouseOut={handleMouseOut}
+            >
+              <ModeDiv>
+                <ModeH3>{mode.name}</ModeH3>
+                <ModeP>
+                  <ModeImg
+                    src={mode.image}
+                    alt={`${mode.name} 이미지`}
+                    width="50"
+                    height="50"
+                  />
+                </ModeP>
+              </ModeDiv>
+            </ModeItem>
+          ))}
+        </ModeList>
+      </SidebarContainer>
+      {tooltipVisible && (
+        <TooltipText
+          style={{
+            left: tooltipPosition.x,
+            top: tooltipPosition.y,
+          }}
+        >
+          {tooltipMessage}
+        </TooltipText>
+      )}
     </>
   );
-}
+};
 
-function useClickOutside(ref, handler) {
-  useEffect(() => {
-    const listener = event => {
-      if (!ref.current || ref.current.contains(event.target)) {
-        return;
-      }
-      handler();
-    };
-    document.addEventListener('mousedown', listener);
-    return () => {
-      document.removeEventListener('mousedown', listener);
-    };
-  }, [ref, handler]);
-}
+ModeSidebar.propTypes = {
+  modes: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      image: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  onSelectMode: PropTypes.func.isRequired,
+  isVisible: PropTypes.bool.isRequired,
+};
 
-export default Sidebar;
+export default ModeSidebar;

@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import ModeSidebar from './ModeSidebar';
+import { useTooltip, TOOLTIP_MESSAGES, TooltipText } from './utils/tooltip';
 import Tooltip from './Tooltip';
 
 const commonButtonStyle = css`
@@ -98,6 +99,15 @@ function Sidebar() {
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
   const [isTooltipVisible, setIsTooltipVisible] = useState(false);
 
+  const {
+    tooltipVisible,
+    tooltipMessage,
+    tooltipPosition,
+    handleMouseOver,
+    handleMouseMove,
+    handleMouseOut,
+  } = useTooltip(TOOLTIP_MESSAGES);
+
   const audioRef = useRef(null);
   const tooltipRef = useRef(null);
   const tooltipButtonRef = useRef(null);
@@ -167,18 +177,45 @@ function Sidebar() {
     <>
       <SideNav>
         <SideDiv>
-          <TooltipHomeButton onClick={handleHomeClick} />
+          <TooltipHomeButton
+            onClick={handleHomeClick}
+            data-tooltip-key="HOME_TOOLTIP"
+            onMouseOver={handleMouseOver}
+            onMouseMove={handleMouseMove}
+            onMouseOut={handleMouseOut}
+          />
           <TooltipListButton
             onClick={handleModeButtonClick}
             $isSidebarVisible={isSidebarVisible}
+            data-tooltip-key="PLAYMODELIST_TOOLTIP"
+            onMouseOver={handleMouseOver}
+            onMouseMove={handleMouseMove}
+            onMouseOut={handleMouseOut}
           />
-          <TooltipGalleryButton onClick={handleGalleryClick} />
+          <TooltipGalleryButton
+            onClick={handleGalleryClick}
+            data-tooltip-key="GALLERY_TOOLTIP"
+            onMouseOver={handleMouseOver}
+            onMouseMove={handleMouseMove}
+            onMouseOut={handleMouseOut}
+          />
         </SideDiv>
         <SideDiv>
-          <TooltipSoundButton onClick={handleSoundClick} $isMuted={isMuted} />
+          <TooltipSoundButton
+            onClick={handleSoundClick}
+            $isMuted={isMuted}
+            data-tooltip-key="SOUND_TOOLTIP"
+            onMouseOver={handleMouseOver}
+            onMouseMove={handleMouseMove}
+            onMouseOut={handleMouseOut}
+          />
           <TooltipGuideButton
             onClick={handleTooltipClick}
             ref={tooltipButtonRef}
+            data-tooltip-key="PLAYGUIDE_TOOLTIP"
+            onMouseOver={handleMouseOver}
+            onMouseMove={handleMouseMove}
+            onMouseOut={handleMouseOut}
           />
           {isTooltipVisible && (
             <div ref={tooltipRef}>
@@ -200,6 +237,16 @@ function Sidebar() {
         loop
         autoPlay
       />
+      {tooltipVisible && (
+        <TooltipText
+          style={{
+            left: tooltipPosition.x,
+            top: tooltipPosition.y,
+          }}
+        >
+          {tooltipMessage}
+        </TooltipText>
+      )}
     </>
   );
 }

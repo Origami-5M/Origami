@@ -1,8 +1,10 @@
 import styled, { css } from 'styled-components';
-import Sidebar from '../components/ui/Sidebar';
-import { useTooltip, TOOLTIP_MESSAGES, TooltipText } from '../utils/tooltip';
-import GuideSlide from '../components/ui/GuideSlide';
 import { useSearchParams } from 'react-router-dom';
+import { useTooltip, TOOLTIP_MESSAGES, TooltipText } from '../utils/tooltip';
+
+import Sidebar from '../components/ui/Sidebar';
+import GuideSlide from '../components/ui/GuideSlide';
+import PaperCanvas from '../components/three/PaperCanvas';
 
 const commonButtonStyle = css`
   background-color: #888;
@@ -127,6 +129,7 @@ const ButtonUl = styled.ul`
   gap: 20px;
   list-style: none;
 `;
+
 const PlayPage = () => {
   const [searchParams] = useSearchParams();
   const mode = searchParams.get('mode');
@@ -142,6 +145,7 @@ const PlayPage = () => {
 
   return (
     <MainContainer>
+      <PaperCanvas />
       <SectionContainer>
         {mode && <GuideSlide />}
         <PlayGuide>

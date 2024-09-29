@@ -34,5 +34,20 @@ export default [
         { allowConstantExport: true },
       ],
     },
+    'react/no-unknown-property': [
+      'error',
+      {
+        ignore: [
+          'attach',
+          'args',
+          'color',
+          'rotation',
+          'position',
+          'scale',
+          'geometry',
+          'material',
+        ],
+      },
+    ],
   },
 ];

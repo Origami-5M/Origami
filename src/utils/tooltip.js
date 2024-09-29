@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 
-export const useTooltip = TOOLTIP_MESSAGES => {
+const useTooltip = TOOLTIP_MESSAGES => {
   const [tooltipVisible, setTooltipVisible] = useState(false);
   const [tooltipMessage, setTooltipMessage] = useState('');
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
@@ -55,7 +55,7 @@ export const useTooltip = TOOLTIP_MESSAGES => {
   };
 };
 
-export const TooltipText = styled.span`
+const TooltipText = styled.span`
   position: fixed;
   background-color: rgba(0, 0, 0, 0.8);
   color: #fff;
@@ -69,7 +69,7 @@ export const TooltipText = styled.span`
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 `;
 
-export const TOOLTIP_MESSAGES = {
+const TOOLTIP_MESSAGES = {
   HOME_TOOLTIP: '홈으로 이동합니다',
   PLAYMODELIST_TOOLTIP: '플레이모드 리스트를 볼 수 있습니다',
   GALLERY_TOOLTIP: '갤러리로 이동합니다',
@@ -85,3 +85,5 @@ export const TOOLTIP_MESSAGES = {
   NEXT_TOOLTIP: '다음 스텝 가이드를 보여줍니다',
   PREV_TOOLTIP: '이전 스텝 가이드를 보여줍니다',
 };
+
+export { useTooltip, TooltipText, TOOLTIP_MESSAGES };

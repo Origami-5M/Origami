@@ -15,10 +15,10 @@ const fetchUserDocument = async id => {
 
 const fetchAllUserDocuments = async () => {
   try {
-    const querySnapshot = await getDocs(collection(db, 'users'));
+    const usersDoc = await getDocs(collection(db, 'users'));
     const allDocuments = [];
 
-    querySnapshot.docs.forEach(doc => {
+    usersDoc.docs.forEach(doc => {
       const data = doc.data();
       allDocuments.push({ id: doc.id, ...data });
     });

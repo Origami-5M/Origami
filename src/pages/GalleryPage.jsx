@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { fetchAllUserDocuments } from '../utils/getUserService';
 import GalleryCard from '../components/ui/GalleryCard';
 import styled from 'styled-components';
 import Sidebar from '../components/ui/Sidebar';
 import GalleryModal from '../components/ui/GalleryModal';
 import arrowImage from '../assets/img/arrow.png';
-import { useSearchParams } from 'react-router-dom';
 
 const Main = styled.main`
   display: flex;
@@ -99,7 +99,6 @@ const GalleryPage = () => {
     setModalOpen(false);
 
     const newSearchParams = new URLSearchParams(searchParams);
-    console.log('newSearchParams', newSearchParams);
     newSearchParams.delete('id');
 
     setSearchParams(newSearchParams);
@@ -154,7 +153,9 @@ const GalleryPage = () => {
                 />
               ))}
             </GalleryListWrap>
-            {modalOpen && <GalleryModal onClick={changeCloseModal} />}
+            {modalOpen && (
+              <GalleryModal onClick={changeCloseModal} data={currentItems} />
+            )}
             <NextButton
               onClick={handleNextPage}
               disabled={currentPage === totalPages}

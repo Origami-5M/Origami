@@ -1,3 +1,6 @@
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { fetchUserPositions } from '../../utils/getUserService';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import closeIcon from '../../assets/img/close.png';
@@ -5,6 +8,8 @@ import shareIcon from '../../assets/img/share.png';
 
 const ModalWrap = styled.div`
   position: absolute;
+  top: 0;
+  left: 0%;
   width: 100vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.4);
@@ -29,6 +34,11 @@ const ModalImg = styled.div`
   width: 300px;
   height: 300px;
   background-color: #e8e8e8;
+
+  img {
+    width: 100%;
+    height: auto;
+  }
 `;
 
 const ModalText = styled.h3`
@@ -76,25 +86,44 @@ const ShareButton = styled.span`
   }
 `;
 
-const GalleryModal = ({ onClick }) => {
+const GalleryModal = ({ onClick, data }) => {
+  const [searchParams] = useSearchParams();
+  const id = searchParams.get('id');
+  const [positions, setPositions] = useState([]);
+
+  const selectedItem = data.find(item => item.id === id);
+
+  useEffect(() => {
+    const getUserpositions = async () => {
+      setPositions(await fetchUserPositions(id));
+    };
+
+    getUserpositions();
+  }, [id]);
+
   return (
-    <ModalWrap>
-      <Modal>
-        <CloseButton onClick={onClick}>
-          <img src={closeIcon} alt="닫는버튼" />
-        </CloseButton>
-        <ModalImg></ModalImg>
-        <ModalText>모달입니다</ModalText>
-        <ShareButton>
-          <img src={shareIcon} alt="공유버튼" />
-        </ShareButton>
-      </Modal>
-    </ModalWrap>
+    <div>
+      <ModalWrap>
+        <Modal>
+          <CloseButton onClick={onClick}>
+            <img src={closeIcon} alt="닫는버튼" />
+          </CloseButton>
+          <ModalImg>
+            <img src={selectedItem.thumbnail} alt="종이접기 이미지" />
+          </ModalImg>
+          <ModalText>{selectedItem.nickname}</ModalText>
+          <ShareButton>
+            <img src={shareIcon} alt="공유버튼" />
+          </ShareButton>
+        </Modal>
+      </ModalWrap>
+    </div>
   );
 };
 
 GalleryModal.propTypes = {
   onClick: PropTypes.func,
+  data: PropTypes.array,
 };
 
 export default GalleryModal;

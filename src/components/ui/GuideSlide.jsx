@@ -33,6 +33,7 @@ const GuideWrap = styled.div`
   position: absolute;
   top: 39px;
   left: 57px;
+  z-index: 20;
   padding: 16px 60px;
   border-radius: 30px;
   background-color: rgba(255, 255, 255, 0.5);

@@ -95,6 +95,7 @@ const PlayGuide = styled.div`
   position: absolute;
   top: 39px;
   right: 57px;
+  z-index: 20;
   padding: 16px 20px;
   border-radius: 10px;
   background-color: rgba(255, 255, 255, 0.5);
@@ -145,9 +146,9 @@ const PlayPage = () => {
 
   return (
     <MainContainer>
-      <PaperCanvas />
       <SectionContainer>
         {mode && <GuideSlide />}
+        <PaperCanvas />
         <PlayGuide>
           <PlayGuideP>
             <PlayGuideSpan>카메라 정면:</PlayGuideSpan> 빈 영역 더블클릭 하세요

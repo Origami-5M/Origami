@@ -9,7 +9,7 @@ const SidebarContainer = styled.aside`
   width: ${({ $isVisible }) => ($isVisible ? '269px' : '0px')};
   height: 96%;
   opacity: ${({ $isVisible }) => ($isVisible ? '1' : '0')};
-  z-index: 10;
+  z-index: 30;
   overflow: hidden;
   box-sizing: border-box;
   padding: 30px 0 0 0;

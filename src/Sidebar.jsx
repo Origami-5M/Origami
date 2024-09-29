@@ -49,51 +49,14 @@ const TooltipGalleryButton = styled.button`
 
 const TooltipSoundButton = styled.button`
   ${commonButtonStyle};
-  background: url('/src/assets/img/nav_sprites.png') no-repeat
-    ${({ isMuted }) => (isMuted ? '-100px -137px' : '-100px -80px')};
+  background: url('/src/assets/img/nav_sprites.png') no-repeat;
+  background-position: ${({ $isMuted }) =>
+    $isMuted ? '-100px -137px' : '-100px -80px'};
 `;
 
 const TooltipGuideButton = styled.button`
   ${commonButtonStyle};
   background: url('/src/assets/img/nav_sprites.png') no-repeat -4px -81px;
-`;
-
-const ModeSidebar = styled.aside`
-  position: absolute;
-  top: 0;
-  left: 110px;
-  width: 200px;
-  height: 100%;
-  background-color: #fff;
-  display: ${({ isVisible }) => (isVisible ? 'block' : 'none')};
-  z-index: 1000;
-`;
-
-const ModeList = styled.ul`
-  list-style: none;
-  padding: 20px;
-  margin: 0;
-`;
-
-const ModeListItem = styled.li`
-  margin-bottom: 15px;
-  cursor: pointer;
-  display: ${({ isHidden }) => (isHidden ? 'none' : 'block')};
-
-  div {
-    text-align: center;
-
-    h3 {
-      margin-bottom: 10px;
-      font-size: 18px;
-      color: #343394;
-    }
-
-    img {
-      width: 100px;
-      height: auto;
-    }
-  }
 `;
 
 function useClickOutside(ref, handler) {
@@ -112,12 +75,9 @@ function useClickOutside(ref, handler) {
 }
 
 function Sidebar() {
-  const [isMuted, setIsMuted] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
   const [isInfoVisible, setIsInfoVisible] = useState(false);
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
-  const [guideMode] = useState(
-    new URLSearchParams(window.location.search).get('mode')
-  );
 
   const infoWrapRef = useRef(null);
   const modeSidebarRef = useRef(null);
@@ -141,12 +101,6 @@ function Sidebar() {
 
   const handleInfoClick = () => {
     setIsInfoVisible(!isInfoVisible);
-  };
-
-  const handleModeSelect = mode => {
-    const url = new URL(`${window.location.origin}/play`);
-    url.searchParams.append('mode', mode);
-    window.location.assign(url.toString());
   };
 
   useClickOutside(infoWrapRef, () => {
@@ -187,53 +141,6 @@ function Sidebar() {
         loop
         autoPlay
       />
-
-      <ModeSidebar $isVisible={isSidebarVisible} ref={modeSidebarRef}>
-        <ModeList>
-          <ModeListItem
-            onClick={() => handleModeSelect('puppy')}
-            isHidden={guideMode === 'puppy'}
-          >
-            <div>
-              <h3>Puppy</h3>
-              <p>
-                <img
-                  src="/src/assets/img/puppy-img.png"
-                  alt="종이접기 강아지 이미지"
-                />
-              </p>
-            </div>
-          </ModeListItem>
-          <ModeListItem
-            onClick={() => handleModeSelect('plane')}
-            $isHidden={guideMode === 'plane'}
-          >
-            <div>
-              <h3>Plane</h3>
-              <p>
-                <img
-                  src="/src/assets/img/plane-img.png"
-                  alt="종이접기 비행기 이미지"
-                />
-              </p>
-            </div>
-          </ModeListItem>
-          <ModeListItem
-            onClick={() => handleModeSelect('heart')}
-            $isHidden={guideMode === 'heart'}
-          >
-            <div>
-              <h3>Heart</h3>
-              <p>
-                <img
-                  src="/src/assets/img/heart-img.png"
-                  alt="종이접기 하트 이미지"
-                />
-              </p>
-            </div>
-          </ModeListItem>
-        </ModeList>
-      </ModeSidebar>
     </>
   );
 }

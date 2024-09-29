@@ -129,7 +129,7 @@ const SoundButton = styled.button`
   height: 39px;
   background-image: url(/src/assets/img/css_sprites.png);
   background-position: ${props =>
-    props.isMuted ? '-66px -108px' : '-130px -108px'};
+    props.$isMuted ? '-66px -108px' : '-130px -108px'};
   transition: none;
   border: none;
   cursor: pointer;

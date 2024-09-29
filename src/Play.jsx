@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components';
 import Sidebar from './Sidebar';
 import { useTooltip, TOOLTIP_MESSAGES, TooltipText } from './utils/tooltip';
+import GuideSlide from './GuideSlide';
 
 const commonButtonStyle = css`
   background-color: #888;
@@ -139,6 +140,7 @@ const Play = () => {
   return (
     <MainContainer>
       <SectionContainer>
+        <GuideSlide />
         <PlayGuide>
           <PlayGuideP>
             <PlayGuideSpan>카메라 정면:</PlayGuideSpan> 빈 영역 더블클릭 하세요
@@ -147,7 +149,6 @@ const Play = () => {
             <PlayGuideSpan>카메라 회전: </PlayGuideSpan> 빈 영역 드래그 하세요
           </PlayGuideP>
         </PlayGuide>
-
         <BottomLayout>
           <ButtonUl>
             <BottomLayoutLi>

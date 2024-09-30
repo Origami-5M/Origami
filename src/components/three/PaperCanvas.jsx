@@ -4,6 +4,8 @@ import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 
 import Paper from './Paper';
+import PointsMarker from './PointsMarker';
+import { POINTS_MARKER_COLOR, RED_MARKER_COLOR } from '../../constants/paper';
 
 const CanvasContainer = styled.div`
   position: absolute;
@@ -23,6 +25,7 @@ const PaperCanvas = () => {
           intensity={0.5}
         />
         <Paper position={[0, 0, 0]} />
+        <PointsMarker position={[0, 0, 0]} color={POINTS_MARKER_COLOR} />
         <OrbitControls
           enableDamping={true}
           dampingFactor={0.25}

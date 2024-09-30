@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 
@@ -15,14 +16,17 @@ const CanvasContainer = styled.div`
 `;
 
 const PaperCanvas = () => {
+  const [isInteracting, setIsInteracting] = useState(false);
+
   return (
     <CanvasContainer>
       <Canvas>
         <ambientLight intensity={0.5} />
         <directionalLight position={[1, 1, 1]} intensity={0.5} />
-        <Paper position={[0, 0, 0]} />
+        <Paper position={[0, 0, 0]} setIsInteracting={setIsInteracting} />
         <PointsMarker position={[0, 0, 0]} color={POINTS_MARKER_COLOR} />
         <OrbitControls
+          enabled={!isInteracting}
           enableDamping={true}
           dampingFactor={0.25}
           enableZoom={true}

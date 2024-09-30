@@ -8,7 +8,7 @@ import * as THREE from 'three';
 import paperShaderMaterial from './paperShaderMaterial';
 import { handlePointerEvent, getPaperCorners } from './paperUtils';
 
-const Paper = ({ position }) => {
+const Paper = ({ position, setIsInteracting }) => {
   const meshRef = useRef();
   const { camera, raycaster } = useThree();
   const [colors] = useAtom(paperAtom);
@@ -16,7 +16,8 @@ const Paper = ({ position }) => {
   const [mouseUpPoint, setMouseUpPoint] = useState(null);
 
   const handlePointerDown = useCallback(
-    event =>
+    event => {
+      setIsInteracting(true);
       handlePointerEvent(
         event,
         setClickPoint,
@@ -24,12 +25,14 @@ const Paper = ({ position }) => {
         camera,
         raycaster,
         meshRef
-      ),
-    [camera, raycaster]
+      );
+    },
+    [camera, raycaster, setIsInteracting]
   );
 
   const handlePointerUp = useCallback(
-    event =>
+    event => {
+      setIsInteracting(false);
       handlePointerEvent(
         event,
         setMouseUpPoint,
@@ -37,8 +40,9 @@ const Paper = ({ position }) => {
         camera,
         raycaster,
         meshRef
-      ),
-    [camera, raycaster]
+      );
+    },
+    [camera, raycaster, setIsInteracting]
   );
 
   const paperCorners = getPaperCorners();

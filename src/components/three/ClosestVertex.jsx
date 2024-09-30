@@ -28,50 +28,28 @@ const generateBorderPoints = (corners, pointsPerEdge = 9) => {
   return borderPoints;
 };
 
-const findClosestVertex = (point, vertices) => {
-  let closestVertex = vertices[0];
-  let minDistance = point.distanceTo(vertices[0]);
+export const findClosestVertex = (point, corners, pointsPerEdge = 9) => {
+  const borderVertices = generateBorderPoints(corners, pointsPerEdge);
+  let closestVertex = borderVertices[0];
+  let minDistance = point.distanceTo(borderVertices[0]);
 
-  for (let i = 1; i < vertices.length; i++) {
-    const distance = point.distanceTo(vertices[i]);
+  for (let i = 1; i < borderVertices.length; i++) {
+    const distance = point.distanceTo(borderVertices[i]);
 
     if (distance < minDistance) {
       minDistance = distance;
-      closestVertex = vertices[i];
+      closestVertex = borderVertices[i];
     }
   }
 
   return closestVertex;
 };
 
-const BorderPoints = ({
-  corners,
-  pointsPerEdge = 9,
-  clickPoint,
-  mouseUpPoint,
-  axisPoints,
-}) => {
+const BorderPoints = ({ corners, pointsPerEdge = 9, axisPoints }) => {
   const borderVertices = useMemo(
     () => generateBorderPoints(corners, pointsPerEdge),
     [corners, pointsPerEdge]
   );
-
-  const updateClosestVertices = () => {
-    if (clickPoint) {
-      const closestClickVertex = findClosestVertex(clickPoint, borderVertices);
-    }
-
-    if (mouseUpPoint) {
-      const closestMouseUpVertex = findClosestVertex(
-        mouseUpPoint,
-        borderVertices
-      );
-    }
-  };
-
-  useEffect(() => {
-    updateClosestVertices();
-  }, [clickPoint, mouseUpPoint]);
 
   return (
     <group>

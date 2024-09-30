@@ -42,46 +42,64 @@ const Paper = ({ position, setIsInteracting }) => {
 
   const handlePointerDown = useCallback(
     event => {
-      handlePointerEvent(
-        event,
-        point => {
-          setClickPoint(point);
-        },
-        '클릭 좌표:',
-        camera,
-        raycaster,
-        meshRef
-      );
+      if (paperCorners && paperCorners.length > 0) {
+        const point = handlePointerEvent(
+          event,
+          setClickPoint,
+          '클릭 좌표:',
+          camera,
+          raycaster,
+          meshRef,
+          paperCorners
+        );
 
-      setIsInteracting(true);
+        if (point) {
+          setClickPoint(point);
+          setIsInteracting(true);
+        }
+      }
     },
-    [camera, raycaster, setIsInteracting]
+    [camera, raycaster, setIsInteracting, paperCorners]
   );
 
   const handlePointerUp = useCallback(
     event => {
-      setIsInteracting(false);
-      handlePointerEvent(
-        event,
-        point => {
+      if (paperCorners && paperCorners.length > 0) {
+        const point = handlePointerEvent(
+          event,
+          setMouseUpPoint,
+          'MouseUp 좌표:',
+          camera,
+          raycaster,
+          meshRef,
+          paperCorners
+        );
+        if (point) {
           setMouseUpPoint(point);
           if (clickPoint && point) {
             const updatedAxisPoints = updateBoundaryAndAxis(
               scene,
-              paperCorners,
+              paperVertices,
               clickPoint,
               point
             );
-            setAxisPoints(updatedAxisPoints);
+            if (updatedAxisPoints) {
+              setAxisPoints(updatedAxisPoints);
+            }
           }
-        },
-        'MouseUp 좌표:',
-        camera,
-        raycaster,
-        meshRef
-      );
+        }
+        setIsInteracting(false);
+      }
     },
-    [camera, raycaster, setIsInteracting, scene, paperCorners, clickPoint]
+    [
+      camera,
+      raycaster,
+      setIsInteracting,
+      scene,
+      paperVertices,
+      paperCorners,
+      clickPoint,
+    ]
   );
 
   return (

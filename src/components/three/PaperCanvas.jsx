@@ -1,8 +1,8 @@
-import styled from 'styled-components';
-import * as THREE from 'three';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 
+import styled from 'styled-components';
+import * as THREE from 'three';
 import Paper from './Paper';
 import PointsMarker from './PointsMarker';
 import { POINTS_MARKER_COLOR, RED_MARKER_COLOR } from '../../constants/paper';
@@ -18,12 +18,8 @@ const PaperCanvas = () => {
   return (
     <CanvasContainer>
       <Canvas>
-        <ambientLight color="0xffffff" intensity={0.5} />
-        <directionalLight
-          position={[1, 1, 1]}
-          color="0xffffff"
-          intensity={0.5}
-        />
+        <ambientLight intensity={0.5} />
+        <directionalLight position={[1, 1, 1]} intensity={0.5} />
         <Paper position={[0, 0, 0]} />
         <PointsMarker position={[0, 0, 0]} color={POINTS_MARKER_COLOR} />
         <OrbitControls

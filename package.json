@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@react-three/drei": "^9.114.0",
+    "@react-three/eslint-plugin": "^0.1.1",
     "@react-three/fiber": "^8.17.8",
     "firebase": "^10.13.2",
     "jotai": "^2.10.0",

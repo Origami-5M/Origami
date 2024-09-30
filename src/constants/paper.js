@@ -15,7 +15,7 @@ export const PAPERCOLORS = [
 
 export const SEGMENT_NUM = 150;
 export const THRESHOLD = 0.3;
-export const AXIS_BOUNDARY = 10000;
+export const AXIS_BOUNDARY = 10;
 export const DASH_SIZE = 0.02;
 export const Z_GAP = 0.02;
 export const FRAMES = 30;

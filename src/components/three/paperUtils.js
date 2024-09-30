@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 
 export const calculateMousePosition = event => {
-  const mouse = new THREE.Vector2();
+  const mouse = new THREE.Vector3();
   mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
   mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
   return mouse;
@@ -24,14 +24,6 @@ export const handlePointerEvent = (
   const mouse = calculateMousePosition(event);
   const point = getIntersectionPoint(mouse, camera, raycaster, meshRef);
   if (point) {
-    console.log(logMessage, point);
     setPoint(point);
   }
 };
-
-export const getPaperCorners = () => [
-  new THREE.Vector3(1.5, 1.5, 0),
-  new THREE.Vector3(-1.5, 1.5, 0),
-  new THREE.Vector3(-1.5, -1.5, 0),
-  new THREE.Vector3(1.5, -1.5, 0),
-];

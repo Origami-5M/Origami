@@ -1,4 +1,4 @@
-import { useRef, useCallback, useState } from 'react';
+import { useRef, useCallback, useState, useMemo, useEffect } from 'react';
 import { useThree } from '@react-three/fiber';
 import { useAtom } from 'jotai';
 import { paperAtom } from '../../atoms';
@@ -6,26 +6,54 @@ import { SEGMENT_NUM } from '../../constants/paper';
 import BorderPoints from './ClosestVertex';
 import * as THREE from 'three';
 import paperShaderMaterial from './paperShaderMaterial';
-import { handlePointerEvent, getPaperCorners } from './paperUtils';
+import { handlePointerEvent } from './paperUtils';
+import {
+  updateBoundaryAndAxis,
+  computeBoundaryPoints,
+} from './computeBoundaryPoints';
 
 const Paper = ({ position, setIsInteracting }) => {
   const meshRef = useRef();
-  const { camera, raycaster } = useThree();
+  const { camera, raycaster, scene } = useThree();
   const [colors] = useAtom(paperAtom);
   const [clickPoint, setClickPoint] = useState(null);
   const [mouseUpPoint, setMouseUpPoint] = useState(null);
+  const [axisPoints, setAxisPoints] = useState(null);
+  const [paperVertices, setPaperVertices] = useState([]);
+
+  useEffect(() => {
+    if (meshRef.current) {
+      const geometry = meshRef.current.geometry;
+      const positionAttribute = geometry.getAttribute('position');
+      const vertices = [];
+      for (let i = 0; i < positionAttribute.count; i++) {
+        vertices.push(
+          new THREE.Vector3().fromBufferAttribute(positionAttribute, i)
+        );
+      }
+      setPaperVertices(vertices);
+    }
+  }, []);
+
+  const paperCorners = useMemo(
+    () => computeBoundaryPoints(paperVertices),
+    [paperVertices]
+  );
 
   const handlePointerDown = useCallback(
     event => {
-      setIsInteracting(true);
       handlePointerEvent(
         event,
-        setClickPoint,
+        point => {
+          setClickPoint(point);
+        },
         '클릭 좌표:',
         camera,
         raycaster,
         meshRef
       );
+
+      setIsInteracting(true);
     },
     [camera, raycaster, setIsInteracting]
   );
@@ -35,17 +63,26 @@ const Paper = ({ position, setIsInteracting }) => {
       setIsInteracting(false);
       handlePointerEvent(
         event,
-        setMouseUpPoint,
+        point => {
+          setMouseUpPoint(point);
+          if (clickPoint && point) {
+            const updatedAxisPoints = updateBoundaryAndAxis(
+              scene,
+              paperCorners,
+              clickPoint,
+              point
+            );
+            setAxisPoints(updatedAxisPoints);
+          }
+        },
         'MouseUp 좌표:',
         camera,
         raycaster,
         meshRef
       );
     },
-    [camera, raycaster, setIsInteracting]
+    [camera, raycaster, setIsInteracting, scene, paperCorners, clickPoint]
   );
-
-  const paperCorners = getPaperCorners();
 
   return (
     <group position={position}>
@@ -54,7 +91,7 @@ const Paper = ({ position, setIsInteracting }) => {
         onPointerDown={handlePointerDown}
         onPointerUp={handlePointerUp}
       >
-        <planeGeometry args={[3, 3, SEGMENT_NUM, SEGMENT_NUM]} />
+        <planeGeometry args={[5, 5, SEGMENT_NUM, SEGMENT_NUM]} />
         <paperShaderMaterial
           colorFront={new THREE.Color(colors.frontColor)}
           colorBack={new THREE.Color(colors.backColor)}
@@ -66,6 +103,7 @@ const Paper = ({ position, setIsInteracting }) => {
         pointsPerEdge={9}
         clickPoint={clickPoint}
         mouseUpPoint={mouseUpPoint}
+        axisPoints={axisPoints}
       />
     </group>
   );

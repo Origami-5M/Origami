@@ -49,6 +49,7 @@ const BorderPoints = ({
   pointsPerEdge = 9,
   clickPoint,
   mouseUpPoint,
+  axisPoints,
 }) => {
   const borderVertices = useMemo(
     () => generateBorderPoints(corners, pointsPerEdge),
@@ -58,7 +59,6 @@ const BorderPoints = ({
   const updateClosestVertices = () => {
     if (clickPoint) {
       const closestClickVertex = findClosestVertex(clickPoint, borderVertices);
-      console.log('클릭 후 가장 가까운 정점:', closestClickVertex);
     }
 
     if (mouseUpPoint) {
@@ -66,7 +66,6 @@ const BorderPoints = ({
         mouseUpPoint,
         borderVertices
       );
-      console.log('MouseUp 후 가장 가까운 정점:', closestMouseUpVertex);
     }
   };
 
@@ -82,6 +81,28 @@ const BorderPoints = ({
           <meshBasicMaterial color="red" />
         </mesh>
       ))}
+      {axisPoints && (
+        <line>
+          <bufferGeometry>
+            <bufferAttribute
+              attachObject={['attributes', 'position']}
+              count={2}
+              array={
+                new Float32Array([
+                  axisPoints.startPoint.x,
+                  axisPoints.startPoint.y,
+                  axisPoints.startPoint.z,
+                  axisPoints.endPoint.x,
+                  axisPoints.endPoint.y,
+                  axisPoints.endPoint.z,
+                ])
+              }
+              itemSize={3}
+            />
+          </bufferGeometry>
+          <lineBasicMaterial color="yellow" />
+        </line>
+      )}
     </group>
   );
 };

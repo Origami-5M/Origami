@@ -1,4 +1,4 @@
-import { useMemo, useEffect } from 'react';
+import { useMemo } from 'react';
 import * as THREE from 'three';
 
 const interpolatePoints = (start, end, numPoints) => {

@@ -6,7 +6,6 @@ import styled from 'styled-components';
 import * as THREE from 'three';
 import Paper from './Paper';
 import PointsMarker from './PointsMarker';
-import { POINTS_MARKER_COLOR, RED_MARKER_COLOR } from '../../constants/paper';
 
 const CanvasContainer = styled.div`
   position: absolute;
@@ -24,7 +23,7 @@ const PaperCanvas = () => {
         <ambientLight intensity={0.5} />
         <directionalLight position={[1, 1, 1]} intensity={0.5} />
         <Paper position={[0, 0, 0]} setIsInteracting={setIsInteracting} />
-        <PointsMarker position={[0, 0, 0]} color={POINTS_MARKER_COLOR} />
+        {/* <PointsMarker position={[0, 0, 0]} color={POINTS_MARKER_COLOR} /> */}
         <OrbitControls
           enabled={!isInteracting}
           enableDamping={true}

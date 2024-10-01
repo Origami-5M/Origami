@@ -1,5 +1,7 @@
 import { useMemo } from 'react';
 import * as THREE from 'three';
+import PointsMarker from './PointsMarker';
+import { POINTS_MARKER_COLOR } from '../../constants/paper';
 
 const interpolatePoints = (start, end, numPoints) => {
   const points = [];
@@ -54,10 +56,7 @@ const BorderPoints = ({ corners, pointsPerEdge = 9, axisPoints }) => {
   return (
     <group>
       {borderVertices.map((vertex, index) => (
-        <mesh key={index} position={vertex}>
-          <sphereGeometry args={[0.05, 16, 16]} />
-          <meshBasicMaterial color="red" />
-        </mesh>
+        <PointsMarker position={vertex} color={POINTS_MARKER_COLOR} />
       ))}
       {axisPoints && (
         <line>

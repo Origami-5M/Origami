@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { findClosestVertex } from './ClosestVertex';
+import { findClickClosestVertex } from '../BorderPoints';
 
 export const calculateMousePosition = (event, camera) => {
   const mouse = new THREE.Vector2();
@@ -32,7 +32,10 @@ export const handlePointerEvent = (
   );
 
   if (intersectionPoint) {
-    const closestVertex = findClosestVertex(intersectionPoint, paperCorners);
+    const closestVertex = findClickClosestVertex(
+      intersectionPoint,
+      paperCorners
+    );
 
     if (closestVertex) {
       setPoint(closestVertex);

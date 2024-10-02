@@ -1,36 +1,11 @@
-import { useMemo } from 'react';
 import * as THREE from 'three';
+import { useMemo } from 'react';
+
 import PointsMarker from './PointsMarker';
+import { generateBorderPoints } from './utils/borderVerticesUtils';
 import { POINTS_MARKER_COLOR } from '../../constants/paper';
 
-const interpolatePoints = (start, end, numPoints) => {
-  const points = [];
-
-  for (let i = 0; i <= numPoints; i++) {
-    const t = i / numPoints;
-    const x = start.x + t * (end.x - start.x);
-    const y = start.y + t * (end.y - start.y);
-    const z = start.z + t * (end.z - start.z);
-    points.push(new THREE.Vector3(x, y, z));
-  }
-
-  return points;
-};
-
-const generateBorderPoints = (corners, pointsPerEdge = 9) => {
-  const borderPoints = [];
-
-  for (let i = 0; i < corners.length; i++) {
-    const start = corners[i];
-    const end = corners[(i + 1) % corners.length];
-    const interpolatedPoints = interpolatePoints(start, end, pointsPerEdge);
-    borderPoints.push(...interpolatedPoints);
-  }
-
-  return borderPoints;
-};
-
-export const findClosestVertex = (point, corners, pointsPerEdge = 9) => {
+export const findClickClosestVertex = (point, corners, pointsPerEdge = 9) => {
   const borderVertices = generateBorderPoints(corners, pointsPerEdge);
   let closestVertex = borderVertices[0];
   let minDistance = point.distanceTo(borderVertices[0]);
@@ -56,7 +31,11 @@ const BorderPoints = ({ corners, pointsPerEdge = 9, axisPoints }) => {
   return (
     <group>
       {borderVertices.map((vertex, index) => (
-        <PointsMarker position={vertex} color={POINTS_MARKER_COLOR} />
+        <PointsMarker
+          key={index}
+          position={vertex}
+          color={POINTS_MARKER_COLOR}
+        />
       ))}
       {axisPoints && (
         <line>

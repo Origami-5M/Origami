@@ -1,11 +1,10 @@
+import * as THREE from 'three';
 import { useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 
 import styled from 'styled-components';
-import * as THREE from 'three';
 import Paper from './Paper';
-import PointsMarker from './PointsMarker';
 
 const CanvasContainer = styled.div`
   position: absolute;
@@ -23,7 +22,6 @@ const PaperCanvas = () => {
         <ambientLight intensity={0.5} />
         <directionalLight position={[1, 1, 1]} intensity={0.5} />
         <Paper position={[0, 0, 0]} setIsInteracting={setIsInteracting} />
-        {/* <PointsMarker position={[0, 0, 0]} color={POINTS_MARKER_COLOR} /> */}
         <OrbitControls
           enabled={!isInteracting}
           enableDamping={true}

@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { AXIS_BOUNDARY, DASH_SIZE } from '../../constants/paper';
+import { AXIS_BOUNDARY, DASH_SIZE } from '../../../constants/paper';
 
 export const computeBoundaryPoints = vertices => {
   const points = vertices.map(v => new THREE.Vector2(v.x, v.y));

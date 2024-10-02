@@ -1,16 +1,17 @@
 import { useRef, useCallback, useState, useMemo, useEffect } from 'react';
+import * as THREE from 'three';
 import { useThree } from '@react-three/fiber';
+import paperShaderMaterial from './utils/PaperShaderMaterial';
+
 import { useAtom } from 'jotai';
 import { paperAtom } from '../../atoms';
-import { SEGMENT_NUM } from '../../constants/paper';
-import BorderPoints from './ClosestVertex';
-import * as THREE from 'three';
-import paperShaderMaterial from './paperShaderMaterial';
-import { handlePointerEvent } from './paperUtils';
+import BorderPoints from './BorderPoints';
 import {
   updateBoundaryAndAxis,
   computeBoundaryPoints,
-} from './computeBoundaryPoints';
+} from './utils/computeBoundaryPoints';
+import { handlePointerEvent } from './utils/paperUtils';
+import { SEGMENT_NUM } from '../../constants/paper';
 
 const Paper = ({ position, setIsInteracting }) => {
   const meshRef = useRef();

@@ -1,9 +1,9 @@
-import * as THREE from 'three';
 import { useMemo } from 'react';
-
-import PointsMarker from './PointsMarker';
+import { useAtom } from 'jotai';
+import { borderVerticesAtom } from '../../atoms';
 import { generateBorderPoints } from './utils/borderVerticesUtils';
 import { POINTS_MARKER_COLOR } from '../../constants/paper';
+import PointsMarker from './PointsMarker';
 
 export const findClickClosestVertex = (point, corners, pointsPerEdge = 9) => {
   const borderVertices = generateBorderPoints(corners, pointsPerEdge);
@@ -23,10 +23,12 @@ export const findClickClosestVertex = (point, corners, pointsPerEdge = 9) => {
 };
 
 const BorderPoints = ({ corners, pointsPerEdge = 9, axisPoints }) => {
-  const borderVertices = useMemo(
-    () => generateBorderPoints(corners, pointsPerEdge),
-    [corners, pointsPerEdge]
-  );
+  const [borderVertices, setBorderVertices] = useAtom(borderVerticesAtom);
+
+  useMemo(() => {
+    const newBorderVertices = generateBorderPoints(corners, pointsPerEdge);
+    setBorderVertices(newBorderVertices);
+  }, [corners]);
 
   return (
     <group>

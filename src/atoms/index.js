@@ -1,3 +1,3 @@
-import { paperAtom } from './paperAtom';
+import { paperAtom, borderVerticesAtom, closestVertexAtom } from './paperAtom';
 
-export { paperAtom };
+export { paperAtom, borderVerticesAtom, closestVertexAtom };

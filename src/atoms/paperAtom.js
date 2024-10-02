@@ -11,3 +11,6 @@ export const paperAtom = atom(() => {
     backColor: PAPERCOLORS[backColorIndex],
   };
 });
+
+export const borderVerticesAtom = atom([]);
+export const closestVertexAtom = atom();

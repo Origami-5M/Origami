@@ -52,7 +52,7 @@ const PaperCanvas = () => {
         setClosestVertex(null);
       }
     },
-    [borderVertices, camera, raycaster]
+    [borderVertices, camera, raycaster, scene]
   );
 
   return (

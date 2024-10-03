@@ -1,9 +1,21 @@
 import * as THREE from 'three';
-import { useState } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
-
+import { useAtom } from 'jotai';
 import styled from 'styled-components';
+
+import {
+  borderVerticesAtom,
+  closestVertexAtom,
+  cameraAtom,
+  raycasterAtom,
+  sceneAtom,
+} from '../../atoms';
+import {
+  getMousePositionIn3D,
+  findClosestMesh,
+} from './utils/borderVerticesUtils';
 import Paper from './Paper';
 
 const CanvasContainer = styled.div`
@@ -14,11 +26,38 @@ const CanvasContainer = styled.div`
 `;
 
 const PaperCanvas = () => {
+  const containerRef = useRef();
   const [isInteracting, setIsInteracting] = useState(false);
 
+  const [borderVertices] = useAtom(borderVerticesAtom);
+  const [, setClosestVertex] = useAtom(closestVertexAtom);
+  const [camera] = useAtom(cameraAtom);
+  const [raycaster] = useAtom(raycasterAtom);
+  const [scene] = useAtom(sceneAtom);
+
+  const handleMouseMove = useCallback(
+    event => {
+      const mouse3DPoint = getMousePositionIn3D(
+        event,
+        containerRef,
+        raycaster,
+        camera,
+        scene
+      );
+
+      if (mouse3DPoint) {
+        const closestVertex = findClosestMesh(mouse3DPoint, borderVertices);
+        setClosestVertex(closestVertex);
+      } else {
+        setClosestVertex(null);
+      }
+    },
+    [borderVertices, camera, raycaster]
+  );
+
   return (
-    <CanvasContainer>
-      <Canvas>
+    <CanvasContainer ref={containerRef}>
+      <Canvas onMouseMove={handleMouseMove}>
         <ambientLight intensity={0.5} />
         <directionalLight position={[1, 1, 1]} intensity={0.5} />
         <Paper position={[0, 0, 0]} setIsInteracting={setIsInteracting} />

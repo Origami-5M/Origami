@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { THRESHOLD } from '../../../constants/paper';
 
 const interpolatePoints = (start, end, numPoints) => {
   const points = [];
@@ -25,4 +26,40 @@ export const generateBorderPoints = (corners, pointsPerEdge = 9) => {
   }
 
   return borderPoints;
+};
+
+export const getMousePositionIn3D = (
+  event,
+  containerRef,
+  raycaster,
+  camera,
+  scene
+) => {
+  const rect = containerRef.current.getBoundingClientRect();
+  const mouse = new THREE.Vector2(
+    ((event.clientX - rect.left) / rect.width) * 2 - 1,
+    -((event.clientY - rect.top) / rect.height) * 2 + 1
+  );
+
+  raycaster.setFromCamera(mouse, camera);
+  const intersects = raycaster.intersectObjects(scene.children, true);
+
+  return intersects.length > 0 ? intersects[0].point : null;
+};
+
+export const findClosestMesh = (mouse3DPoint, borderVertices) => {
+  if (!mouse3DPoint) return null;
+
+  let closestVertex = null;
+  let minDistance = Infinity;
+
+  for (let i = 1; i < borderVertices.length; i++) {
+    const distance = mouse3DPoint.distanceTo(borderVertices[i]);
+    if (distance < THRESHOLD && distance < minDistance) {
+      minDistance = distance;
+      closestVertex = borderVertices[i];
+    }
+  }
+
+  return closestVertex;
 };

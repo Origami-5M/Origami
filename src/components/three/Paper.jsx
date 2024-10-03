@@ -4,7 +4,7 @@ import { useThree } from '@react-three/fiber';
 import paperShaderMaterial from './utils/PaperShaderMaterial';
 
 import { useAtom } from 'jotai';
-import { paperAtom } from '../../atoms';
+import { paperAtom, cameraAtom, raycasterAtom, sceneAtom } from '../../atoms';
 import BorderPoints from './BorderPoints';
 import {
   updateBoundaryAndAxis,
@@ -15,14 +15,22 @@ import { SEGMENT_NUM } from '../../constants/paper';
 
 const Paper = ({ position, setIsInteracting }) => {
   const meshRef = useRef();
-  const { camera, raycaster, scene } = useThree();
-  const [colors] = useAtom(paperAtom);
   const [clickPoint, setClickPoint] = useState(null);
   const [mouseUpPoint, setMouseUpPoint] = useState(null);
   const [axisPoints, setAxisPoints] = useState(null);
   const [paperVertices, setPaperVertices] = useState([]);
+  const [colors] = useAtom(paperAtom);
+
+  const { camera, raycaster, scene } = useThree();
+  const [, setCamera] = useAtom(cameraAtom);
+  const [, setRaycaster] = useAtom(raycasterAtom);
+  const [, setScene] = useAtom(sceneAtom);
 
   useEffect(() => {
+    setCamera(camera);
+    setRaycaster(raycaster);
+    setScene(scene);
+
     if (meshRef.current) {
       const geometry = meshRef.current.geometry;
       const positionAttribute = geometry.getAttribute('position');

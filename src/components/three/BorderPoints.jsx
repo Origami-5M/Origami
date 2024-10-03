@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useAtom } from 'jotai';
-import { borderVerticesAtom } from '../../atoms';
+import { borderVerticesAtom, closestVertexAtom } from '../../atoms';
 import { generateBorderPoints } from './utils/borderVerticesUtils';
 import { POINTS_MARKER_COLOR } from '../../constants/paper';
 import PointsMarker from './PointsMarker';
@@ -23,7 +23,8 @@ export const findClickClosestVertex = (point, corners, pointsPerEdge = 9) => {
 };
 
 const BorderPoints = ({ corners, pointsPerEdge = 9, axisPoints }) => {
-  const [borderVertices, setBorderVertices] = useAtom(borderVerticesAtom);
+  const [, setBorderVertices] = useAtom(borderVerticesAtom);
+  const [closestVertex] = useAtom(closestVertexAtom);
 
   useMemo(() => {
     const newBorderVertices = generateBorderPoints(corners, pointsPerEdge);
@@ -32,13 +33,9 @@ const BorderPoints = ({ corners, pointsPerEdge = 9, axisPoints }) => {
 
   return (
     <group>
-      {borderVertices.map((vertex, index) => (
-        <PointsMarker
-          key={index}
-          position={vertex}
-          color={POINTS_MARKER_COLOR}
-        />
-      ))}
+      {closestVertex && (
+        <PointsMarker position={closestVertex} color={POINTS_MARKER_COLOR} />
+      )}
       {axisPoints && (
         <line>
           <bufferGeometry>

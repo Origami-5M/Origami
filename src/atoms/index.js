@@ -7,6 +7,8 @@ import {
   sceneAtom,
 } from './paperAtom';
 
+import { isDraggingAtom, selectedVerticesAtom } from './foldAtom';
+
 export {
   paperAtom,
   borderVerticesAtom,
@@ -14,4 +16,6 @@ export {
   cameraAtom,
   raycasterAtom,
   sceneAtom,
+  isDraggingAtom,
+  selectedVerticesAtom,
 };

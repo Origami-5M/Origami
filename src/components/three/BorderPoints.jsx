@@ -1,8 +1,13 @@
 import { useMemo } from 'react';
 import { useAtom } from 'jotai';
-import { borderVerticesAtom, closestVertexAtom } from '../../atoms';
+import {
+  borderVerticesAtom,
+  closestVertexAtom,
+  selectedVerticesAtom,
+  isDraggingAtom,
+} from '../../atoms';
 import { generateBorderPoints } from './utils/borderVerticesUtils';
-import { POINTS_MARKER_COLOR } from '../../constants/paper';
+import { POINTS_MARKER_COLOR, RED_MARKER_COLOR } from '../../constants/paper';
 import PointsMarker from './PointsMarker';
 
 export const findClickClosestVertex = (point, corners, pointsPerEdge = 9) => {
@@ -25,6 +30,8 @@ export const findClickClosestVertex = (point, corners, pointsPerEdge = 9) => {
 const BorderPoints = ({ corners, pointsPerEdge = 9, axisPoints }) => {
   const [, setBorderVertices] = useAtom(borderVerticesAtom);
   const [closestVertex] = useAtom(closestVertexAtom);
+  const [selectedVertices] = useAtom(selectedVerticesAtom);
+  const [isDragging] = useAtom(isDraggingAtom);
 
   useMemo(() => {
     const newBorderVertices = generateBorderPoints(corners, pointsPerEdge);
@@ -33,9 +40,19 @@ const BorderPoints = ({ corners, pointsPerEdge = 9, axisPoints }) => {
 
   return (
     <group>
-      {closestVertex && (
-        <PointsMarker position={closestVertex} color={POINTS_MARKER_COLOR} />
+      {isDragging && selectedVertices.point1 && (
+        <PointsMarker
+          position={selectedVertices.point1}
+          color={RED_MARKER_COLOR}
+        />
       )}
+      {closestVertex && (
+        <PointsMarker
+          position={closestVertex}
+          color={isDragging ? RED_MARKER_COLOR : POINTS_MARKER_COLOR}
+        />
+      )}
+
       {axisPoints && (
         <line>
           <bufferGeometry>

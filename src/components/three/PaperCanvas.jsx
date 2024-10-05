@@ -28,7 +28,6 @@ const CanvasContainer = styled.div`
 const PaperCanvas = () => {
   const containerRef = useRef();
   const [isInteracting, setIsInteracting] = useState(false);
-
   const [borderVertices] = useAtom(borderVerticesAtom);
   const [, setClosestVertex] = useAtom(closestVertexAtom);
   const [camera] = useAtom(cameraAtom);
@@ -47,6 +46,7 @@ const PaperCanvas = () => {
 
       if (mouse3DPoint) {
         const closestVertex = findClosestMesh(mouse3DPoint, borderVertices);
+
         setClosestVertex(closestVertex);
       } else {
         setClosestVertex(null);

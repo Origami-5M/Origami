@@ -5,6 +5,7 @@ export const calculateMousePosition = event => {
   const mouse = new THREE.Vector2();
   mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
   mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
   return mouse;
 };
 
@@ -17,7 +18,6 @@ export const getIntersectionPoint = (mouse, camera, raycaster, meshRef) => {
 export const handlePointerEvent = (
   event,
   setPoint,
-  logMessage,
   camera,
   raycaster,
   meshRef,

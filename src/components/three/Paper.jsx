@@ -1,4 +1,4 @@
-import { useRef, useCallback, useState, useMemo, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import * as THREE from 'three';
 import { useThree } from '@react-three/fiber';
 import paperShaderMaterial from './utils/PaperShaderMaterial';
@@ -23,8 +23,6 @@ import { SEGMENT_NUM } from '../../constants/paper';
 
 const Paper = ({ position, setIsInteracting }) => {
   const meshRef = useRef();
-  const [clickPoint, setClickPoint] = useState(null);
-  const [mouseUpPoint, setMouseUpPoint] = useState(null);
   const [axisPoints, setAxisPoints] = useState(null);
   const [paperVertices, setPaperVertices] = useState([]);
   const [colors] = useAtom(paperAtom);
@@ -38,10 +36,7 @@ const Paper = ({ position, setIsInteracting }) => {
   const [closestVertex] = useAtom(closestVertexAtom);
   const [selectedVertices, setSelectedVertices] = useAtom(selectedVerticesAtom);
 
-  const paperCorners = useMemo(
-    () => computeBoundaryPoints(paperVertices),
-    [paperVertices]
-  );
+  const paperCorners = computeBoundaryPoints(paperVertices);
 
   useEffect(() => {
     setCamera(camera);
@@ -61,101 +56,49 @@ const Paper = ({ position, setIsInteracting }) => {
     }
   }, []);
 
-  const handlePointerDown = useCallback(
-    event => {
-      if (paperCorners && paperCorners.length > 0) {
-        const point = handlePointerEvent(
-          event,
-          setClickPoint,
-          '클릭 좌표:',
-          camera,
-          raycaster,
-          meshRef,
-          paperCorners
-        );
+  const handlePointerDown = () => {
+    if (closestVertex) {
+      setSelectedVertices({
+        point1: closestVertex,
+        point2: null,
+      });
+    } else {
+      setSelectedVertices({ point1: null, point2: null });
+    }
 
-        if (point) {
-          setClickPoint(point);
-          setIsInteracting(true);
-          setIsDragging(true);
-        }
-      }
+    if (closestVertex) {
+      setIsInteracting(true);
+      setIsDragging(true);
+    }
+  };
+  const handlePointerUp = () => {
+    if (closestVertex) {
+      setSelectedVertices(prev => ({
+        ...prev,
+        point2: closestVertex,
+      }));
+    }
 
-      if (closestVertex) {
-        setSelectedVertices(prev => ({
-          ...prev,
-          point1: closestVertex,
-        }));
-      } else {
-        setSelectedVertices({ point1: null, point2: null });
-      }
-    },
-    [
-      camera,
-      raycaster,
-      setIsDragging,
-      setIsInteracting,
-      paperCorners,
-      closestVertex,
-      selectedVertices,
-    ]
-  );
+    if (selectedVertices.point1 && closestVertex) {
+      const updatedAxisPoints = updateBoundaryAndAxis(
+        scene,
+        paperVertices,
+        selectedVertices.point1,
+        closestVertex
+      );
 
-  const handlePointerUp = useCallback(
-    event => {
-      if (paperCorners && paperCorners.length > 0) {
-        const point = handlePointerEvent(
-          event,
-          setMouseUpPoint,
-          'MouseUp 좌표:',
-          camera,
-          raycaster,
-          meshRef,
-          paperCorners
-        );
-        if (point) {
-          setMouseUpPoint(point);
-          if (clickPoint && point) {
-            const updatedAxisPoints = updateBoundaryAndAxis(
-              scene,
-              paperVertices,
-              clickPoint,
-              point
-            );
-            if (updatedAxisPoints) {
-              setAxisPoints(updatedAxisPoints);
-            }
-          }
-        }
-        setIsInteracting(false);
-        setIsDragging(false);
+      if (updatedAxisPoints) {
+        setAxisPoints(updatedAxisPoints);
       }
+    }
 
-      if (closestVertex) {
-        setSelectedVertices(prev => ({
-          ...prev,
-          point2: closestVertex,
-        }));
-      }
-    },
-    [
-      camera,
-      raycaster,
-      setIsDragging,
-      setIsInteracting,
-      scene,
-      paperVertices,
-      paperCorners,
-      clickPoint,
-      closestVertex,
-      selectedVertices,
-    ]
-  );
+    setIsInteracting(false);
+    setIsDragging(false);
+  };
 
   useEffect(() => {
     const { point1, point2 } = selectedVertices;
     if (point1 === point2) {
-      //선택된 두 점이 같을 때 접기 조건 충족안됨 예외처리
     }
   }, [selectedVertices]);
 
@@ -176,8 +119,6 @@ const Paper = ({ position, setIsInteracting }) => {
       <BorderPoints
         corners={paperCorners}
         pointsPerEdge={9}
-        clickPoint={clickPoint}
-        mouseUpPoint={mouseUpPoint}
         axisPoints={axisPoints}
       />
     </group>

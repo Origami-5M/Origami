@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { useState, useRef, useCallback } from 'react';
+import { useRef, useCallback } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import { useAtom } from 'jotai';
@@ -11,6 +11,7 @@ import {
   cameraAtom,
   raycasterAtom,
   sceneAtom,
+  isDraggingAtom,
 } from '../../atoms';
 import {
   getMousePositionIn3D,
@@ -27,12 +28,12 @@ const CanvasContainer = styled.div`
 
 const PaperCanvas = () => {
   const containerRef = useRef();
-  const [isInteracting, setIsInteracting] = useState(false);
   const [borderVertices] = useAtom(borderVerticesAtom);
   const [, setClosestVertex] = useAtom(closestVertexAtom);
   const [camera] = useAtom(cameraAtom);
   const [raycaster] = useAtom(raycasterAtom);
   const [scene] = useAtom(sceneAtom);
+  const [isDragging] = useAtom(isDraggingAtom);
 
   const handleMouseMove = useCallback(
     event => {
@@ -60,9 +61,9 @@ const PaperCanvas = () => {
       <Canvas onMouseMove={handleMouseMove}>
         <ambientLight intensity={0.5} />
         <directionalLight position={[1, 1, 1]} intensity={0.5} />
-        <Paper position={[0, 0, 0]} setIsInteracting={setIsInteracting} />
+        <Paper position={[0, 0, 0]} />
         <OrbitControls
-          enabled={!isInteracting}
+          enabled={!isDragging}
           enableDamping={true}
           dampingFactor={0.25}
           enableZoom={true}

@@ -18,10 +18,9 @@ import {
   updateBoundaryAndAxis,
   computeBoundaryPoints,
 } from './utils/computeBoundaryPoints';
-import { handlePointerEvent } from './utils/paperUtils';
 import { SEGMENT_NUM } from '../../constants/paper';
 
-const Paper = ({ position, setIsInteracting }) => {
+const Paper = ({ position }) => {
   const meshRef = useRef();
   const [axisPoints, setAxisPoints] = useState(null);
   const [paperVertices, setPaperVertices] = useState([]);
@@ -67,7 +66,6 @@ const Paper = ({ position, setIsInteracting }) => {
     }
 
     if (closestVertex) {
-      setIsInteracting(true);
       setIsDragging(true);
     }
   };
@@ -91,8 +89,6 @@ const Paper = ({ position, setIsInteracting }) => {
         setAxisPoints(updatedAxisPoints);
       }
     }
-
-    setIsInteracting(false);
     setIsDragging(false);
   };
 

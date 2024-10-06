@@ -20,3 +20,4 @@ export const DASH_SIZE = 0.02;
 export const Z_GAP = 0.02;
 export const FRAMES = 30;
 export const DIAMETER = Math.PI;
+export const PAPER_POSITION = [0, 0, 0];

@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import * as THREE from 'three';
 import { useThree } from '@react-three/fiber';
 import paperShaderMaterial from './utils/PaperShaderMaterial';
@@ -20,7 +20,7 @@ import {
 } from './utils/computeBoundaryPoints';
 import { SEGMENT_NUM } from '../../constants/paper';
 
-const Paper = ({ position }) => {
+const Paper = React.memo(() => {
   const meshRef = useRef();
   const [axisPoints, setAxisPoints] = useState(null);
   const [paperVertices, setPaperVertices] = useState([]);
@@ -36,6 +36,7 @@ const Paper = ({ position }) => {
   const [selectedVertices, setSelectedVertices] = useAtom(selectedVerticesAtom);
 
   const paperCorners = computeBoundaryPoints(paperVertices);
+  const paperPosition = [0, 0, 0];
 
   useEffect(() => {
     setCamera(camera);
@@ -99,7 +100,7 @@ const Paper = ({ position }) => {
   }, [selectedVertices]);
 
   return (
-    <group position={position}>
+    <group position={paperPosition}>
       <mesh
         ref={meshRef}
         onPointerDown={handlePointerDown}
@@ -119,6 +120,6 @@ const Paper = ({ position }) => {
       />
     </group>
   );
-};
+});
 
 export default Paper;

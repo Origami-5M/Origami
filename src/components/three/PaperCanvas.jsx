@@ -61,7 +61,7 @@ const PaperCanvas = () => {
       <Canvas onMouseMove={handleMouseMove}>
         <ambientLight intensity={0.5} />
         <directionalLight position={[1, 1, 1]} intensity={0.5} />
-        <Paper position={[0, 0, 0]} />
+        <Paper />
         <OrbitControls
           enabled={!isDragging}
           enableDamping={true}

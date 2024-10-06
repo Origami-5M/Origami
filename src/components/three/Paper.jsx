@@ -12,17 +12,17 @@ import {
   closestVertexAtom,
   isDraggingAtom,
   selectedVerticesAtom,
+  axisPointsAtom,
 } from '../../atoms';
 import BorderPoints from './BorderPoints';
 import {
   updateBoundaryAndAxis,
   computeBoundaryPoints,
 } from './utils/computeBoundaryPoints';
-import { SEGMENT_NUM } from '../../constants/paper';
+import { SEGMENT_NUM, PAPER_POSITION } from '../../constants/paper';
 
 const Paper = React.memo(() => {
   const meshRef = useRef();
-  const [axisPoints, setAxisPoints] = useState(null);
   const [paperVertices, setPaperVertices] = useState([]);
   const [colors] = useAtom(paperAtom);
 
@@ -33,10 +33,10 @@ const Paper = React.memo(() => {
 
   const [, setIsDragging] = useAtom(isDraggingAtom);
   const [closestVertex] = useAtom(closestVertexAtom);
+  const [axisPoints, setAxisPoints] = useAtom(axisPointsAtom);
   const [selectedVertices, setSelectedVertices] = useAtom(selectedVerticesAtom);
 
   const paperCorners = computeBoundaryPoints(paperVertices);
-  const paperPosition = [0, 0, 0];
 
   useEffect(() => {
     setCamera(camera);
@@ -100,7 +100,7 @@ const Paper = React.memo(() => {
   }, [selectedVertices]);
 
   return (
-    <group position={paperPosition}>
+    <group position={PAPER_POSITION}>
       <mesh
         ref={meshRef}
         onPointerDown={handlePointerDown}

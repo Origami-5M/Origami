@@ -18,3 +18,4 @@ export const paperAtom = atom(() => {
 
 export const borderVerticesAtom = atom([]);
 export const closestVertexAtom = atom({});
+export const axisPointsAtom = atom(null);

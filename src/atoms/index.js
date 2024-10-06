@@ -5,6 +5,7 @@ import {
   cameraAtom,
   raycasterAtom,
   sceneAtom,
+  axisPointsAtom,
 } from './paperAtom';
 
 import { isDraggingAtom, selectedVerticesAtom } from './foldAtom';
@@ -18,4 +19,5 @@ export {
   sceneAtom,
   isDraggingAtom,
   selectedVerticesAtom,
+  axisPointsAtom,
 };

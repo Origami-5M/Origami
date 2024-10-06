@@ -79,13 +79,13 @@ export const calculateRotatedLine = (
     midpoint,
     rotatedDirection,
     boundaryPoints
-  ).add(new THREE.Vector3(0, 0, 0.01));
+  ).add(new THREE.Vector3(0, 0, 0.001));
 
   const endPoint = extendToBoundary(
     midpoint,
     rotatedDirection.negate(),
     boundaryPoints
-  ).add(new THREE.Vector3(0, 0, 0.01));
+  ).add(new THREE.Vector3(0, 0, 0.001));
 
   const geometry = new THREE.BufferGeometry().setFromPoints([
     startPoint,
@@ -125,15 +125,26 @@ const findIntersection = (midpoint, direction, boundaryPoints) => {
   let closestIntersection = null;
   let minDistance = Infinity;
 
+  const ray = new THREE.Ray(midpoint, direction);
+
   for (let i = 0; i < boundaryPoints.length; i++) {
     const currentPoint = boundaryPoints[i];
     const nextPoint = boundaryPoints[(i + 1) % boundaryPoints.length];
+    const intersectionPoint = new THREE.Vector3();
+
+    const result = ray.distanceSqToSegment(
+      currentPoint,
+      nextPoint,
+      intersectionPoint
+    );
+
+    if (result < minDistance) {
+      minDistance = result;
+      closestIntersection = intersectionPoint.clone();
+    }
   }
 
-  return (
-    closestIntersection ||
-    midpoint.clone().add(direction.clone().multiplyScalar(AXIS_BOUNDARY))
-  );
+  return closestIntersection;
 };
 
 export const updateBoundaryAndAxis = (

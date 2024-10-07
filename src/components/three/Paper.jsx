@@ -13,12 +13,14 @@ import {
   isDraggingAtom,
   selectedVerticesAtom,
   axisPointsAtom,
+  paperAllPositionAtom,
 } from '../../atoms';
 import BorderPoints from './BorderPoints';
 import {
   updateBoundaryAndAxis,
   computeBoundaryPoints,
 } from './utils/computeBoundaryPoints';
+import { foldingAnimation } from './utils/foldingAnimation';
 import { SEGMENT_NUM, PAPER_POSITION } from '../../constants/paper';
 
 const Paper = React.memo(() => {
@@ -35,6 +37,8 @@ const Paper = React.memo(() => {
   const [closestVertex] = useAtom(closestVertexAtom);
   const [axisPoints, setAxisPoints] = useAtom(axisPointsAtom);
   const [selectedVertices, setSelectedVertices] = useAtom(selectedVerticesAtom);
+  const [paperAllPositions, setPaperAllPositions] =
+    useAtom(paperAllPositionAtom);
 
   const paperCorners = computeBoundaryPoints(paperVertices);
 
@@ -94,10 +98,35 @@ const Paper = React.memo(() => {
   };
 
   useEffect(() => {
-    const { point1, point2 } = selectedVertices;
-    if (point1 === point2) {
+    if (
+      axisPoints &&
+      paperAllPositions &&
+      selectedVertices.point1 &&
+      camera &&
+      meshRef
+    ) {
+      const { point1 } = selectedVertices;
+      const { startPoint, endPoint } = axisPoints;
+      foldingAnimation(
+        paperAllPositions,
+        startPoint,
+        endPoint,
+        point1,
+        camera,
+        meshRef.current
+      );
     }
-  }, [selectedVertices]);
+  }, [axisPoints, paperAllPositions, selectedVertices, camera, meshRef]);
+
+  useEffect(() => {
+    setSelectedVertices(null);
+    setAxisPoints(null);
+
+    if (meshRef.current) {
+      const paperAllPositions = meshRef.current.geometry.attributes.position;
+      setPaperAllPositions(paperAllPositions);
+    }
+  }, []);
 
   return (
     <group position={PAPER_POSITION}>

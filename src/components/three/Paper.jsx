@@ -99,23 +99,27 @@ const Paper = React.memo(() => {
 
   useEffect(() => {
     if (
-      axisPoints &&
-      paperAllPositions &&
-      selectedVertices.point1 &&
-      camera &&
-      meshRef
+      !axisPoints ||
+      !paperAllPositions ||
+      !selectedVertices.point1 ||
+      !selectedVertices.point2 ||
+      !camera ||
+      !meshRef?.current
     ) {
-      const { point1 } = selectedVertices;
-      const { startPoint, endPoint } = axisPoints;
-      foldingAnimation(
-        paperAllPositions,
-        startPoint,
-        endPoint,
-        point1,
-        camera,
-        meshRef.current
-      );
+      return;
     }
+
+    const { point1 } = selectedVertices;
+    const { startPoint, endPoint } = axisPoints;
+
+    foldingAnimation(
+      paperAllPositions,
+      startPoint,
+      endPoint,
+      point1,
+      camera,
+      meshRef.current
+    );
   }, [axisPoints, paperAllPositions, selectedVertices, camera, meshRef]);
 
   useEffect(() => {

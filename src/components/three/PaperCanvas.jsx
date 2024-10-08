@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { useRef, useCallback } from 'react';
+import { useRef, useCallback, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import { useAtom } from 'jotai';
@@ -18,6 +18,7 @@ import {
   findClosestMesh,
 } from './utils/borderVerticesUtils';
 import Paper from './Paper';
+import ToastMessage from '../ui/ToastMessage';
 
 const CanvasContainer = styled.div`
   position: absolute;
@@ -28,6 +29,8 @@ const CanvasContainer = styled.div`
 
 const PaperCanvas = () => {
   const containerRef = useRef();
+  const [toastMessage, setToastMessage] = useState(null);
+
   const [borderVertices] = useAtom(borderVerticesAtom);
   const [, setClosestVertex] = useAtom(closestVertexAtom);
   const [camera] = useAtom(cameraAtom);
@@ -61,7 +64,7 @@ const PaperCanvas = () => {
       <Canvas onMouseMove={handleMouseMove}>
         <ambientLight intensity={0.5} />
         <directionalLight position={[1, 1, 1]} intensity={0.5} />
-        <Paper />
+        <Paper setToastMessage={setToastMessage} />
         <OrbitControls
           enabled={!isDragging}
           enableDamping={true}
@@ -80,6 +83,12 @@ const PaperCanvas = () => {
           }}
         />
       </Canvas>
+      {toastMessage && (
+        <ToastMessage
+          message={toastMessage}
+          onClose={() => setToastMessage(null)}
+        />
+      )}
     </CanvasContainer>
   );
 };

@@ -15,20 +15,21 @@ import {
   axisPointsAtom,
   paperAllPositionAtom,
 } from '../../atoms';
-import BorderPoints from './BorderPoints';
 import {
   updateBoundaryAndAxis,
   computeBoundaryPoints,
 } from './utils/computeBoundaryPoints';
 import { foldingAnimation } from './utils/foldingAnimation';
 import { SEGMENT_NUM, PAPER_POSITION } from '../../constants/paper';
+import TOAST_MESSAGE from '../../constants/toastMessage';
+import BorderPoints from './BorderPoints';
 
-const Paper = React.memo(() => {
+const Paper = React.memo(({ setToastMessage }) => {
   const meshRef = useRef();
   const [paperVertices, setPaperVertices] = useState([]);
-  const [colors] = useAtom(paperAtom);
 
   const { camera, raycaster, scene } = useThree();
+  const [colors] = useAtom(paperAtom);
   const [, setCamera] = useAtom(cameraAtom);
   const [, setRaycaster] = useAtom(raycasterAtom);
   const [, setScene] = useAtom(sceneAtom);
@@ -109,8 +110,13 @@ const Paper = React.memo(() => {
       return;
     }
 
-    const { point1 } = selectedVertices;
+    const { point1, point2 } = selectedVertices;
     const { startPoint, endPoint } = axisPoints;
+
+    if (JSON.stringify(point1) === JSON.stringify(point2)) {
+      setToastMessage(TOAST_MESSAGE.SAME_POSITION);
+      return;
+    }
 
     foldingAnimation(
       paperAllPositions,

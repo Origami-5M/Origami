@@ -20,6 +20,7 @@ import {
   updateBoundaryAndAxis,
   computeBoundaryPoints,
 } from './utils/computeBoundaryPoints';
+import { generateBorderPoints } from './utils/borderVerticesUtils';
 import { foldVertices } from './utils/foldVertices';
 import { SEGMENT_NUM, PAPER_POSITION } from '../../constants/paper';
 import TOAST_MESSAGE from '../../constants/toastMessage';
@@ -143,7 +144,13 @@ const Paper = React.memo(({ setToastMessage }) => {
       camera,
       meshRef.current
     );
-    setBorderVertices(foldedVertices);
+
+    const newBorderVertices = generateBorderPoints([
+      axisPoints.startPoint,
+      axisPoints.endPoint,
+    ]);
+
+    setBorderVertices([...foldedVertices, ...newBorderVertices]);
   }, [
     axisPoints,
     paperAllPositions,

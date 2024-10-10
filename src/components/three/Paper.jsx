@@ -8,6 +8,7 @@ import {
   paperAtom,
   cameraAtom,
   raycasterAtom,
+  borderVerticesAtom,
   sceneAtom,
   closestVertexAtom,
   isDraggingAtom,
@@ -19,7 +20,7 @@ import {
   updateBoundaryAndAxis,
   computeBoundaryPoints,
 } from './utils/computeBoundaryPoints';
-import { foldingAnimation } from './utils/foldingAnimation';
+import { foldVertices } from './utils/foldVertices';
 import { SEGMENT_NUM, PAPER_POSITION } from '../../constants/paper';
 import TOAST_MESSAGE from '../../constants/toastMessage';
 import BorderPoints from './BorderPoints';
@@ -36,6 +37,7 @@ const Paper = React.memo(({ setToastMessage }) => {
 
   const [, setIsDragging] = useAtom(isDraggingAtom);
   const [closestVertex] = useAtom(closestVertexAtom);
+  const [borderVertices, setBorderVertices] = useAtom(borderVerticesAtom);
   const [axisPoints, setAxisPoints] = useAtom(axisPointsAtom);
   const [selectedVertices, setSelectedVertices] = useAtom(selectedVerticesAtom);
   const [paperAllPositions, setPaperAllPositions] =
@@ -48,6 +50,9 @@ const Paper = React.memo(({ setToastMessage }) => {
     setRaycaster(raycaster);
     setScene(scene);
 
+    setSelectedVertices(null);
+    setAxisPoints(null);
+
     if (meshRef.current) {
       const geometry = meshRef.current.geometry;
       const positionAttribute = geometry.getAttribute('position');
@@ -57,7 +62,9 @@ const Paper = React.memo(({ setToastMessage }) => {
           new THREE.Vector3().fromBufferAttribute(positionAttribute, i)
         );
       }
+      const paperAllPositions = meshRef.current.geometry.attributes.position;
       setPaperVertices(vertices);
+      setPaperAllPositions(paperAllPositions);
     }
   }, []);
 
@@ -75,6 +82,7 @@ const Paper = React.memo(({ setToastMessage }) => {
       setIsDragging(true);
     }
   };
+
   const handlePointerUp = () => {
     if (closestVertex) {
       setSelectedVertices(prev => ({
@@ -105,7 +113,8 @@ const Paper = React.memo(({ setToastMessage }) => {
       !selectedVertices.point1 ||
       !selectedVertices.point2 ||
       !camera ||
-      !meshRef?.current
+      !meshRef?.current ||
+      !borderVertices
     ) {
       return;
     }
@@ -118,7 +127,7 @@ const Paper = React.memo(({ setToastMessage }) => {
       return;
     }
 
-    foldingAnimation(
+    foldVertices(
       paperAllPositions,
       startPoint,
       endPoint,
@@ -126,17 +135,23 @@ const Paper = React.memo(({ setToastMessage }) => {
       camera,
       meshRef.current
     );
-  }, [axisPoints, paperAllPositions, selectedVertices, camera, meshRef]);
-
-  useEffect(() => {
-    setSelectedVertices(null);
-    setAxisPoints(null);
-
-    if (meshRef.current) {
-      const paperAllPositions = meshRef.current.geometry.attributes.position;
-      setPaperAllPositions(paperAllPositions);
-    }
-  }, []);
+    const foldedVertices = foldVertices(
+      borderVertices,
+      startPoint,
+      endPoint,
+      point1,
+      camera,
+      meshRef.current
+    );
+    setBorderVertices(foldedVertices);
+  }, [
+    axisPoints,
+    paperAllPositions,
+    selectedVertices,
+    camera,
+    meshRef,
+    borderVertices,
+  ]);
 
   return (
     <group position={PAPER_POSITION}>

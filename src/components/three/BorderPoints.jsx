@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect } from 'react';
 import { useAtom } from 'jotai';
 import {
   borderVerticesAtom,
@@ -33,14 +33,14 @@ const BorderPoints = ({ corners, pointsPerEdge = 9, axisPoints }) => {
   const [selectedVertices] = useAtom(selectedVerticesAtom);
   const [isDragging] = useAtom(isDraggingAtom);
 
-  useMemo(() => {
+  useEffect(() => {
     const newBorderVertices = generateBorderPoints(corners, pointsPerEdge);
     setBorderVertices(newBorderVertices);
   }, [corners]);
 
   return (
     <group>
-      {isDragging && selectedVertices.point1 && (
+      {isDragging && selectedVertices?.point1 && (
         <PointsMarker
           position={selectedVertices.point1}
           color={RED_MARKER_COLOR}

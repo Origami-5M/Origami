@@ -190,14 +190,7 @@ const Paper = React.memo(({ setToastMessage }) => {
     ]);
 
     setBorderVertices([...foldedVertices, ...newBorderVertices]);
-  }, [
-    axisPoints,
-    paperAllPositions,
-    selectedVertices,
-    camera,
-    meshRef,
-    // borderVertices,
-  ]);
+  }, [axisPoints, paperAllPositions, selectedVertices, camera, meshRef]);
 
   return (
     <group position={PAPER_POSITION}>

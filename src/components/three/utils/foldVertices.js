@@ -26,6 +26,9 @@ export const foldVertices = (
     ? allPositions.length
     : allPositions.count;
 
+  const movedVertices = [];
+  const rotateVertexIndices = [];
+
   const { x: x1, y: y1 } = startPoint;
   const { x: x2, y: y2 } = endPoint;
 
@@ -33,20 +36,30 @@ export const foldVertices = (
   const inequality = getInequality(direction);
   const frontOrBack = calculateFrontOrBack(camera, paperMesh);
 
-  const m = (y2 - y1) / (x2 - x1);
-  const c = y1 - m * x1;
+  const m = x2 !== x1 ? (y2 - y1) / (x2 - x1) : Infinity;
+  const c = x2 !== x1 ? y1 - m * x1 : 0;
 
   for (let i = 0; i < count; i++) {
     const vertex = getVertexFromPosition(allPositions, i);
 
+    let vertexMoved = false;
+
     if (x1 === x2 && inequality(vertex.x, x1)) {
       calculateReflectedPosition(vertex, x1, 'x');
       vertex.z += Z_GAP * frontOrBack;
+      vertexMoved = true;
     } else if (y1 === y2 && inequality(vertex.y, y1)) {
       calculateReflectedPosition(vertex, y1, 'y');
       vertex.z += Z_GAP * frontOrBack;
-    } else if (inequality(vertex.y, m * vertex.x + c)) {
+      vertexMoved = true;
+    } else if (x2 !== x1 && inequality(vertex.y, m * vertex.x + c)) {
       reflectAcrossLine(vertex, m, c, frontOrBack);
+      vertexMoved = true;
+    }
+
+    if (vertexMoved) {
+      movedVertices.push({ vertex: vertex.clone() });
+      rotateVertexIndices.push(i);
     }
 
     if (!Array.isArray(allPositions)) {
@@ -59,5 +72,12 @@ export const foldVertices = (
 
   if (Array.isArray(allPositions)) {
     return foldedVertices;
+  } else {
+    return {
+      rotateVertices: movedVertices,
+      rotateVertexIndices,
+      startPoint,
+      endPoint,
+    };
   }
 };

@@ -25,12 +25,16 @@ import { foldVertices } from './utils/foldVertices';
 import { SEGMENT_NUM, PAPER_POSITION } from '../../constants/paper';
 import TOAST_MESSAGE from '../../constants/toastMessage';
 import BorderPoints from './BorderPoints';
+import {
+  rotateSelectedVertices,
+  handleFoldedMeshClick,
+} from './utils/rotateSelectedVertices';
 
 const Paper = React.memo(({ setToastMessage }) => {
   const meshRef = useRef();
   const [paperVertices, setPaperVertices] = useState([]);
 
-  const { camera, raycaster, scene } = useThree();
+  const { camera, raycaster, scene, gl } = useThree();
   const [colors] = useAtom(paperAtom);
   const [, setCamera] = useAtom(cameraAtom);
   const [, setRaycaster] = useAtom(raycasterAtom);
@@ -43,7 +47,8 @@ const Paper = React.memo(({ setToastMessage }) => {
   const [selectedVertices, setSelectedVertices] = useAtom(selectedVerticesAtom);
   const [paperAllPositions, setPaperAllPositions] =
     useAtom(paperAllPositionAtom);
-
+  const [rotateData, setRotateData] = useState([]);
+  const [selectedRotateData, setSelectedRotateData] = useState(null);
   const paperCorners = computeBoundaryPoints(paperVertices);
 
   useEffect(() => {
@@ -69,18 +74,25 @@ const Paper = React.memo(({ setToastMessage }) => {
     }
   }, []);
 
-  const handlePointerDown = () => {
+  const handlePointerDown = event => {
     if (closestVertex) {
       setSelectedVertices({
         point1: closestVertex,
         point2: null,
       });
-    } else {
-      setSelectedVertices({ point1: null, point2: null });
-    }
-
-    if (closestVertex) {
       setIsDragging(true);
+    } else {
+      const rect = gl.domElement.getBoundingClientRect();
+      const mouse = new THREE.Vector2();
+
+      mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+      const raycaster = new THREE.Raycaster();
+      raycaster.setFromCamera(mouse, camera);
+
+      handleFoldedMeshClick(rotateData, raycaster, setSelectedRotateData);
+      setSelectedVertices({ point1: null, point2: null });
     }
   };
 
@@ -92,7 +104,7 @@ const Paper = React.memo(({ setToastMessage }) => {
       }));
     }
 
-    if (selectedVertices.point1 && closestVertex) {
+    if (selectedVertices?.point1 && closestVertex) {
       const updatedAxisPoints = updateBoundaryAndAxis(
         scene,
         paperVertices,
@@ -105,14 +117,40 @@ const Paper = React.memo(({ setToastMessage }) => {
       }
     }
     setIsDragging(false);
+
+    if (!selectedVertices || !selectedVertices.point1 || !closestVertex) {
+      if (meshRef.current) {
+        const positionAttribute = meshRef.current.geometry.attributes.position;
+        const selectedVerticesSet = new Set(
+          selectedRotateData.rotateVertexIndices
+        );
+        const totalRotation = Math.PI;
+        const frames = 85;
+
+        const clockwise = positionAttribute.array[2] > 0 ? true : false;
+
+        rotateSelectedVertices(
+          positionAttribute,
+          selectedVerticesSet,
+          totalRotation,
+          frames,
+          clockwise,
+          selectedRotateData
+        );
+        setSelectedRotateData(null);
+        setRotateData(prevRotateData =>
+          prevRotateData.filter(data => data !== selectedRotateData)
+        );
+      }
+    }
   };
 
   useEffect(() => {
     if (
       !axisPoints ||
       !paperAllPositions ||
-      !selectedVertices.point1 ||
-      !selectedVertices.point2 ||
+      !selectedVertices?.point1 ||
+      !selectedVertices?.point2 ||
       !camera ||
       !meshRef?.current ||
       !borderVertices
@@ -128,7 +166,7 @@ const Paper = React.memo(({ setToastMessage }) => {
       return;
     }
 
-    foldVertices(
+    const getRotateData = foldVertices(
       paperAllPositions,
       startPoint,
       endPoint,
@@ -136,6 +174,8 @@ const Paper = React.memo(({ setToastMessage }) => {
       camera,
       meshRef.current
     );
+    setRotateData(prevRotateData => [...prevRotateData, getRotateData]);
+
     const foldedVertices = foldVertices(
       borderVertices,
       startPoint,
@@ -144,7 +184,6 @@ const Paper = React.memo(({ setToastMessage }) => {
       camera,
       meshRef.current
     );
-
     const newBorderVertices = generateBorderPoints([
       axisPoints.startPoint,
       axisPoints.endPoint,
@@ -157,7 +196,7 @@ const Paper = React.memo(({ setToastMessage }) => {
     selectedVertices,
     camera,
     meshRef,
-    borderVertices,
+    // borderVertices,
   ]);
 
   return (

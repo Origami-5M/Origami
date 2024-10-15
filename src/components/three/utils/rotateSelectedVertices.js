@@ -1,6 +1,6 @@
 import * as THREE from 'three';
-import { Z_GAP } from '../constants/paper';
-import { mode, nowStep } from '../constants/guide';
+import { Z_GAP } from '../../../constants/paper';
+import { GUIDE_IMAGES, GUIDE_STEPS } from '../../../constants/guide';
 
 const rotateVector = (vector, pivot, quaternion) => {
   vector.sub(pivot);
@@ -15,7 +15,7 @@ const updateVertexZPosition = (positionAttribute, selectedVertices) => {
       const z = positionAttribute.getZ(i);
       if (z !== 0) {
         const zAdjustment =
-          (mode === 'puppy' && nowStep === 3) || nowStep === 11
+          (GUIDE_IMAGES === 'puppy' && GUIDE_STEPS === 3) || GUIDE_STEPS === 11
             ? Z_GAP * 2
             : Z_GAP;
         positionAttribute.setZ(i, z < 0 ? z + zAdjustment : z - zAdjustment);
@@ -116,4 +116,62 @@ const findAndSelectClosestVertices = (
   });
 };
 
-export { rotateSelectedVertices, findAndSelectClosestVertices };
+function handleFoldedMeshClick(rotateData, raycaster, setSelectedRotateData) {
+  if (rotateData && rotateData.length > 0) {
+    const foldedMeshes = rotateData
+      .map((data, index) => {
+        if (data && data.rotateVertices && data.rotateVertices.length > 0) {
+          const mesh = createFoldedMesh(data.rotateVertices);
+          mesh.userData.rotateDataIndex = index;
+          return mesh;
+        }
+        return null;
+      })
+      .filter(mesh => mesh !== null);
+
+    if (foldedMeshes.length > 0) {
+      const intersects = raycaster.intersectObjects(foldedMeshes);
+
+      if (intersects.length > 0) {
+        console.log('접힌 면을 클릭했습니다.');
+        const intersectedObject = intersects[0].object;
+        const dataIndex = intersectedObject.userData.rotateDataIndex;
+        const clickedData = rotateData[dataIndex];
+
+        setSelectedRotateData(clickedData);
+      } else {
+        console.log('빈 공간을 클릭했습니다.');
+      }
+    }
+  }
+}
+
+const createFoldedMesh = rotateVertices => {
+  const geometry = new THREE.BufferGeometry();
+
+  const positions = new Float32Array(rotateVertices.length * 3);
+  for (let i = 0; i < rotateVertices.length; i++) {
+    positions[i * 3] = rotateVertices[i].vertex.x;
+    positions[i * 3 + 1] = rotateVertices[i].vertex.y;
+    positions[i * 3 + 2] = rotateVertices[i].vertex.z;
+  }
+
+  geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+  const indices = [];
+  for (let i = 0; i < rotateVertices.length - 2; i++) {
+    indices.push(0, i + 1, i + 2);
+  }
+  geometry.setIndex(indices);
+
+  const material = new THREE.MeshBasicMaterial({ visible: false });
+  const mesh = new THREE.Mesh(geometry, material);
+
+  return mesh;
+};
+
+export {
+  rotateSelectedVertices,
+  findAndSelectClosestVertices,
+  handleFoldedMeshClick,
+};

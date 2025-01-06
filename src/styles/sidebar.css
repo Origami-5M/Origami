@@ -42,7 +42,7 @@
   content: '';
   width: 61px;
   height: 79px;
-  background: url('/src/assets/img/speech-bubble.png') no-repeat -5px -30px;
+  background: url('/public/assets/img/speech-bubble.png') no-repeat -5px -30px;
   background-size: contain;
 }
 
@@ -65,19 +65,19 @@
 .home-button {
   width: 60px;
   height: 60px;
-  background: url('/src/assets/img/nav_sprites.png') no-repeat -5px -8px;
+  background: url('/public/assets/img/nav_sprites.png') no-repeat -5px -8px;
   opacity: 0.5;
 }
 
 .mode-button {
   width: 60px;
   height: 60px;
-  background: url('/src/assets/img/nav_sprites.png') no-repeat -184px -80px;
+  background: url('/public/assets/img/nav_sprites.png') no-repeat -184px -80px;
   opacity: 0.5;
 }
 
 .mode-button.active {
-  background: #fff url('/src/assets/img/checked_sprites.png') no-repeat -8px -3px;
+  background: #fff url('/public/assets/img/checked_sprites.png') no-repeat -8px -3px;
   opacity: 1;
 }
 
@@ -89,14 +89,14 @@
 .gallery-button {
   width: 60px;
   height: 60px;
-  background: url('/src/assets/img/nav_sprites.png') no-repeat -97px -8px;
+  background: url('/public/assets/img/nav_sprites.png') no-repeat -97px -8px;
   opacity: 0.5;
 }
 
 .sound-button {
   width: 60px;
   height: 60px;
-  background: url('/src/assets/img/nav_sprites.png') no-repeat -100px -80px;
+  background: url('/public/assets/img/nav_sprites.png') no-repeat -100px -80px;
   opacity: 0.5;
   transition: none;
 }
@@ -105,12 +105,12 @@
   width: 60px;
   height: 60px;
   margin-bottom: 0;
-  background: url('/src/assets/img/nav_sprites.png') no-repeat -4px -81px;
+  background: url('/public/assets/img/nav_sprites.png') no-repeat -4px -81px;
   opacity: 0.5;
 }
 
 .info-button.active {
-  background: url('/src/assets/img/checked_sprites.png') no-repeat -52px -55px;
+  background: url('/public/assets/img/checked_sprites.png') no-repeat -52px -55px;
   background-color: #fff;
   opacity: 1;
 }
@@ -179,7 +179,7 @@
   width: 209px;
   height: 155px;
   border-radius: 30px;
-  background-image: url(../assets/img/green-gamebg.png);
+  background-image: url('/public/assets/img/green-gamebg.png');
   background-size: contain;
 }
 

@@ -24,7 +24,7 @@
 }
 
 .circle-button.restart-button {
-  background: url('/src/assets/img/nav_sprites.png') no-repeat -186px -9px;
+  background: url('/public/assets/img/nav_sprites.png') no-repeat -186px -9px;
   background-color: #888;
   opacity: 50%;
 }
@@ -34,7 +34,7 @@
 }
 
 .rollback-button {
-  background: url('/src/assets/img/checked_sprites.png') no-repeat -107px -56px;
+  background: url('/public/assets/img/checked_sprites.png') no-repeat -107px -56px;
   opacity: 50%;
 }
 
@@ -54,7 +54,7 @@
 }
 
 .commit-button {
-  background: url('/src/assets/img/checked_sprites.png') no-repeat -103px -2px;
+  background: url('/public/assets/img/checked_sprites.png') no-repeat -103px -2px;
   opacity: 50%;
 }
 
@@ -111,13 +111,13 @@
 .prev {
   width: 16px;
   height: 26px;
-  background: url('/src/assets/img/checked_sprites.png') no-repeat -20px -72px;
+  background: url('/public/assets/img/checked_sprites.png') no-repeat -20px -72px;
 }
 
 .next {
   width: 16px;
   height: 26px;
-  background: url('/src/assets/img/checked_sprites.png') no-repeat -80px -18px;
+  background: url('/public/assets/img/checked_sprites.png') no-repeat -80px -18px;
 }
 
 .pagination {

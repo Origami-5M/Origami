@@ -119,7 +119,7 @@
   transform: translateY(-50%);
   width: 28px;
   height: 84px;
-  background: url('/src/assets/img/css_sprites.png') no-repeat;
+  background: url('/public/assets/img/css_sprites.png') no-repeat;
   cursor: pointer;
 }
 
@@ -155,7 +155,7 @@
 .main-container .detail-container .share-icon {
   width: 50px;
   height: 50px;
-  background: url('/src/assets/img/shareIcon.png') no-repeat 40% 50%;
+  background: url('/public/assets/img/shareIcon.png') no-repeat 40% 50%;
   background-color: #838383;
   object-fit: contain;
   opacity: 50%;
@@ -215,7 +215,7 @@
   height: 35px;
   padding: 22px;
   border-radius: 5px;
-  background: url(/src/assets/img/css_sprites.png) no-repeat -111px -166px;
+  background: url(/public/assets/img/css_sprites.png) no-repeat -111px -166px;
   background-color: #343394;
 }
 
@@ -225,7 +225,7 @@
   right: 50px;
   width: 55px;
   height: 55px;
-  background: url('/src/assets/img/shareIcon.png') no-repeat 40% 50%;
+  background: url('/public/assets/img/shareIcon.png') no-repeat 40% 50%;
   background-color: #838383;
   opacity: 50%;
   object-fit: contain;

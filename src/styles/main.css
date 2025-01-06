@@ -8,7 +8,7 @@
   width: calc(100vw - 410px);
   height: calc(100vh - 40px);
   border-radius: 40px;
-  background: #fff url('../assets/img/main_bg.png') no-repeat center;
+  background: #fff url('/public/assets/img/main_bg.png') no-repeat center;
   background-size: cover;
 }
 
@@ -27,7 +27,7 @@
   margin-left: auto;
   width: 47px;
   height: 39px;
-  background: url('../assets/img/css_sprites.png') -130px -108px;
+  background: url('/public/assets/img/css_sprites.png') -130px -108px;
   transition: none;
 }
 
@@ -45,7 +45,7 @@
 
 .mode-button.active {
   color: #f2482e;
-  background: url('../assets/img/active-mode-btn.png') -10px no-repeat;
+  background: url('/public/assets/img/active-mode-btn.png') -10px no-repeat;
   background-size: cover;
 }
 
@@ -118,17 +118,17 @@
 }
 
 .blue-bg {
-  background: url('../assets/img/blue-gamebg.png');
+  background: url('/public/assets/img/blue-gamebg.png');
   background-size: cover;
 }
 
 .red-bg {
-  background: url('../assets/img/orange-gamebg.png');
+  background: url('/public/assets/img/orange-gamebg.png');
   background-size: cover;
 }
 
 .green-bg {
-  background: url('../assets/img/green-gamebg.png');
+  background: url('/public/assets/img/green-gamebg.png');
   background-size: cover;
 }
 
@@ -145,7 +145,7 @@
   bottom: 120px;
   width: 47px;
   height: 47px;
-  background: url('../assets/img/css_sprites.png') -96px -8px;
+  background: url('/public/assets/img/css_sprites.png') -96px -8px;
 }
 
 .check-icon {
@@ -154,5 +154,5 @@
   bottom: 50px;
   width: 37px;
   height: 27px;
-  background: url('../assets/img/css_sprites.png') -221px -125px;
+  background: url('/public/assets/img/css_sprites.png') -221px -125px;
 }

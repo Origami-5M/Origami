@@ -48,7 +48,7 @@ const makeShareList = async id => {
     newListName.setAttribute('class', 'share-title');
 
     newList.setAttribute('id', id);
-    newListImg.src = shareListData.thumbnail || '../assets/img/guide/guide.png';
+    newListImg.src = shareListData.thumbnail || '/assets/img/guide/guide.png';
     newListName.textContent = `${shareListData.nickname}`;
 
     return newList;

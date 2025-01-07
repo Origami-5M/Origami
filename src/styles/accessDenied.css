@@ -3,13 +3,13 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  padding: 15px;
+  padding: 0px;
+  margin: 0px;
   text-align: center;
   background-color: #e7e6ff;
 }
 
 .message {
-  margin-bottom: 50px;
   font-size: 1.4rem;
   color: #343394;
 }
